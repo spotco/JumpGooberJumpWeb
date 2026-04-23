@@ -113,11 +113,14 @@ JumpGooberJumpWeb/
 |- src/                        # JavaScript source, mapped from AS3 source
 |  |- Main.js                  # Runtime entry/config; maps JumpDieCreateMain.as shell role
 |  |- Constants.js             # Shared constants from JumpDieCreateMain.as
+|  |- JumpDieCreateMain.js     # Runtime owner port of JumpDieCreateMain.as
+|  |- SaveManager.js           # SharedObject-compatible localStorage helper
+|  |- SoundManager.js          # SoundChannel/SoundTransform-compatible helper
 |  |- GameEngine.js            # Maps core/GameEngine.as
 |  |- LevelXmlParser.js        # XML construction path from GameEngine.as
 |  |- blocks/                  # Maps blocks/*.as file-for-file
 |  |- core/                    # Future direct ports of core/*.as
-|  |- currentfunction/         # Future direct ports of currentfunction/*.as
+|  |- currentfunction/         # Direct ports of currentfunction/*.as
 |  |- misc/                    # Future direct ports of misc/*.as
 |  '- scenes/                  # Phaser wrappers only; keep thin
 |- img/                        # Original image assets
@@ -144,7 +147,7 @@ replacement for `GameEngine.as`, `JumpDieCreateMenu.as`, or other source files.
 |---|---|---|
 | `Main.as` | `index.html` + `src/scenes/BootScene.js` shell notes | Flash preloader/ad click shell only; keep gameplay out. |
 | `Preloader.as` | `src/scenes/BootScene.js` + no-op SWF bridge notes | SWF loading is Flash-only. |
-| `JumpDieCreateMain.as` | `src/Main.js`, `src/Constants.js`, future `src/JumpDieCreateMain.js` | Main game owner, constants, routing, sound/save/rank ownership. |
+| `JumpDieCreateMain.as` | `src/JumpDieCreateMain.js`, `src/Constants.js`, `src/SaveManager.js`, `src/SoundManager.js` | Main game owner, constants, routing, sound/save/rank ownership. |
 
 ### Core
 

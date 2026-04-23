@@ -44,8 +44,8 @@ Planning style reference:
   - [x] fonts/XML: 41 checked pairs, 0 missing, 0 mismatches.
 - [x] Scan active ActionScript source files outside `old/`.
 - [x] Update `AGENTS.md` to require source-matching and file-for-file porting.
-- [ ] Add an `ASSET_AUDIT.md` with copied, omitted, and Flash-only asset notes.
-- [ ] Decide whether to archive source-present Flash output `jumpdiecreate.swf`
+- [x] Add an `ASSET_AUDIT.md` with copied, omitted, and Flash-only asset notes.
+- [x] Decide whether to archive source-present Flash output `jumpdiecreate.swf`
   in the web repo. It is not needed for Phaser runtime.
 
 ---
@@ -64,45 +64,51 @@ Primary source:
 - [x] Create `src/Main.js` with Phaser config and scene list.
 - [x] Create `src/Constants.js` with first menu/mode constants.
 - [x] Create `src/scenes/BootScene.js` as a Phaser boot/preload wrapper.
-- [ ] Port the relevant non-ad/non-SWF loading flow from `Main.as`.
-- [ ] Document Flash-only `preloader_bar.png`, `preloader_bg.png`, and
+- [x] Port the relevant non-ad/non-SWF loading flow from `Main.as`.
+- [x] Document Flash-only `preloader_bar.png`, `preloader_bg.png`, and
   `startgame_bg.png` references, which are missing from the source checkout.
-- [ ] Document `Preloader.as` SWF loading as omitted for Phaser runtime.
-- [ ] Remove Flash ad and SWF bridge calls from the web boot path.
+- [x] Document `Preloader.as` SWF loading as omitted for Phaser runtime.
+- [x] Remove Flash ad and SWF bridge calls from the web boot path.
+  See `ASSET_AUDIT.md`; Phaser boot now preloads assets directly and skips
+  CPMStar, intro SWF, compiled game SWF, and SWFBridge behavior.
 
 ### 1b. `JumpDieCreateMain.as` direct port
 
-- [ ] Create `src/JumpDieCreateMain.js`.
-- [ ] Port static mode constants:
+- [x] Create `src/JumpDieCreateMain.js`.
+- [x] Port static mode constants:
   `LEVELEDITOR`, `RANDOMONLINE`, `MOSTPLAYEDONLINE`, `NEWESTONLINE`,
   `SPECIFICONLINE`, `WORLD1`, `WORLD2`, `WORLD3`, `WORLD_SPECIAL`.
-- [ ] Port static music IDs:
+- [x] Port static music IDs:
   `MENU_MUSIC`, `LEVELEDITOR_MUSIC`, `WIN_SOUND`, `BOSSSONG`,
   `BOSSENDSONG`, `SONG1`, `SONG2`, `SONG3`, `SONG4`, `SONG1END`,
   `SONG2END`, `SONG3END`, `ONLINE`, `ONLINEEND`.
-- [ ] Port global flags:
+- [x] Port global flags:
   `MOCHI_ENABLED`, `ONLINE_DB_URL`, `HAS_CHALLENGE_LEVELS`, `IS_MUTED`,
   `CONTEST_MODE`, `LEVELS_UNLOCKED`.
-- [ ] Port `verifysave()` to localStorage-backed state.
-- [ ] Port `menuStart(menupos)` routing to source-mapped currentfunction
+- [x] Port `verifysave()` to localStorage-backed state.
+- [x] Port `menuStart(menupos)` routing to source-mapped currentfunction
   classes.
-- [ ] Port `clearDisplay()` as a Phaser-safe display cleanup helper.
-- [ ] Port `getChecksum(a, b)`.
-- [ ] Port `playSpecific(tar, repeat)` through a source-mapped sound manager.
-- [ ] Port `stop()`.
-- [ ] Port `playsfx(s, t)`.
-- [ ] Port `getTextFormat(size, type)` semantics to shared text style helpers.
-- [ ] Port `initrankdata()` through `src/misc/RankData.js`.
+  Phase 2 will replace the placeholder route objects with direct
+  `src/currentfunction/*.js` class instances.
+- [x] Port `clearDisplay()` as a Phaser-safe display cleanup helper.
+- [x] Port `getChecksum(a, b)`.
+- [x] Port `playSpecific(tar, repeat)` through a source-mapped sound manager.
+- [x] Port `stop()`.
+- [x] Port `playsfx(s, t)`.
+- [x] Port `getTextFormat(size, type)` semantics to shared text style helpers.
+- [x] Port `initrankdata()` through `src/misc/RankData.js`.
 
 ### 1c. Audio and save helpers
 
-- [ ] Create `src/SoundManager.js` or keep audio ownership in
+- [x] Create `src/SoundManager.js` or keep audio ownership in
   `JumpDieCreateMain.js` with source-compatible methods.
-- [ ] Load and map all music assets from `JumpDieCreateMain.as`.
-- [ ] Load and map all SFX assets from `JumpDieCreateMain.as`.
-- [ ] Preserve jump sound sequence behavior used by `GameEngine.playjumpsound()`.
-- [ ] Preserve mute behavior and sound fade-in behavior.
-- [ ] Create `src/SaveManager.js` only if it stays source-compatible with
+- [x] Load and map all music assets from `JumpDieCreateMain.as`.
+  `SONG4` has no active embed/file in source and is kept as an explicit unmapped
+  ID until the original behavior path is reached.
+- [x] Load and map all SFX assets from `JumpDieCreateMain.as`.
+- [x] Preserve jump sound sequence behavior used by `GameEngine.playjumpsound()`.
+- [x] Preserve mute behavior and sound fade-in behavior.
+- [x] Create `src/SaveManager.js` only if it stays source-compatible with
   `SharedObject` fields from `JumpDieCreateMain.as` and `TutorialGame.as`.
 
 ---
@@ -117,56 +123,60 @@ currentfunction/
 
 ### 2a. CurrentFunction base and menu
 
-- [ ] Create `src/currentfunction/CurrentFunction.js` from
+- [x] Create `src/currentfunction/CurrentFunction.js` from
   `currentfunction/CurrentFunction.as`.
-- [ ] Create `src/currentfunction/JumpDieCreateMenu.js` from
+- [x] Create `src/currentfunction/JumpDieCreateMenu.js` from
   `currentfunction/JumpDieCreateMenu.as`.
-- [ ] Preserve `destroy()`, `startLevel()`, and `nextLevel(hitgoal)` method
+- [x] Preserve `destroy()`, `startLevel()`, and `nextLevel(hitgoal)` method
   shape.
-- [ ] Port main menu, world menu, online menu arrays, and menu swap behavior.
-- [ ] Port menu cursor `Guy` usage and description bubble behavior.
-- [ ] Port mute button behavior.
-- [ ] Port status display behavior with web-safe online-status stub.
-- [ ] Keep `src/scenes/MenuScene.js` as a thin Phaser wrapper around
+- [x] Port main menu, world menu, online menu arrays, and menu swap behavior.
+- [x] Port menu cursor `Guy` usage and description bubble behavior.
+- [x] Port mute button behavior.
+- [x] Port status display behavior with web-safe online-status stub.
+- [x] Keep `src/scenes/MenuScene.js` as a thin Phaser wrapper around
   `JumpDieCreateMenu`.
 
 ### 2b. Campaign world select and progression
 
-- [ ] Create `src/currentfunction/TutorialGame.js` from
+- [x] Create `src/currentfunction/TutorialGame.js` from
   `currentfunction/TutorialGame.as`.
-- [ ] Create `src/currentfunction/WorldTwoGame.js` from
+- [x] Create `src/currentfunction/WorldTwoGame.js` from
   `currentfunction/WorldTwoGame.as`.
-- [ ] Create `src/currentfunction/WorldThreeGame.js` from
+- [x] Create `src/currentfunction/WorldThreeGame.js` from
   `currentfunction/WorldThreeGame.as`.
-- [ ] Port level array construction for 11 levels per world.
-- [ ] Port level select screen layout, scrolling background, selector `Guy`,
+- [x] Port level array construction for 11 levels per world.
+- [x] Port level select screen layout, scrolling background, selector `Guy`,
   keyboard and mouse selection, locked-level alpha, and back button.
-- [ ] Port save progress per world.
-- [ ] Port per-level best-time display and rank display.
-- [ ] Port `getsong()` and `playWinSound()` overrides per world.
-- [ ] Port level-complete screen, time display, rank display, total time,
+- [x] Port save progress per world.
+- [x] Port per-level best-time display and rank display.
+- [x] Port `getsong()` and `playWinSound()` overrides per world.
+- [x] Port level-complete screen, time display, rank display, total time,
   deaths, `WinAnimation`, `Fireworks`, and continue flow.
-- [ ] Port world-complete art and World 3 credits flow.
+  `WinAnimation` and `Fireworks` are represented as a source-positioned
+  completion screen hook until their `misc/*.as` files are ported in Phase 6.
+- [x] Port world-complete art and World 3 credits flow.
 
 ### 2c. Challenge, simple, editor, and online mode entry classes
 
-- [ ] Create `src/currentfunction/SpecialGame.js` from
+- [x] Create `src/currentfunction/SpecialGame.js` from
   `currentfunction/SpecialGame.as`.
-- [ ] Create `src/currentfunction/SimpleGame.js` from
+- [x] Create `src/currentfunction/SimpleGame.js` from
   `currentfunction/SimpleGame.as`.
-- [ ] Create `src/currentfunction/LevelEditor.js` from
+- [x] Create `src/currentfunction/LevelEditor.js` from
   `currentfunction/LevelEditor.as`.
-- [ ] Create `src/currentfunction/RandomOnlineGame.js` from
+- [x] Create `src/currentfunction/RandomOnlineGame.js` from
   `currentfunction/RandomOnlineGame.as`.
-- [ ] Create `src/currentfunction/BrowseMostPlayedGame.js` from
+- [x] Create `src/currentfunction/BrowseMostPlayedGame.js` from
   `currentfunction/BrowseMostPlayedGame.as`.
-- [ ] Create `src/currentfunction/BrowseMostRecentGame.js` from
+- [x] Create `src/currentfunction/BrowseMostRecentGame.js` from
   `currentfunction/BrowseMostRecentGame.as`.
-- [ ] Create `src/currentfunction/BrowseSpecificGame.js` from
+- [x] Create `src/currentfunction/BrowseSpecificGame.js` from
   `currentfunction/BrowseSpecificGame.as`.
-- [ ] Create `src/currentfunction/TypeNameGame.js` from
+- [x] Create `src/currentfunction/TypeNameGame.js` from
   `currentfunction/TypeNameGame.as`.
-- [ ] Keep remote/PHP behavior stubbed until local campaign parity is stable.
+- [x] Keep remote/PHP behavior stubbed until local campaign parity is stable.
+  Online classes preserve source entry shape and route names, but do not call
+  PHP endpoints.
 
 ---
 

@@ -12,3 +12,36 @@ export const MODES = {
     WORLD3: 908974,
     WORLD_SPECIAL: 463811,
 };
+
+export const MUSIC = {
+    MENU_MUSIC: 44141,
+    LEVELEDITOR_MUSIC: 12312,
+    WIN_SOUND: 19282,
+    BOSSSONG: 99213,
+    BOSSENDSONG: 88732,
+    SONG1: 23567,
+    SONG2: 67223,
+    SONG3: 65412,
+    SONG4: 44214,
+    SONG1END: 87367,
+    SONG2END: 66423,
+    SONG3END: 13325,
+    ONLINE: 77231,
+    ONLINEEND: 88123,
+};
+
+export const FLAGS = {
+    MOCHI_ENABLED: true,
+    ONLINE_DB_URL: 'http://flashegames.net/spotco/',
+    HAS_CHALLENGE_LEVELS: false,
+    IS_MUTED: false,
+    CONTEST_MODE: false,
+    LEVELS_UNLOCKED: false,
+};
+
+export const TEXT_FORMAT_TYPES = {
+    GAME: 1,
+    MENU: 2,
+};
+
+export const SAVE_KEY = 'JumpDieOrCreateSPOTCO';

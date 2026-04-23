@@ -11,22 +11,29 @@ export default class GameScene extends Phaser.Scene {
         this.mode = data.mode;
         this.world = data.world || 1;
         this.level = data.level || 1;
+        this.cacheKey = data.cacheKey || `world${this.world}_level${this.level}`;
+        this.clvlxml = data.clvlxml || null;
+        this.levelName = data.name || `world ${this.world}-${this.level}`;
     }
 
     create() {
+        if (window.jumpDieCreateMain) {
+            window.jumpDieCreateMain.setScene(this);
+        }
         this._createGameEngine();
         this._createInput();
     }
 
     _createGameEngine() {
-        const levelText = this.cache.text.get('world1_level1');
+        const levelText = this.clvlxml || this.cache.text.get(this.cacheKey) || this.cache.text.get('world1_level1');
         this.gameEngine = new GameEngine(this, {
             clvlxml: levelText,
-            name: `world ${this.world}-${this.level}`,
+            name: this.levelName,
             usebackbutton: false,
             useBg: this.world,
             hasskip: true,
             deathcount: 0,
+            curfunction: window.jumpDieCreateMain ? window.jumpDieCreateMain.curfunction : null,
         });
     }
 

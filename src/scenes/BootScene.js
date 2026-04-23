@@ -10,11 +10,29 @@ export default class BootScene extends Phaser.Scene {
         this._createLoadBar();
 
         this.load.image('menu_bg', 'img/misc/menubg0.png');
+        this.load.image('menububble', 'img/misc/menububble.png');
+        this.load.image('transparentmenu', 'img/misc/transparentmenu.png');
         this.load.image('title_logo', 'img/misc/titlelogo.png');
+        this.load.image('adventure', 'img/misc/adventure.png');
+        this.load.image('online_menu_img', 'img/misc/online.png');
+        this.load.image('leveleditor', 'img/misc/leveleditor.png');
         this.load.image('world1', 'img/misc/world1.png');
         this.load.image('world2', 'img/misc/world2.png');
         this.load.image('world3', 'img/misc/world3.png');
         this.load.image('special', 'img/misc/special.png');
+        this.load.image('challenge', 'img/misc/challenge.png');
+        this.load.image('playrandom', 'img/misc/playrandom.png');
+        this.load.image('mostplayed', 'img/misc/mostplayed.png');
+        this.load.image('newestsubmitted', 'img/misc/newestsubmitted.png');
+        this.load.image('entername', 'img/misc/entername.png');
+        this.load.image('back_menu', 'img/misc/back.png');
+        this.load.image('complete1', 'img/misc/complete1.png');
+        this.load.image('complete2', 'img/misc/complete2.png');
+        this.load.image('complete3', 'img/misc/complete3.png');
+        this.load.image('creditslist', 'img/misc/creditslist.png');
+        this.load.image('sitelogo', 'img/sitelogo.png');
+        this.load.image('soundon', 'img/soundon.png');
+        this.load.image('soundoff', 'img/soundoff.png');
 
         this.load.image('bg1', 'img/block/bg1.png');
         this.load.image('bg2', 'img/block/bg2.png');
@@ -44,15 +62,54 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('redblock', 'img/block/redblock.png');
         this.load.image('boostfruit', 'img/editoricon/boostfruit.png');
 
+        this.load.image('playbutton_preloader', 'img/playbutton.png');
+
         this.load.audio('menu_music', 'snd/menu.mp3');
         this.load.audio('song1', 'snd/song1.mp3');
+        this.load.audio('song1end', 'snd/song1end.mp3');
+        this.load.audio('song2', 'snd/song2.mp3');
+        this.load.audio('song2end', 'snd/song2end.mp3');
+        this.load.audio('song3', 'snd/song3.mp3');
+        this.load.audio('song3end', 'snd/song3end.mp3');
+        this.load.audio('boss', 'snd/boss.mp3');
+        this.load.audio('bossend', 'snd/bossend.mp3');
+        this.load.audio('online', 'snd/online.mp3');
+        this.load.audio('onlineend', 'snd/onlineend.mp3');
+        this.load.audio('leveleditor_music', 'snd/leveleditor.mp3');
+        this.load.audio('explode', 'snd/explode.mp3');
+        this.load.audio('cheer', 'snd/cheer.mp3');
+        this.load.audio('wow', 'snd/wow.mp3');
+        this.load.audio('fruit', 'snd/fruit.mp3');
+        this.load.audio('thunder', 'snd/thunder.mp3');
         this.load.audio('jump1', 'snd/jump/jump1.mp3');
+        this.load.audio('jump2', 'snd/jump/jump2.mp3');
+        this.load.audio('jump3', 'snd/jump/jump3.mp3');
+        this.load.audio('jump4', 'snd/jump/jump4.mp3');
         this.load.audio('fall', 'snd/fall.mp3');
+        this.load.audio('rocketexplode', 'snd/rocketexplode.mp3');
+        this.load.audio('shoot', 'snd/shoot.mp3');
+        this.load.audio('boost', 'snd/boost.mp3');
+        this.load.audio('rocketboss', 'snd/rocketboss.mp3');
+        this.load.audio('rocketbossdie', 'snd/rocketbossdie.mp3');
+        this.load.audio('pause', 'snd/pause.mp3');
+        this.load.audio('unpause', 'snd/unpause.mp3');
+        this.load.audio('beep', 'snd/beep.mp3');
 
-        this.load.text('world1_level1', 'data/world_1/level1.xml');
+        for (let world = 1; world <= 3; world += 1) {
+            for (let level = 1; level <= 11; level += 1) {
+                this.load.text(`world${world}_level${level}`, `data/world_${world}/level${level}.xml`);
+            }
+        }
+        this.load.text('challenge_level1', 'data/challenge/Challenge1.xml');
+        this.load.text('challenge_level2', 'data/challenge/Challenge2.xml');
+        this.load.text('challenge_level3', 'data/challenge/Challenge3.xml');
+        this.load.text('blank_level', 'data/blank.xml');
     }
 
     create() {
+        if (window.jumpDieCreateMain) {
+            window.jumpDieCreateMain.setScene(this);
+        }
         this.scene.start('MenuScene');
     }
 

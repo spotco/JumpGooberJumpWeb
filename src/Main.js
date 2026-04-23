@@ -5,6 +5,7 @@ import BootScene from './scenes/BootScene.js';
 import MenuScene from './scenes/MenuScene.js';
 import GameScene from './scenes/GameScene.js';
 import { GAME_WIDTH, GAME_HEIGHT } from './Constants.js';
+import JumpDieCreateMain from './JumpDieCreateMain.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -24,4 +25,5 @@ const config = {
     ],
 };
 
+window.jumpDieCreateMain = new JumpDieCreateMain();
 window.jumpGooberJumpGame = new Phaser.Game(config);
