@@ -6,3 +6,7 @@ Thumbs.db
 node_modules/
 dist/
 coverage/
+*.swp
+*.swo
+.*.swp
+.*.swo
