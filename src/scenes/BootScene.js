@@ -28,8 +28,18 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('guy_up', 'img/guyup.png');
         this.load.image('guy_down', 'img/guydown.png');
 
-        this.load.image('greenblock', 'img/block/greenblock.png');
-        this.load.image('blueblock', 'img/block/blueblock.png');
+        this.load.image('wall_blue', 'img/block/blueblock.png');
+        this.load.image('wall_blue_tall', 'img/block/blueblocktall.png');
+        this.load.image('wall_blue_top', 'img/block/blue/top.png');
+        this.load.image('goal_green_1', 'img/block/greenblock.png');
+        this.load.image('goal_green_2', 'img/block/greenblock2.png');
+        this.load.image('goal_green_top', 'img/block/green/top.png');
+        this.load.image('goal_green_left', 'img/block/green/left.png');
+        this.load.image('goal_green_bottom', 'img/block/green/bottom.png');
+        this.load.image('goal_green_right', 'img/block/green/right.png');
+        this.load.image('text_bug_1', 'img/block/textbug/textbug1.png');
+        this.load.image('text_bug_2', 'img/block/textbug/textbug2.png');
+        this.load.image('text_speechbubble', 'img/block/textbug/speechbubble.png');
         this.load.image('yellowblock', 'img/block/yellowblock.png');
         this.load.image('redblock', 'img/block/redblock.png');
         this.load.image('boostfruit', 'img/editoricon/boostfruit.png');

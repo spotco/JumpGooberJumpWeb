@@ -1,13 +1,12 @@
-# Jump Goober Jump Web - High-Level Port Plan
+# Jump Goober Jump Web - Source-Matching Port Plan
 
 **Last Updated**: 2026-04-23
 
 ---
 
-This file tracks the current high-level plan for the Flash-to-Phaser port.
-
-The plan is intentionally system-level right now. Future runs should expand each
-phase into exact JavaScript files, method mappings, and implementation tasks.
+This file tracks the active checklist for the direct ActionScript 3 to Phaser 3
+port. The target is a source-matching, file-for-file port of the original Flash
+game wherever the source file represents runtime behavior.
 
 Original source reference:
 
@@ -15,37 +14,43 @@ Original source reference:
 /Users/betty/dev/Jump--goober--Jump--
 ```
 
-Reference web-port style:
+Planning style reference:
 
 ```text
-/Users/betty/dev/Save-the-Princess-Web
+/Users/betty/dev/Save-the-Princess-Web/PLAN_COMPLETED.md
 ```
 
 ---
 
-## Phase 0: Project Setup
-
-Status: scaffolded.
+## Phase 0: Project Setup And Source Inventory
 
 - [x] Initialize `JumpGooberJumpWeb` as a static Phaser 3 project.
-- [x] Copy original image assets from `img/`.
-- [x] Copy original sound assets from `snd/`.
+- [x] Add `index.html`, `AGENTS.md`, `PLAN.md`, `.gitignore`, `run.sh`, and
+  `run.bat`.
+- [x] Copy checked-in Phaser from the reference web port.
+- [x] Copy original `img/` assets.
+- [x] Copy original `snd/` assets.
 - [x] Copy original fonts from `misc/Bienvenu.ttf` and `misc/acknowtt.ttf`.
-- [x] Copy bundled XML levels from:
-  - `misc/world_1/*.xml`
-  - `misc/world_2/*.xml`
-  - `misc/world_3/*.xml`
-  - `misc/challenge*.xml`
-  - `misc/blank.xml`
-- [x] Add initial boot/menu/game stubs.
-- [x] Add `AGENTS.md`, `.gitignore`, and run scripts.
-
-Future expansion hook:
-Document the final source tree once the first real gameplay modules are created.
+- [x] Copy original bundled XML levels:
+  - [x] `misc/world_1/*.xml` -> `data/world_1/`
+  - [x] `misc/world_2/*.xml` -> `data/world_2/`
+  - [x] `misc/world_3/*.xml` -> `data/world_3/`
+  - [x] `misc/challenge/*.xml` -> `data/challenge/`
+  - [x] `misc/challenge.xml` -> `data/challenge.xml`
+  - [x] `misc/blank.xml` -> `data/blank.xml`
+- [x] Audit copied runtime assets against the Flash source:
+  - [x] `img/`: 171 source files, 171 web files, checksum match.
+  - [x] `snd/`: 89 source files, 89 web files, checksum match.
+  - [x] fonts/XML: 41 checked pairs, 0 missing, 0 mismatches.
+- [x] Scan active ActionScript source files outside `old/`.
+- [x] Update `AGENTS.md` to require source-matching and file-for-file porting.
+- [ ] Add an `ASSET_AUDIT.md` with copied, omitted, and Flash-only asset notes.
+- [ ] Decide whether to archive source-present Flash output `jumpdiecreate.swf`
+  in the web repo. It is not needed for Phaser runtime.
 
 ---
 
-## Phase 1: Boot, Asset Loading, And Global Runtime
+## Phase 1: Boot, Shell, Constants, Audio, Save, And Runtime Owner
 
 Primary source:
 
@@ -53,521 +58,312 @@ Primary source:
 - `Preloader.as`
 - `JumpDieCreateMain.as`
 
-Porting approach:
+### 1a. Phaser shell and Flash preloader replacement
 
-- Keep the web app static, with Phaser loaded from `lib/phaser.min.js`.
-- Treat `Main.as` and `Preloader.as` as Flash shell/preloader references only.
-  The ad container, SWF bridge, and external sponsor navigation are not core
-  gameplay and should stay stubbed or omitted.
-- Port the game ownership role of `JumpDieCreateMain.as` into JavaScript:
-  constants, mode switching, save ownership, audio ownership, rank data, global
-  mute state, and shared helpers.
-- Preserve the original internal resolution: `500x520`.
-- Load source assets by explicit Phaser keys so later entity classes can refer
-  to the original AS3 embed names and asset paths.
+- [x] Create `index.html` to load Phaser and `src/Main.js`.
+- [x] Create `src/Main.js` with Phaser config and scene list.
+- [x] Create `src/Constants.js` with first menu/mode constants.
+- [x] Create `src/scenes/BootScene.js` as a Phaser boot/preload wrapper.
+- [ ] Port the relevant non-ad/non-SWF loading flow from `Main.as`.
+- [ ] Document Flash-only `preloader_bar.png`, `preloader_bg.png`, and
+  `startgame_bg.png` references, which are missing from the source checkout.
+- [ ] Document `Preloader.as` SWF loading as omitted for Phaser runtime.
+- [ ] Remove Flash ad and SWF bridge calls from the web boot path.
 
-Systems to create or expand later:
+### 1b. `JumpDieCreateMain.as` direct port
 
-- `BootScene`: full asset preload and progress display.
-- `JumpGooberMain` or equivalent runtime owner: mode routing and shared state.
-- `SoundManager`: music IDs, looping behavior, one-shot SFX, mute/fade support.
-- `SaveManager`: `SharedObject` replacement using `localStorage`.
-- `RankData`: rank thresholds from `misc/RankData.as`.
+- [ ] Create `src/JumpDieCreateMain.js`.
+- [ ] Port static mode constants:
+  `LEVELEDITOR`, `RANDOMONLINE`, `MOSTPLAYEDONLINE`, `NEWESTONLINE`,
+  `SPECIFICONLINE`, `WORLD1`, `WORLD2`, `WORLD3`, `WORLD_SPECIAL`.
+- [ ] Port static music IDs:
+  `MENU_MUSIC`, `LEVELEDITOR_MUSIC`, `WIN_SOUND`, `BOSSSONG`,
+  `BOSSENDSONG`, `SONG1`, `SONG2`, `SONG3`, `SONG4`, `SONG1END`,
+  `SONG2END`, `SONG3END`, `ONLINE`, `ONLINEEND`.
+- [ ] Port global flags:
+  `MOCHI_ENABLED`, `ONLINE_DB_URL`, `HAS_CHALLENGE_LEVELS`, `IS_MUTED`,
+  `CONTEST_MODE`, `LEVELS_UNLOCKED`.
+- [ ] Port `verifysave()` to localStorage-backed state.
+- [ ] Port `menuStart(menupos)` routing to source-mapped currentfunction
+  classes.
+- [ ] Port `clearDisplay()` as a Phaser-safe display cleanup helper.
+- [ ] Port `getChecksum(a, b)`.
+- [ ] Port `playSpecific(tar, repeat)` through a source-mapped sound manager.
+- [ ] Port `stop()`.
+- [ ] Port `playsfx(s, t)`.
+- [ ] Port `getTextFormat(size, type)` semantics to shared text style helpers.
+- [ ] Port `initrankdata()` through `src/misc/RankData.js`.
 
-Future expansion hook:
-Add a complete asset manifest and sound ID mapping after all entities are
-ported enough to prove which duplicate HQ/LQ/old assets are needed.
+### 1c. Audio and save helpers
 
----
-
-## Phase 2: Mode And Scene Flow
-
-Primary source:
-
-- `currentfunction/CurrentFunction.as`
-- `currentfunction/JumpDieCreateMenu.as`
-- `currentfunction/TutorialGame.as`
-- `currentfunction/WorldTwoGame.as`
-- `currentfunction/WorldThreeGame.as`
-- `currentfunction/SpecialGame.as`
-- `currentfunction/SimpleGame.as`
-
-Porting approach:
-
-- Preserve the original `CurrentFunction` concept as the mode/session layer
-  above gameplay. In Phaser this can be scene data plus small controller
-  classes, but the AS3 method names should remain recognizable:
-  `destroy()`, `startLevel()`, and `nextLevel(hitgoal)`.
-- Port menu hierarchy before online/editor additions:
-  main menu, adventure/world menu, online menu shell, level select, challenge
-  select, mute button, cursor behavior, and description bubbles.
-- Port world progression exactly:
-  3 worlds, 11 levels per world, per-world unlock counters, per-level best
-  times, rank display, world completion art, and final credits after World 3.
-- Port special/challenge levels as local bundled content.
-- Keep online mode menu entries visible only if we choose to preserve the
-  original surface; remote behavior should be stubbed until local gameplay is
-  stable.
-
-Systems to create or expand later:
-
-- `MenuScene` / `MenuController`.
-- `WorldSelectController`.
-- `LevelSelectController`.
-- `ChallengeSelectController`.
-- `LevelCompleteScene` or overlay.
-- `CreditsScene`.
-- `CurrentFunction`-style session controllers for campaign, challenge, custom,
-  and online flows.
-
-Future expansion hook:
-Define the exact scene/controller split after the core `GameEngine` loop has a
-working death, reload, and goal transition path.
+- [ ] Create `src/SoundManager.js` or keep audio ownership in
+  `JumpDieCreateMain.js` with source-compatible methods.
+- [ ] Load and map all music assets from `JumpDieCreateMain.as`.
+- [ ] Load and map all SFX assets from `JumpDieCreateMain.as`.
+- [ ] Preserve jump sound sequence behavior used by `GameEngine.playjumpsound()`.
+- [ ] Preserve mute behavior and sound fade-in behavior.
+- [ ] Create `src/SaveManager.js` only if it stays source-compatible with
+  `SharedObject` fields from `JumpDieCreateMain.as` and `TutorialGame.as`.
 
 ---
 
-## Phase 3: Level XML Loading And GameEngine Runtime
+## Phase 2: CurrentFunction Mode System And Menus
 
-First concrete coding target:
+Primary source directory:
 
-Render `data/world_1/level1.xml` in Phaser from the original XML data, with
-faithful block positions, negative width/height normalization, text fields,
-goal rendering, the original 500x520 playfield, and the initial vertical
-camera/scroll structure in place. This first slice is for visual/runtime
-foundation only; full player movement parity belongs to Phase 4.
+```text
+currentfunction/
+```
+
+### 2a. CurrentFunction base and menu
+
+- [ ] Create `src/currentfunction/CurrentFunction.js` from
+  `currentfunction/CurrentFunction.as`.
+- [ ] Create `src/currentfunction/JumpDieCreateMenu.js` from
+  `currentfunction/JumpDieCreateMenu.as`.
+- [ ] Preserve `destroy()`, `startLevel()`, and `nextLevel(hitgoal)` method
+  shape.
+- [ ] Port main menu, world menu, online menu arrays, and menu swap behavior.
+- [ ] Port menu cursor `Guy` usage and description bubble behavior.
+- [ ] Port mute button behavior.
+- [ ] Port status display behavior with web-safe online-status stub.
+- [ ] Keep `src/scenes/MenuScene.js` as a thin Phaser wrapper around
+  `JumpDieCreateMenu`.
+
+### 2b. Campaign world select and progression
+
+- [ ] Create `src/currentfunction/TutorialGame.js` from
+  `currentfunction/TutorialGame.as`.
+- [ ] Create `src/currentfunction/WorldTwoGame.js` from
+  `currentfunction/WorldTwoGame.as`.
+- [ ] Create `src/currentfunction/WorldThreeGame.js` from
+  `currentfunction/WorldThreeGame.as`.
+- [ ] Port level array construction for 11 levels per world.
+- [ ] Port level select screen layout, scrolling background, selector `Guy`,
+  keyboard and mouse selection, locked-level alpha, and back button.
+- [ ] Port save progress per world.
+- [ ] Port per-level best-time display and rank display.
+- [ ] Port `getsong()` and `playWinSound()` overrides per world.
+- [ ] Port level-complete screen, time display, rank display, total time,
+  deaths, `WinAnimation`, `Fireworks`, and continue flow.
+- [ ] Port world-complete art and World 3 credits flow.
+
+### 2c. Challenge, simple, editor, and online mode entry classes
+
+- [ ] Create `src/currentfunction/SpecialGame.js` from
+  `currentfunction/SpecialGame.as`.
+- [ ] Create `src/currentfunction/SimpleGame.js` from
+  `currentfunction/SimpleGame.as`.
+- [ ] Create `src/currentfunction/LevelEditor.js` from
+  `currentfunction/LevelEditor.as`.
+- [ ] Create `src/currentfunction/RandomOnlineGame.js` from
+  `currentfunction/RandomOnlineGame.as`.
+- [ ] Create `src/currentfunction/BrowseMostPlayedGame.js` from
+  `currentfunction/BrowseMostPlayedGame.as`.
+- [ ] Create `src/currentfunction/BrowseMostRecentGame.js` from
+  `currentfunction/BrowseMostRecentGame.as`.
+- [ ] Create `src/currentfunction/BrowseSpecificGame.js` from
+  `currentfunction/BrowseSpecificGame.as`.
+- [ ] Create `src/currentfunction/TypeNameGame.js` from
+  `currentfunction/TypeNameGame.as`.
+- [ ] Keep remote/PHP behavior stubbed until local campaign parity is stable.
+
+---
+
+## Phase 3: Core Runtime And Level XML Loading
 
 Primary source:
 
 - `core/GameEngine.as`
-- `blocks/BaseBlock.as`
-- `blocks/Wall.as`
-- `blocks/Goal.as`
-- `blocks/Textdisplay.as`
-- `misc/world_*/*.xml`
-- `misc/challenge/*.xml`
-- `misc/blank.xml`
+- campaign/challenge XML under `misc/`
 
-Porting approach:
+### 3a. GameEngine direct port
 
-- Keep the original XML format as the canonical campaign data format for now.
-- Parse XML nodes into the same runtime lists as AS3:
-  `walls`, `deathwall`, `boostlist`, `textdisplays`, `goals`, `boostfruits`,
-  `tracks`, `particles`, plus reuse pools for particles, rockets, and bullets.
-- Preserve negative width/height normalization because existing levels rely on
-  it.
-- Preserve the vertical climbing camera model:
-  player stays near the scroll threshold, blocks scroll downward, and the
-  background uses a scroll window equivalent.
-- Preserve timer and death-count semantics:
-  game time excludes pause, reload increments death count, and goal completion
-  passes `hitgoal=true` to the owning mode.
-- Preserve UI controls:
-  menu, back/skip, pause/unpause, mute, level display, time/deaths display.
-- Preserve memory-removal behavior in spirit:
-  remove or hide far-offscreen blocks without changing gameplay.
-
-### 3a. Files And Module Shape
-
-Initial files to create or expand:
-
-- `src/GameEngine.js`
-  AS3-style runtime owner for one loaded level. Holds object arrays, current
-  vertical offset, background, timer/death placeholders, and update/render
-  calls.
-- `src/LevelXmlParser.js`
-  Parses XML strings into typed node records and builds block instances in the
-  same node order as `GameEngine.loadfromXML()`.
-- `src/blocks/BaseBlock.js`
-  Shared block interface with `type()`, `internaltext()`, `update(gameEngine)`,
-  `simpleupdate(gameEngine)`, `gameScroll(scrollSpeed)`, `destroy()`, and
-  normalized bounds helpers.
-- `src/blocks/Wall.js`
-  Phaser equivalent of `blocks/Wall.as`, using the original blue block textures.
-- `src/blocks/Goal.js`
-  Phaser equivalent of `blocks/Goal.as`, using the original green goal textures
-  and simple two-frame fill animation.
-- `src/blocks/Textdisplay.js`
-  Phaser equivalent of `blocks/Textdisplay.as`, using Phaser text plus the
-  original text bubble styling where practical.
-- `src/scenes/GameScene.js`
-  Replace placeholder rendering with `GameEngine` construction for World 1
-  Level 1.
-- `src/scenes/BootScene.js`
-  Expand preloads only for the assets required by this slice.
-
-Future expansion hook:
-After this slice works, split shared drawing/fill behavior into helper modules
-only if repeated block classes make the duplication meaningful.
-
-### 3b. XML Parser Scope
-
-Implement first:
-
-- Read XML from Phaser text cache:
-  `data/world_1/level1.xml`.
-- Parse the root `<level>` attributes:
-  `name`, optional `bg`.
-- Parse child nodes into records with numeric attributes:
-  `x`, `y`, `width`, `height`, plus string attributes such as `text`.
-- Support the World 1 Level 1 node types:
-  `wall`, `textfield`, and `goal`.
-- Preserve source order for construction where it matters visually.
-- Normalize negative dimensions exactly like AS3 constructors:
-  if `width < 0`, add width to `x` and make width positive;
-  if `height < 0`, add height to `y` and make height positive.
-- Return an explicit unsupported-node list for later levels. Do not silently
-  drop unsupported nodes after World 1 Level 1.
-
-Defer:
-
-- `boost`, `deathwall`, `boostfruit`, `track`, `trackwall`,
-  `trackblade`, `activatetrackwall`, bosses, launchers, projectiles, and
-  editor-only serialization behavior.
-- XML export.
-- Remote/online XML metadata.
-
-Validation checklist:
-
-- `world 1-1` appears as the level display name.
-- The parser reports zero unsupported nodes for `world_1/level1.xml`.
-- Walls with negative dimensions render in their normalized positions:
-  for example the wall at `x=363 y=-579 width=-293 height=-26` becomes a
-  positive `293x26` wall at `x=70 y=-605`.
-
-### 3c. World 1 Level 1 Rendering
-
-Implement first:
-
-- Use the original `500x520` coordinate space.
-- Add background `bg1` with a scroll-window equivalent or a Phaser container
-  strategy that can later match `bg.scrollRect`.
-- Render all `wall` nodes as blue textured rectangles:
-  use `img/block/blueblock.png` or `img/block/blueblocktall.png` for fill,
-  and `img/block/blue/top.png` for the top detail, matching `Wall.as`.
-- Render all `goal` nodes as green textured rectangles:
-  use `img/block/greenblock.png`, `img/block/greenblock2.png`, and edge
-  textures from `img/block/green/`.
-- Render all `textfield` nodes as readable text at the source coordinates.
-  Start with Phaser text using the original text string; add the bubble art
-  after basic placement is correct.
-- Put all level objects inside a single world container so vertical scrolling
-  can be implemented by moving the container or by updating each block through
-  `gameScroll()`.
-
-Defer:
-
-- Pixel-perfect bitmap fill parity for every block edge.
-- Complex text bubble animation.
-- Goal collision/completion.
-- Player-controlled scrolling.
-
-Validation checklist:
-
-- All 19 walls, 6 text fields, and 1 goal from World 1 Level 1 are created.
-- The first screen shows the ground/platform layout from the XML.
-- Offscreen negative-`y` objects exist in the runtime arrays even if not
-  visible before scrolling.
-- No placeholder rectangle remains from the scaffold.
-
-### 3d. GameEngine Runtime Skeleton
-
-Implement first:
-
-- Constructor shape should mirror:
-  `new GameEngine(main, curfunction, clvlxml, name, usebackbutton, useBg,
-  hasskip, deathcount)`.
-  In JS/Phaser this can be an options object, but retain the same field names
-  internally.
-- Initialize AS3-equivalent arrays:
+- [x] Create first `src/GameEngine.js` runtime skeleton.
+- [x] Initialize AS3-equivalent arrays:
   `deathwall`, `boostlist`, `textdisplays`, `walls`, `goals`, `boostfruits`,
   `tracks`, `particles`, `particlesreuse`, `rocketparticlesreuse`,
   `bulletsreuse`.
-- Add `loadfromXML(xmlText)` with the same node-type ordering as
-  `GameEngine.as`.
-- Add `makeui()` as a minimal first pass:
-  level name, `TIME: 0:00:000`, `DEATHS:0`, and a back/menu placeholder.
-- Add `update(time, delta)` even if it only runs goal animation and text/block
-  animation for this slice.
-- Add `clear()` that destroys Phaser objects and clears arrays.
-- Add `gettimet(n)` equivalent early so timer display formatting is settled.
+- [x] Create `src/LevelXmlParser.js` for XML parsing.
+- [x] Parse `data/world_1/level1.xml`.
+- [x] Preserve negative width/height normalization.
+- [x] Add first `loadfromXML()` implementation for `wall`, `goal`, and
+  `textfield`.
+- [x] Add first `makeui()` pass with level display, time, death text, and debug
+  scroll help.
+- [x] Add `GameEngine.gettimet(n)`.
+- [x] Add `gameScroll(scroll_spd)` foundation.
+- [x] Add `clear()` foundation.
+- [x] Wire `src/scenes/GameScene.js` to create `GameEngine` from
+  `world1_level1`.
+- [x] Add debug PageUp/PageDown vertical scroll.
+- [ ] Port `GameEngine.loadfromXML()` support for every node type in source
+  order.
+- [ ] Port `makeui()` fully: menu, back/skip, mute, pause/unpause,
+  leveldisplay image, time/death text, and paused cover.
+- [ ] Port `update(e)` fully: timing, pause, input, player update, block update,
+  scroll, UI layering, and early-return behavior.
+- [ ] Port `moveUiToFront()`.
+- [ ] Port `clearAbove()` and `clearBelow()` behavior.
+- [ ] Port `checkOffScreenDeath()`.
+- [ ] Port background scrollRect behavior.
+- [ ] Port `onKeyPress()`, `onKeyUp()`, `inputStackMove()`, and
+  `playjumpsound()`.
+- [ ] Port `reload()`, `loadnextlevel(hitgoal)`, and callback contracts to
+  `CurrentFunction`.
+- [ ] Port `clear()` fully, including listener cleanup and object cleanup.
 
-Defer:
+### 3b. XML data coverage
 
-- Real `CurrentFunction` callbacks.
-- Death/reload behavior.
-- Pause/mute button behavior beyond noninteractive placeholders.
-- Object memory removal until scrolling and player movement are active.
-
-Validation checklist:
-
-- `GameScene` can create and clear a `GameEngine` instance without leaking
-  visible objects during scene restart.
-- Timer text uses the same `m:ss:ms` shape as AS3.
-- Runtime arrays contain the expected World 1 Level 1 counts.
-
-### 3e. Camera And Scroll Foundation
-
-Implement first:
-
-- Keep `currenty` and `bg_y` fields from `GameEngine.as`.
-- Define a `gameScroll(scrollSpeed)` path that can move every block through its
-  own `gameScroll()` method.
-- For the first visual pass, expose temporary keyboard scroll controls for
-  testing the vertical level without claiming gameplay parity:
-  for example PageUp/PageDown or debug-only keys.
-- Keep the scroll threshold logic documented in code comments for Phase 4:
-  original scroll speed is `roundDec((250 - testguy.y) / 9, 1)` when
-  `testguy.y < 250`.
-
-Defer:
-
-- Player-driven scrolling.
-- Background scrollRect exactness.
-- Offscreen death bounds.
-- `clearAbove()` and `clearBelow()` pruning.
-
-Validation checklist:
-
-- Debug scrolling can reveal the goal at the top of World 1 Level 1.
-- Blocks and text move together without drifting apart.
-- Background movement can be refined later without rewriting block placement.
-
-### 3f. Asset Loading For This Slice
-
-Add only the required assets first:
-
-- `bg1`: `img/block/bg1.png`
-- `wall_blue`: `img/block/blueblock.png`
-- `wall_blue_tall`: `img/block/blueblocktall.png`
-- `wall_blue_top`: `img/block/blue/top.png`
-- `goal_green_1`: `img/block/greenblock.png`
-- `goal_green_2`: `img/block/greenblock2.png`
-- `goal_green_top`: `img/block/green/top.png`
-- `goal_green_left`: `img/block/green/left.png`
-- `goal_green_bottom`: `img/block/green/bottom.png`
-- `goal_green_right`: `img/block/green/right.png`
-- Text display bubble assets from `img/block/textbug/` only if the first text
-  pass uses them.
-- `world1_level1`: `data/world_1/level1.xml`
-
-Defer:
-
-- Full manifest for all worlds.
-- Boss/projectile/track assets.
-- Sound preloads not used by this visual slice.
-
-### 3g. Manual Test Plan
-
-Do not start a web server automatically unless the user asks.
-
-When testing is requested:
-
-- Serve the folder over HTTP.
-- Open `GameScene` through the existing menu stub.
-- Confirm there are no browser console errors.
-- Confirm World 1 Level 1 renders from XML, not from hardcoded rectangles.
-- Confirm debug scroll can inspect from the spawn area to the goal.
-- Confirm scene restart/return to menu cleans up the previous level objects.
-
-### 3h. Completion Criteria For Phase 3 First Slice
-
-This phase slice is complete when:
-
-- World 1 Level 1 is parsed from `data/world_1/level1.xml`.
-- `wall`, `textfield`, and `goal` nodes render at source-faithful positions.
-- Negative dimensions normalize exactly like the AS3 constructors.
-- `GameEngine` owns runtime arrays and basic UI placeholders.
-- The level can be debug-scrolled vertically to inspect all objects.
-- The code shape leaves obvious hooks for Phase 4 player movement and Phase 5
-  block expansion.
-
-Systems to keep expanding later:
-
-- `GameScene`: Phaser scene wrapper.
-- `GameEngine`: AS3-style runtime loop and level object manager.
-- `LevelXmlParser`: XML-to-runtime-object construction.
-- `GameUi`: bottom buttons and top-right timer/death text.
-- `TimeFormatter`: `GameEngine.gettimet()` equivalent.
-
-Future expansion hook:
-After this slice lands, expand Phase 3 again for full campaign XML coverage:
-all node types, all worlds, challenge levels, pause/death/goal callbacks, and
-complete UI controls.
+- [x] Copy all bundled campaign/challenge XML files.
+- [x] Verify World 1 Level 1 actual counts:
+  17 walls, 7 text fields, 1 goal.
+- [ ] Parse all World 1 levels without unsupported-node crashes.
+- [ ] Parse all World 2 levels without unsupported-node crashes.
+- [ ] Parse all World 3 levels without unsupported-node crashes.
+- [ ] Parse all challenge levels without unsupported-node crashes.
+- [ ] Add parser diagnostics that report unsupported node type, file, and count.
+- [ ] Keep XML as canonical source format during the faithful port.
 
 ---
 
-## Phase 4: Player Movement And Collision
+## Phase 4: Core Player
 
 Primary source:
 
 - `core/Guy.as`
-- `core/GameEngine.as` input methods
 
-Porting approach:
-
-- Port `Guy.as` before complex blocks, because most block behavior depends on
-  exact hitbox, velocity, and wall-jump semantics.
-- Preserve original fields and quirks:
+- [ ] Create `src/core/Guy.js`.
+- [ ] Port fields:
   `vx`, `vy`, `boost`, `canJump`, `jumpCounter`, `justtouched`,
-  `jumpavailable`, `jumpcd`, `isslide`, `hashitwall`, and separate hitboxes.
-- Preserve input stack behavior:
-  last pressed movement key wins, jump is edge-triggered, down dampens
-  horizontal velocity, `ESC` pauses, and `F1` toggles mute.
-- Preserve movement constants:
-  gravity increment, friction, wall collision recoil, wall-jump horizontal
-  impulse, jump velocity, and boost behavior.
-- Port animation selection from movement state using the original sprite set.
-- Preserve death animation handoff through `Guy.explode()` and delayed reload.
-
-Systems to create or expand later:
-
-- `Guy` / `Player`.
-- `InputStack`.
-- `Hitbox` helpers.
-- `PlayerAnimation`.
-- Optional debug hitbox rendering.
-
-Future expansion hook:
-Create a focused movement parity checklist after `Guy` is ported: flat jump,
-wall slide, wall jump, boost jump, offscreen death, and collision with negative
-dimension walls.
+  `JUSTTOUCHED_ERROR_TIME`, `guydisplay`, `hitbox`, `innerhitbox`,
+  `isslide`, `hashitwall`, `jumpavailable`, `jumpcd`, `JUMPCDTIMER`,
+  `animcounter`, `toggle`, explosion fields, and animation state.
+- [ ] Port constructor spawn, display setup, hitbox setup, and sprite offsets.
+- [ ] Port `changePos(chx, chy)`.
+- [ ] Port `update(walls, justWallJumped)`.
+- [ ] Port collision chunking, y collision, x collision, recursive out behavior,
+  wall-slide behavior, recoil, friction, and gravity.
+- [ ] Port `checkCollision(walls)`.
+- [ ] Port `updateImg()`.
+- [ ] Port `explode()`, explosion animation update, and reload timing handoff.
+- [ ] Port math helpers from `Guy.as` such as `roundDec`, `SIG`, and
+  `SIG_ONE`.
+- [ ] Validate movement parity: flat jump, wall slide, wall jump, boost jump,
+  side fall death, top/bottom offscreen death, and negative-dimension walls.
 
 ---
 
-## Phase 5: Blocks, Hazards, Goals, And Interactive Objects
+## Phase 5: Blocks Directory File-For-File Port
 
-Primary source:
+Primary source directory:
 
-- `blocks/BaseBlock.as`
-- `blocks/Wall.as`
-- `blocks/FalldownBlock.as`
-- `blocks/Boost.as`
-- `blocks/BoostFruit.as`
-- `blocks/Goal.as`
-- `blocks/Textdisplay.as`
-- `blocks/Track.as`
-- `blocks/TrackWall.as`
-- `blocks/ActivateTrackWall.as`
-- `blocks/TrackBlade.as`
-- `blocks/RocketLauncher.as`
-- `blocks/Rocket.as`
-- `blocks/RocketParticle.as`
-- `blocks/LaserLauncher.as`
-- `blocks/BossActivate.as`
-- `blocks/FlowerBoss.as`
-- `blocks/CloudBoss.as`
-- `blocks/RocketBoss.as`
-- `misc/Bullet.as`
+```text
+blocks/
+```
 
-Porting approach:
+### 5a. Base and simple blocks
 
-- Keep `BaseBlock` as the common object interface:
-  `type()`, `internaltext()`, `update(gameEngine)`, `simpleupdate(gameEngine)`,
-  and `gameScroll(scrollSpeed)`.
-- Port simple static and goal objects first:
-  `Wall`, `FalldownBlock`, `Boost`, `BoostFruit`, `Goal`, `Textdisplay`.
-- Port track systems second:
-  `Track`, `TrackWall`, `ActivateTrackWall`, and `TrackBlade`.
-- Port projectile and launcher systems third:
-  `RocketLauncher`, `Rocket`, `RocketParticle`, `LaserLauncher`, and `Bullet`.
-- Port bosses after their supporting projectiles and activation blocks are in:
-  `FlowerBoss`, `CloudBoss`, `RocketBoss`, and `BossActivate`.
-- Preserve original draw order expectations where gameplay depends on it.
-- Preserve block animation counters and update ranges rather than converting to
-  Phaser tweens too early.
+- [x] Create first `src/blocks/BaseBlock.js` from `blocks/BaseBlock.as`.
+- [x] Create first `src/blocks/Wall.js` from `blocks/Wall.as`.
+- [x] Create first `src/blocks/Goal.js` from `blocks/Goal.as`.
+- [x] Create first `src/blocks/Textdisplay.js` from `blocks/Textdisplay.as`.
+- [ ] Complete `BaseBlock.js`: `getTransparent`, `makeBitmap`, `type`,
+  `internaltext`, `update`, `simpleupdate`, and `gameScroll` equivalents.
+- [ ] Complete `Wall.js`, including visual parity and `whitemode()`.
+- [ ] Complete `Goal.js`, including collision and `loadnextlevel(true)`.
+- [ ] Complete `Textdisplay.js`, including bug animation and proximity alpha.
+- [ ] Create `src/blocks/FalldownBlock.js`.
+- [ ] Create `src/blocks/Boost.js`.
+- [ ] Create `src/blocks/BoostFruit.js`.
 
-Systems to create or expand later:
+### 5b. Tracks and moving hazards
 
-- `src/blocks/` module tree mirroring `blocks/*.as`.
-- Shared block texture/tile-fill helpers.
-- Projectile reuse pools.
-- Boss activation and boss HP/state controllers.
+- [ ] Create `src/blocks/Track.js`.
+- [ ] Create `src/blocks/TrackWall.js`.
+- [ ] Create `src/blocks/ActivateTrackWall.js`.
+- [ ] Create `src/blocks/TrackBlade.js`.
+- [ ] Preserve track activation, movement, collision, and draw-order behavior.
 
-Future expansion hook:
-After the core player loop works, expand this phase into a block-by-block port
-order based on which XML nodes appear in World 1 before World 2/3 boss content.
+### 5c. Projectiles and launchers
+
+- [ ] Create `src/blocks/RocketLauncher.js`.
+- [ ] Create `src/blocks/Rocket.js`.
+- [ ] Create `src/blocks/RocketParticle.js`.
+- [ ] Create `src/blocks/LaserLauncher.js`.
+- [ ] Create `src/misc/Bullet.js`.
+- [ ] Preserve projectile reuse pools and explosion behavior.
+
+### 5d. Bosses and boss activation
+
+- [ ] Create `src/blocks/BossActivate.js`.
+- [ ] Create `src/blocks/FlowerBoss.js`.
+- [ ] Create `src/blocks/CloudBoss.js`.
+- [ ] Create `src/blocks/RocketBoss.js`.
+- [ ] Preserve boss HP, activation, particles, sounds, and death/completion
+  behavior.
 
 ---
 
-## Phase 6: Audio, Save Data, Ranks, And Achievements Surface
+## Phase 6: Misc Helpers And UI Effects File-For-File Port
 
-Primary source:
+Primary source directory:
 
-- `JumpDieCreateMain.as`
-- `misc/RankData.as`
-- `misc/MochiManager.as`
-- `currentfunction/TutorialGame.as`
+```text
+misc/
+```
 
-Porting approach:
-
-- Replace Flash `SharedObject` with `localStorage`.
-- Preserve save keys conceptually:
-  per-world unlock counters and per-level best-time strings.
-- Preserve rank thresholds from `RankData.as`.
-- Preserve music selection by mode/world:
-  menu, editor, world songs, boss music, ending music, online music, and
-  one-shot win/end variants.
-- Preserve SFX triggers:
-  jump sequence, fall, explode, boost, fruit, cheer, wow, thunder, shoot,
-  rocket explode, rocket boss sounds, pause, and unpause.
-- Treat Mochi achievements as a local/no-op surface initially. The original
-  achievements can become browser-local badges later if requested, but they
-  should not block gameplay parity.
-
-Systems to create or expand later:
-
-- `SaveManager`.
-- `RankData`.
-- `SoundManager`.
-- `AchievementManager` stub.
-
-Future expansion hook:
-Add a compatibility note for migrating old Flash save fields only if there is
-an explicit source of legacy save data to import.
+- [ ] Create `src/misc/ButtonMessage.js` from `misc/ButtonMessage.as`.
+- [ ] Create `src/misc/ConfirmationWindow.js` from
+  `misc/ConfirmationWindow.as`.
+- [ ] Create `src/misc/Fireworks.js` from `misc/Fireworks.as`.
+- [ ] Create `src/misc/LevelSelectButton.js` from
+  `misc/LevelSelectButton.as`.
+- [ ] Create `src/misc/MenuOption.js` from `misc/MenuOption.as`.
+- [ ] Remove or no-op calls to `misc/MochiManager.as`; Mochi achievements and
+  login widgets are external service features, not gameplay.
+- [ ] Create `src/misc/OnlineBrowseSelection.js` from
+  `misc/OnlineBrowseSelection.as`.
+- [ ] Create `src/misc/Particle.js` from `misc/Particle.as`.
+- [ ] Create `src/misc/RankData.js` from `misc/RankData.as`.
+- [ ] Create `src/misc/ReviewStar.js` from `misc/ReviewStar.as`.
+- [ ] Create `src/misc/ReviewSubmitMenu.js` from
+  `misc/ReviewSubmitMenu.as`.
+- [ ] Create `src/misc/SubmitMenu.js` from `misc/SubmitMenu.as`.
+- [ ] Create `src/misc/TextWindow.js` from `misc/TextWindow.as`.
+- [ ] Create `src/misc/WinAnimation.js` from `misc/WinAnimation.as`.
+- [ ] Preserve original text formatting through shared text style helpers.
+- [ ] Preserve UI image assets and source coordinates wherever practical.
 
 ---
 
-## Phase 7: Level Editor And Custom Level Format
+## Phase 7: Level Editor Direct Port
 
 Primary source:
 
 - `currentfunction/LevelEditor.as`
-- `misc/SubmitMenu.as`
-- `misc/ButtonMessage.as`
-- `misc/ConfirmationWindow.as`
-- `misc/TextWindow.as`
+- editor-supporting `misc/*.as`
 - `misc/blank.xml`
 
-Porting approach:
-
-- Defer editor implementation until campaign gameplay is stable.
-- Preserve the original editor feature shape when implemented:
-  place, resize, move, delete, undo, scroll, background selection, text entry,
-  player spawn, XML output, and test-play flow.
-- Keep XML import/export as the first editor file format because original
-  online and bundled levels use XML.
-- Stub remote submission at first. Browser-local export/import should replace
-  the old PHP upload path unless remote services are intentionally rebuilt.
-- Preserve editor test-play behavior:
-  run the current XML in `GameEngine`, then return to the editor on back/death
-  or offer submit after completion.
-
-Systems to create or expand later:
-
-- `LevelEditorScene`.
-- `EditorToolState`.
-- `EditorXmlSerializer`.
-- `EditorPalette`.
-- `EditorTestPlaySession`.
-- `SubmitMenu` local/export replacement.
-
-Future expansion hook:
-Create a separate editor plan after all campaign block types can round-trip
-through XML.
+- [ ] Port `LevelEditor.as` after campaign gameplay and all block types are
+  stable.
+- [ ] Preserve editor constants:
+  `WALL`, `DEATHBLOCK`, `BOOST`, `GOAL`, `TEXT`, `DELETE`, `MOVE`,
+  `BOOSTFRUIT`, `TRACK`, `TRACKWALL`, `TRACKBLADE`, `FLOWERBOSS`,
+  `CLOUDBOSS`, `ROCKETLAUNCHER`, `LASERCW`, `LASERCCW`,
+  `ACTIVATETRACKWALL`, `ROCKETBOSS`.
+- [ ] Port blank XML loading.
+- [ ] Port grid drawing and current-y scroll behavior.
+- [ ] Port mouse preview create/move behavior.
+- [ ] Port create, delete, move, undo, scroll, type selection, and text entry.
+- [ ] Port `outputXML(name)`.
+- [ ] Port editor test-play through `GameEngine`.
+- [ ] Port submit prompt surface with browser-local export/stubbed remote
+  upload.
 
 ---
 
-## Phase 8: Online And Remote-Level Features
+## Phase 8: Online / PHP Service Surface
 
 Primary source:
 
@@ -579,88 +375,102 @@ Primary source:
 - `misc/OnlineBrowseSelection.as`
 - `misc/ReviewSubmitMenu.as`
 - `misc/web/*.php`
+- `misc/web/levelschema.xsd`
 
-Porting approach:
-
-- Defer true online behavior until local original gameplay is complete.
-- Preserve the menu surface and data model hooks where practical:
-  random level, most played, newest, specific/name lookup, play count, and
-  rating/review flow.
-- Replace PHP service calls with local stubs initially.
-- Later options can include static bundled community levels, GitHub-hosted JSON,
-  or a rebuilt service. Do not couple core gameplay to any remote dependency.
-
-Systems to create or expand later:
-
-- `OnlineLevelService` stub.
-- `OnlineBrowseScene`.
-- `ReviewSubmitMenu` local/no-op shell.
-- `LevelMetadata` object mapping the old XML response fields.
-
-Future expansion hook:
-Write a separate online-data plan only after the user chooses whether online
-features should be local-only, static-hosted, or backed by a service.
+- [ ] Preserve online menu entries and mode classes.
+- [ ] Create a browser-safe `src/services/OnlineLevelService.js` stub that
+  exposes source-equivalent operations.
+- [ ] Map `getrandomid.php` behavior to stub/static data.
+- [ ] Map `getbyid.php` behavior to stub/static data.
+- [ ] Map `getbyname.php` behavior to stub/static data.
+- [ ] Map `getmostplayed.php` behavior to stub/static data.
+- [ ] Map `getrecent.php` behavior to stub/static data.
+- [ ] Map `getnumlevels.php` behavior to stub/static data.
+- [ ] Map `submit.php`, `submitreview.php`, and `updateplaycount.php` to
+  no-op/local behavior unless the user requests a real service.
+- [ ] Keep core gameplay independent of remote network access.
 
 ---
 
-## Phase 9: UI Helpers, Effects, And Completion Polish
+## Phase 9: Excluded Flash Services And Source-Only Artifacts
 
-Primary source:
+These systems were analyzed and should not be ported for gameplay parity.
 
-- `misc/MenuOption.as`
-- `misc/LevelSelectButton.as`
-- `misc/TextWindow.as`
-- `misc/ConfirmationWindow.as`
-- `misc/Fireworks.as`
-- `misc/Particle.as`
-- `misc/WinAnimation.as`
-- `misc/ReviewStar.as`
-- `misc/OnlineBrowseSelection.as`
+### 9a. CPMStar
 
-Porting approach:
+- [x] Analyze `CPMStar/AdLoader.as`.
+- [x] Confirm CPMStar only loads `http://server.cpmstar.com/adviewas3.swf`
+  with a content spot ID.
+- [x] Confirm CPMStar has no gameplay state, level behavior, input behavior,
+  save behavior, or rendering needed by the game.
+- [x] Remove CPMStar from the port plan.
+- [ ] Remove CPMStar imports/calls while porting `Main.as`,
+  `JumpDieCreateMain.as`, and `TutorialGame.as`.
 
-- Port helper classes as needed by the gameplay phases instead of all at once.
-- Preserve original UI layout and image assets for faithful screens.
-- Use Phaser text where replacing Flash `TextField`, but keep font, size,
-  alignment, and text content close to the source.
-- Preserve particle and fireworks timing for win/complete screens.
-- Preserve the final credits scroll timing and skip behavior.
+### 9b. Mochi
 
-Systems to create or expand later:
+- [x] Analyze `misc/MochiManager.as`.
+- [x] Analyze `mochi/as3/*.as` usage.
+- [x] Confirm Mochi code is an external service layer for achievements, awards,
+  login widget, social/profile APIs, scores, coins, user data, and ads.
+- [x] Confirm Mochi achievement checks read save/rank data but do not affect
+  gameplay mechanics, level progression, collision, physics, or level content.
+- [x] Remove `mochi/as3/` from the port plan.
+- [x] Remove `misc/MochiManager.as` from the required source-file port list.
+- [ ] Remove or local-no-op Mochi call sites while porting menus, submit/review
+  flows, and `JumpDieCreateMain.as`.
 
-- `MenuOption`.
-- `LevelSelectButton`.
-- `TextWindow`.
-- `ConfirmationWindow`.
-- `Fireworks`.
-- `Particle`.
-- `WinAnimation`.
-- `CreditsScene`.
+### 9c. Other folders/files that should not be ported
 
-Future expansion hook:
-Add UI parity screenshots/checklists after the game can navigate from menu to
-level, complete a level, and return to menu.
+- [x] Mark `com/gskinner/utils/` as not ported. It is only used for Flash SWF
+  bridge handoff in `Preloader.as`.
+- [x] Mark `misc/web/` PHP files as not ported. They are a legacy server-side
+  online-level backend, not browser gameplay. Online mode can later use a
+  browser-safe local/static service if requested.
+- [x] Mark `old/` as not ported. It contains legacy experiments, old SWFs,
+  backups, PSDs, docs, and old service files.
+- [x] Mark root `.fla`, `.swf`, `.psd`, `.sql.gz`, and `crossdomain.xml` style
+  files as source-only or Flash-service artifacts.
+- [ ] Add `ASSET_AUDIT.md` documenting copied runtime assets and intentionally
+  omitted artifacts.
 
 ---
 
-## Current Implementation Priorities
+## Phase 10: Asset Manifest, Preload Completion, And Browser Verification
 
-1. Expand boot asset loading enough to support XML-rendered World 1 Level 1.
-2. Implement `LevelXmlParser` and simple block construction.
-3. Port `GameEngine` scroll/update structure.
-4. Port `Guy` movement and collision.
-5. Port simple blocks and goal completion.
-6. Build campaign level select and save progression.
-7. Add complex blocks, projectiles, bosses, editor, and online hooks in that
-   order.
+- [ ] Build a full source-mapped asset manifest from active `[Embed]`
+  references outside `old/`.
+- [ ] Load all image assets needed by ported runtime files.
+- [ ] Load all sound assets needed by ported runtime files.
+- [ ] Keep `old/`, `.fla`, `.psd`, PHP service files, and source SQL archives
+  out of runtime unless explicitly requested.
+- [ ] Verify boot, menu, level select, World 1-1, death/reload, goal
+  completion, world completion, credits, challenge levels, editor test-play,
+  and online stubs in browser.
+- [ ] Add screenshots or manual parity notes only after the user asks for
+  browser verification.
+
+---
+
+## Current Implementation Priority
+
+1. Finish Phase 3 direct `GameEngine.as` parity around the existing XML-render
+   skeleton.
+2. Port Phase 4 `core/Guy.as`.
+3. Complete Phase 5 simple blocks needed by World 1.
+4. Port Phase 2 campaign level select enough to play all bundled World 1
+   levels.
+5. Continue file-for-file through remaining blocks, modes, misc helpers, editor,
+   online stubs, and Flash-only service stubs.
 
 ---
 
 ## Notes For Future Runs
 
-- Do not replace the XML campaign data with a new format during the faithful
-  port unless a later task explicitly asks for it.
-- Do not implement online services before local campaign parity.
-- Do not implement the editor before all campaign block types exist.
-- Keep detailed per-file task breakdowns out of this file until the user asks
-  for the next planning pass.
+- Do not replace XML campaign data with a different format during the faithful
+  port.
+- Do not move source behavior into Phaser scene files when a source-mapped class
+  should own it.
+- Do not implement new online services before local source parity.
+- Do not implement editor additions before the source editor can round-trip XML.
+- Update checkboxes as each source file or source behavior is ported.
