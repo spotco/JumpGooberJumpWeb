@@ -129,6 +129,10 @@ currentfunction/
   `currentfunction/JumpDieCreateMenu.as`.
 - [x] Preserve `destroy()`, `startLevel()`, and `nextLevel(hitgoal)` method
   shape.
+- [x] Fix menu visibility so only the active menu option set is visible at one
+  time. Current bug: main, world, and online options are all visible together.
+- [x] Re-check `currentfunction/JumpDieCreateMenu.as` before the fix and keep
+  the JavaScript menu state transitions source-matched.
 - [x] Port main menu, world menu, online menu arrays, and menu swap behavior.
 - [x] Port menu cursor `Guy` usage and description bubble behavior.
 - [x] Port mute button behavior.

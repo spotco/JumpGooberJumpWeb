@@ -10,26 +10,56 @@ class MenuOption {
         this.y = y;
         this.imageKey = imageKey;
         this.menuoption = menuoption;
-        this.guycursorX = -42;
-        this.guycursorY = -8;
-        this.image = scene.add.image(x, y, imageKey).setInteractive({ useHandCursor: true });
+        this.guycursor = null;
+        this.image = scene.add.image(x, y, imageKey)
+            .setDepth(15)
+            .setVisible(false);
+        this.guycursorX = -(this.image.width / 2) - 30;
+        this.guycursorY = -(this.image.height / 2) - 4;
         this.image.buttonmaster = this;
+        this._onPointerOver = null;
+        this._onPointerDown = null;
     }
 
     addEvents(menu) {
-        this.image.on('pointerover', () => {
+        this.removeEvents();
+        this._onPointerOver = () => {
             menu.menupos = menu.use_menu.indexOf(this);
             menu.updateCursor();
-        });
-        this.image.on('pointerdown', () => {
-            menu.menupos = menu.use_menu.indexOf(this);
+        };
+        this._onPointerDown = () => {
             menu.activate();
-        });
+        };
+        this.image.setVisible(true);
+        this.image.setActive(true);
+        this.image.setInteractive({ useHandCursor: true });
+        this.image.on('pointerover', this._onPointerOver);
+        this.image.on('pointerdown', this._onPointerDown);
     }
 
     removeEvents() {
-        this.image.removeAllListeners();
-        this.image.destroy();
+        if (!this.image || !this.image.active) {
+            return;
+        }
+        if (this._onPointerOver) {
+            this.image.off('pointerover', this._onPointerOver);
+        }
+        if (this._onPointerDown) {
+            this.image.off('pointerdown', this._onPointerDown);
+        }
+        this._onPointerOver = null;
+        this._onPointerDown = null;
+        this.image.disableInteractive();
+        this.image.setVisible(false);
+    }
+
+    destroy() {
+        this.removeEvents();
+        if (this.image && typeof this.image.destroy === 'function') {
+            this.image.destroy();
+        }
+        this.image = null;
+        this.guycursor = null;
     }
 }
 
@@ -63,15 +93,15 @@ export default class JumpDieCreateMenu extends CurrentFunction {
         this.use_menu = this.main_menu;
         this.loadOptions();
         this.makeCursor();
+        this.checkonline();
+        this.makemutebutton();
         this.updateCursor();
         this.scene.input.keyboard.on('keyup', this.keyPressed);
-        this.makemutebutton();
-        this.checkonline();
     }
 
     makelogo() {
         this.logo = this.add(this.scene.add.text(0, 490, 'Game by SPOTCO(www.spotcos.com)\nMusic by (www.openheartsound.com)', this.main.getTextFormat(12)).setDepth(20));
-        this.sponsorlogo = this.add(this.scene.add.image(100, 440, 'sitelogo').setOrigin(0, 0).setInteractive({ useHandCursor: true }));
+        this.sponsorlogo = null;
     }
 
     checkonline() {
@@ -105,7 +135,7 @@ export default class JumpDieCreateMenu extends CurrentFunction {
     }
 
     loadOptions() {
-        for (const option of this.menubuttonwrapper) {
+        for (const option of this.all_menu_options) {
             option.removeEvents();
         }
         this.menubuttonwrapper = [];
@@ -154,15 +184,19 @@ export default class JumpDieCreateMenu extends CurrentFunction {
     }
 
     makeCursor() {
-        this.cursor = this.add(this.scene.add.container(0, 0));
+        this.cursor = this.add(this.scene.add.container(0, 0).setDepth(30));
         this.cursor.add(this.scene.add.image(0, 0, 'guy_stand').setScale(0.8));
         this.descBubble = this.scene.add.container(0, 0);
         this.cursor.add(this.descBubble);
     }
 
     updateCursor() {
+        for (const option of this.use_menu) {
+            option.guycursor = null;
+        }
         const selected = this.use_menu[this.menupos];
-        this.cursor.setPosition(selected.x + selected.guycursorX, selected.y + selected.guycursorY);
+        selected.guycursor = this.cursor;
+        this.cursor.setPosition(selected.x + selected.guycursorX, selected.y + selected.guycursorY - 2);
         this.descBubble.removeAll(true);
         const text = this.desc[this.getopt()];
         if (text) {
@@ -171,8 +205,12 @@ export default class JumpDieCreateMenu extends CurrentFunction {
             this.descBubble.add([bubble, label]);
         }
         const inOnline = this.use_menu === this.online_menu;
-        this.statusdisplaycontainer.setVisible(inOnline);
-        this.logo.setVisible(!inOnline);
+        if (this.statusdisplaycontainer) {
+            this.statusdisplaycontainer.setVisible(inOnline);
+        }
+        if (this.logo) {
+            this.logo.setVisible(!inOnline);
+        }
         this.main.playsfx('beep', 0.35);
     }
 
@@ -242,16 +280,20 @@ export default class JumpDieCreateMenu extends CurrentFunction {
             new MenuOption(this.scene, 250, 375, 'entername', MODES.SPECIFICONLINE),
             new MenuOption(this.scene, 250, 425, 'back_menu', JumpDieCreateMenu.BACK_TO_MAIN),
         ];
+
+        this.all_menu_options = [
+            ...this.main_menu,
+            ...this.world_menu,
+            ...this.online_menu,
+        ];
     }
 
     destroy() {
         if (this.scene && this.scene.input && this.scene.input.keyboard) {
             this.scene.input.keyboard.off('keyup', this.keyPressed);
         }
-        for (const option of [...this.main_menu, ...this.world_menu, ...this.online_menu]) {
-            if (option.image && option.image.active) {
-                option.removeEvents();
-            }
+        for (const option of this.all_menu_options) {
+            option.destroy();
         }
         this.clearObjects();
     }
