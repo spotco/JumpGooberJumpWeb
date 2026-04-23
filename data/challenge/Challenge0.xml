@@ -1,0 +1,5 @@
+<level name="Challenge 0">
+  <wall x="106" y="368" width="214" height="68" text=""/>
+  <rocketlauncher x="51" y="52"/>
+  <textfield x="282" y="59" width="156" height="70" text="Challenge! Survive as long as possible! (Can you last 20+?)"/>
+</level>

@@ -1,0 +1,27 @@
+<level name="world 1-6">
+  <wall x="183" y="361" width="157" height="50"/>
+  <wall x="244" y="-93" width="41" height="275" text=""/>
+  <textfield x="72" y="50" width="156" height="70" text="I hope you're ready for this next thing...it's pretty cool"/>
+  <boostfruit x="266" y="-216" width="24" height="28" text=""/>
+  <textfield x="63" y="-276" width="156" height="70" text="go ahead and eat it...it's not poisonous!"/>
+  <textfield x="305" y="-279" width="156" height="70" text="Once you do...start jumping!"/>
+  <wall x="100" y="-572" width="36" height="226" text=""/>
+  <boost x="121" y="213" width="94" height="61"/>
+  <boostfruit x="124" y="-712" width="24" height="28" text=""/>
+  <textfield x="46" y="-816" width="156" height="70" text="It's a boostfruit! It lets you jump mid air!"/>
+  <textfield x="255" y="-725" width="156" height="70" text="go ahead, have another!"/>
+  <wall x="404" y="-812" width="-36" height="-296"/>
+  <boostfruit x="261" y="-1158"/>
+  <boostfruit x="260" y="-1110"/>
+  <boostfruit x="258" y="-1061"/>
+  <wall x="69" y="-1156" width="-35" height="-323"/>
+  <boostfruit x="181" y="-1521"/>
+  <boostfruit x="179" y="-1469"/>
+  <boostfruit x="360" y="-1669"/>
+  <boostfruit x="390" y="-1710"/>
+  <boostfruit x="413" y="-1667"/>
+  <wall x="230" y="-1809" width="-185" height="-61"/>
+  <boostfruit x="131" y="-2000"/>
+  <wall x="294" y="-2149" width="-73" height="-204"/>
+  <goal x="219" y="-2446" width="80" height="-158"/>
+</level>

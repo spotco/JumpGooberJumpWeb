@@ -1,0 +1,29 @@
+<level name="world 3-2">
+  <wall x="183" y="386" width="172" height="52"/>
+  <wall x="416" y="-9" width="40" height="320" text=""/>
+  <wall x="114" y="96" width="223" height="25" text=""/>
+  <laserlauncher x="244" y="-135" dir="3"/>
+  <wall x="306" y="-18" width="150" height="29" text=""/>
+  <wall x="85" y="7" width="-40" height="-341"/>
+  <wall x="143" y="-431" width="106" height="41"/>
+  <deathwall x="107" y="-382" width="-81" height="-104"/>
+  <wall x="367" y="-483" width="37" height="342"/>
+  <textfield x="307" y="-129" width="156" height="70" text="That beam looks painful, don't touch it!"/>
+  <deathwall x="419" y="-527" width="75" height="395"/>
+  <wall x="28" y="-747" width="42" height="239" text=""/>
+  <wall x="157" y="-668" width="302" height="37" text=""/>
+  <wall x="214" y="-799" width="90" height="34" text=""/>
+  <boost x="401" y="-1036" width="72" height="251" text=""/>
+  <wall x="218" y="-1088" width="89" height="44"/>
+  <laserlauncher x="262" y="-934" dir="3"/>
+  <wall x="210" y="-877" width="35" height="112" text=""/>
+  <wall x="112" y="-1114" width="-50" height="-210"/>
+  <boostfruit x="194" y="-1420" width="24" height="28" text=""/>
+  <laserlauncher x="246" y="-1647" dir="-3"/>
+  <boostfruit x="444" y="-1660"/>
+  <wall x="193" y="-1883" width="106" height="69"/>
+  <wall x="94" y="-1933" width="-45" height="-221"/>
+  <wall x="203" y="-2307" width="85" height="148"/>
+  <goal x="203" y="-2360" width="84" height="-128"/>
+  <wall x="178" y="-1610" width="56" height="64"/>
+</level>

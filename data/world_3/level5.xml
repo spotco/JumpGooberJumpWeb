@@ -1,0 +1,30 @@
+<level name="world 3-5">
+  <activatetrackwall x="208" y="323" width="117" height="126" text=""/>
+  <flowerboss x="-3" y="634" width="500" height="300" text=""/>
+  <wall x="202" y="-104" width="132" height="103" text=""/>
+  <activatetrackwall x="158" y="-146" width="-106" height="-138"/>
+  <track x="25" y="-376" width="234" height="39"/>
+  <trackblade x="32" y="-370" width="50" height="55" text=""/>
+  <track x="28" y="-467" width="236" height="30"/>
+  <trackblade x="268" y="-462" width="50" height="55" text=""/>
+  <deathwall x="11" y="-798" width="247" height="137" text=""/>
+  <wall x="321" y="-573" width="123" height="63"/>
+  <boost x="344" y="-670" width="75" height="-180"/>
+  <activatetrackwall x="189" y="-841" width="89" height="-104"/>
+  <wall x="-14" y="-1268" width="35" height="151" text=""/>
+  <deathwall x="170" y="-1442" width="328" height="200"/>
+  <wall x="135" y="-1259" width="29" height="-157"/>
+  <wall x="33" y="-1392" width="-29" height="-219"/>
+  <activatetrackwall x="227" y="-1522" width="151" height="120"/>
+  <deathwall x="176" y="-2152" width="319" height="191"/>
+  <wall x="220" y="-1963" width="167" height="160" text=""/>
+  <deathwall x="391" y="-1975" width="111" height="183"/>
+  <goal x="191" y="-3123" width="122" height="131" text=""/>
+  <activatetrackwall x="174" y="-2327" width="202" height="129" text=""/>
+  <deathwall x="420" y="-2450" width="89" height="-429"/>
+  <wall x="34" y="-1838" width="-32" height="-161"/>
+  <wall x="143" y="-2132" width="35" height="158" text=""/>
+  <wall x="40" y="-2120" width="-37" height="-190"/>
+  <deathwall x="83" y="-2378" width="-80" height="-430"/>
+  <deathwall x="85" y="-2747" width="-98" height="-122"/>
+</level>

@@ -1,0 +1,42 @@
+<level name="world 3-9">
+  <cloudboss x="-135" y="500" width="0" height="0" text=""/>
+  <activatetrackwall x="183" y="332" width="179" height="109"/>
+  <deathwall x="-45" y="83" width="326" height="75" text=""/>
+  <deathwall x="195" y="-170" width="329" height="66" text=""/>
+  <wall x="33" y="34" width="-37" height="-271"/>
+  <rocketlauncher x="37" y="-422"/>
+  <wall x="196" y="-235" width="209" height="40"/>
+  <wall x="446" y="-344" width="40" height="-207"/>
+  <wall x="281" y="-744" width="41" height="220" text=""/>
+  <deathwall x="-8" y="-605" width="281" height="99" text=""/>
+  <deathwall x="445" y="-767" width="103" height="208"/>
+  <track x="116" y="-965" width="37" height="225" text=""/>
+  <laserlauncher x="18" y="-939" dir="3"/>
+  <wall x="270" y="-538" width="-262" height="-35"/>
+  <trackwall x="100" y="-851" width="40" height="132" text=""/>
+  <wall x="333" y="-1150" width="39" height="237" text=""/>
+  <track x="205" y="-1333" width="32" height="200" text=""/>
+  <trackwall x="184" y="-1204" width="46" height="156" text=""/>
+  <deathwall x="385" y="-1128" width="178" height="116" text=""/>
+  <rocketlauncher x="418" y="-1468" width="0" height="0" text=""/>
+  <wall x="37" y="-1372" width="100" height="51" text=""/>
+  <wall x="-4" y="-1690" width="39" height="227" text=""/>
+  <wall x="192" y="-1886" width="39" height="211" text=""/>
+  <deathwall x="29" y="-1724" width="-32" height="-95"/>
+  <deathwall x="221" y="-2005" width="129" height="107" text=""/>
+  <wall x="240" y="-1796" width="250" height="35"/>
+  <deathwall x="244" y="-2030" width="254" height="309" text=""/>
+  <wall x="34" y="-1835" width="-33" height="-321"/>
+  <boostfruit x="202" y="-2139" width="24" height="28" text=""/>
+  <boostfruit x="202" y="-2182" width="24" height="28" text=""/>
+  <rocketlauncher x="58" y="-2316" width="0" height="0" text=""/>
+  <rocketlauncher x="457" y="-2653" width="0" height="0" text=""/>
+  <wall x="463" y="-2476" width="33" height="266" text=""/>
+  <boostfruit x="288" y="-2416" width="24" height="28" text=""/>
+  <boostfruit x="290" y="-2461" width="24" height="28" text=""/>
+  <boostfruit x="115" y="-2639"/>
+  <boostfruit x="117" y="-2690"/>
+  <boost x="223" y="-2858" width="100" height="-173"/>
+  <wall x="349" y="-3252" width="99" height="172" text=""/>
+  <goal x="351" y="-3442" width="98" height="113" text=""/>
+</level>

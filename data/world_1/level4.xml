@@ -1,0 +1,16 @@
+<level name="world 1-4">
+  <wall x="180" y="370" width="174" height="60" text=""/>
+  <textfield x="298" y="131" width="156" height="70" text="Let's mix things up a bit!"/>
+  <wall x="72" y="81" width="47" height="219" text=""/>
+  <deathwall x="295" y="-9" width="117" height="125" text=""/>
+  <wall x="364" y="-390" width="43" height="367" text=""/>
+  <boost x="216" y="-56" width="62" height="173"/>
+  <boost x="292" y="-374" width="-80" height="-133"/>
+  <deathwall x="54" y="-538" width="116" height="136"/>
+  <wall x="135" y="-575" width="-39" height="-350"/>
+  <boost x="214" y="-1053" width="104" height="188" text=""/>
+  <boost x="379" y="-1445" width="92" height="315" text=""/>
+  <deathwall x="20" y="-1276" width="153" height="301" text=""/>
+  <wall x="320" y="-1499" width="-111" height="-179"/>
+  <goal x="220" y="-1759" width="91" height="-115"/>
+</level>

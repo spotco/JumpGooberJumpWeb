@@ -1,0 +1,34 @@
+<level name="world 1-10">
+  <wall x="211" y="196" width="25" height="101"/>
+  <wall x="212" y="186" width="282" height="26" text=""/>
+  <wall x="465" y="195" width="31" height="302"/>
+  <wall x="212" y="275" width="206" height="21" text=""/>
+  <wall x="297" y="191" width="114" height="49" text=""/>
+  <wall x="465" y="398" width="30" height="192"/>
+  <wall x="-10" y="198" width="82" height="310" text=""/>
+  <wall x="239" y="378" width="75" height="235" text=""/>
+  <textfield x="298" y="68" width="156" height="70" text="How to get out of here? I'll give you a hint: you need to fall off!"/>
+  <wall x="211" y="6" width="24" height="230" text=""/>
+  <deathwall x="284" y="-254" width="207" height="307" text=""/>
+  <boostfruit x="134" y="-34" width="24" height="28" text=""/>
+  <wall x="231" y="-411" width="28" height="184" text=""/>
+  <wall x="141" y="-715" width="25" height="212" text=""/>
+  <wall x="402" y="-907" width="22" height="450" text=""/>
+  <deathwall x="288" y="-448" width="206" height="216"/>
+  <deathwall x="-60" y="-260" width="79" height="437" text=""/>
+  <deathwall x="176" y="-511" width="219" height="68" text=""/>
+  <wall x="14" y="-797" width="26" height="493" text=""/>
+  <wall x="211" y="-78" width="23" height="150"/>
+  <deathwall x="191" y="-210" width="147" height="115"/>
+  <deathwall x="255" y="-996" width="-282" height="139"/>
+  <deathwall x="98" y="65" width="-138" height="121"/>
+  <wall x="402" y="-908" width="88" height="34" text=""/>
+  <deathwall x="-32" y="-1045" width="343" height="76" text=""/>
+  <wall x="462" y="-1301" width="28" height="423"/>
+  <wall x="222" y="-1191" width="40" height="156" text=""/>
+  <wall x="36" y="-1159" width="-28" height="-438"/>
+  <deathwall x="167" y="-1441" width="322" height="126"/>
+  <wall x="236" y="-1721" width="33" height="252" text=""/>
+  <goal x="186" y="-1982" width="127" height="157" text=""/>
+  <textfield x="54" y="-1796" text="warning...boss ahead!"/>
+</level>

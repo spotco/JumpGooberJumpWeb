@@ -1,0 +1,52 @@
+<level name="world 2-8">
+  <wall x="447" y="291" width="34" height="-281"/>
+  <track x="97" y="65" width="233" height="34" text=""/>
+  <trackwall x="209" y="52" width="137" height="35"/>
+  <track x="163" y="-44" width="26" height="225"/>
+  <trackblade x="167" y="108" width="50" height="55" text=""/>
+  <track x="47" y="-23" width="324" height="20" text=""/>
+  <trackblade x="269" y="-16"/>
+  <track x="139" y="350" width="251" height="46" text=""/>
+  <trackwall x="173" y="342" width="104" height="30" text=""/>
+  <track x="351" y="259" width="44" height="190"/>
+  <trackblade x="355" y="292"/>
+  <track x="28" y="-229" width="44" height="215" text=""/>
+  <trackwall x="13" y="-121" width="31" height="139" text=""/>
+  <deathwall x="-33" y="-372" width="89" height="153" text=""/>
+  <track x="17" y="-238" width="26" height="232" text=""/>
+  <track x="228" y="-236" width="105" height="120" text=""/>
+  <trackwall x="196" y="-174" width="73" height="86"/>
+  <track x="160" y="-293" width="266" height="37"/>
+  <track x="156" y="-327" width="283" height="26"/>
+  <trackwall x="384" y="-468" width="27" height="242" text=""/>
+  <wall x="20" y="-386" width="-32" height="-162"/>
+  <deathwall x="-24" y="-749" width="52" height="194" text=""/>
+  <deathwall x="305" y="-214" width="191" height="119" text=""/>
+  <track x="359" y="-851" width="44" height="215" text=""/>
+  <track x="98" y="-891" width="290" height="33"/>
+  <track x="99" y="-909" width="298" height="14"/>
+  <trackblade x="259" y="-897"/>
+  <track x="177" y="-959" width="49" height="150" text=""/>
+  <trackwall x="135" y="-852" width="106" height="62"/>
+  <boost x="99" y="-595" width="168" height="75"/>
+  <trackwall x="330" y="-713" width="71" height="113"/>
+  <wall x="61" y="-967" width="-36" height="-298"/>
+  <wall x="189" y="-1424" width="114" height="230" text=""/>
+  <track x="346" y="-1520" width="113" height="14" text=""/>
+  <trackwall x="301" y="-1642" width="197" height="218" text=""/>
+  <track x="37" y="-1800" width="111" height="46" text=""/>
+  <trackwall x="-25" y="-1895" width="209" height="259" text=""/>
+  <trackblade x="396" y="-1672" width="50" height="55" text=""/>
+  <trackblade x="181" y="-1945"/>
+  <track x="285" y="-1686" width="210" height="21"/>
+  <track x="291" y="-1667" width="207" height="10"/>
+  <track x="210" y="-1959" width="-209" height="16"/>
+  <track x="217" y="-1938" width="-216" height="12"/>
+  <boostfruit x="364" y="-1863"/>
+  <boostfruit x="408" y="-1864"/>
+  <boost x="192" y="-2114" width="117" height="-246"/>
+  <wall x="189" y="-2721" width="122" height="48" text=""/>
+  <boost x="117" y="-2630" width="263" height="121" text=""/>
+  <wall x="232" y="-2822" width="41" height="-193"/>
+  <goal x="201" y="-3071" width="107" height="-155"/>
+</level>

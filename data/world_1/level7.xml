@@ -1,0 +1,33 @@
+<level name="world 1-7">
+  <wall x="148" y="373" width="237" height="38"/>
+  <textfield x="63" y="136" width="156" height="70" text="so here's where the whole tutorial part ends..."/>
+  <wall x="419" y="315" width="38" height="-240"/>
+  <boost x="364" y="75" width="-105" height="-84"/>
+  <boostfruit x="264" y="-102"/>
+  <boostfruit x="311" y="-105"/>
+  <boostfruit x="353" y="-102"/>
+  <deathwall x="185" y="-45" width="-138" height="133"/>
+  <wall x="69" y="-642" width="51" height="311" text=""/>
+  <textfield x="232" y="-476" width="156" height="70" text="that means the real fun can begin!"/>
+  <wall x="302" y="-867" width="43" height="357" text=""/>
+  <deathwall x="-40" y="-883" width="192" height="211" text=""/>
+  <boost x="182" y="-1033" width="88" height="138" text=""/>
+  <boostfruit x="180" y="-1209"/>
+  <boostfruit x="224" y="-1210"/>
+  <boostfruit x="120" y="-1433"/>
+  <boostfruit x="310" y="-1635"/>
+  <wall x="196" y="-1768" width="-158" height="59"/>
+  <wall x="18" y="-2172" width="34" height="330" text=""/>
+  <boostfruit x="173" y="-2174"/>
+  <boostfruit x="411" y="-2373"/>
+  <deathwall x="288" y="-2461" width="-318" height="-121"/>
+  <boostfruit x="400" y="-2670"/>
+  <boostfruit x="104" y="-2749"/>
+  <deathwall x="222" y="-2942" width="368" height="138"/>
+  <boostfruit x="125" y="-3026"/>
+  <wall x="242" y="-3097" width="198" height="59"/>
+  <goal x="278" y="-3435" width="130" height="189"/>
+  <textfield x="150" y="-1971" text="Like the game? Try the level editor! (From the main menu)"/>
+  <textfield x="64" y="-2306" text="make levels and post them online to share with your friends!"/>
+  <textfield x="66" y="-3233" text="Or, try the online mode and play levels made by other players!"/>
+</level>

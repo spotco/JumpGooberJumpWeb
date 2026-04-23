@@ -1,0 +1,48 @@
+<level name="Challenge 2" bg="2">
+  <wall x="171" y="321" width="181" height="176"/>
+  <textfield x="38" y="202" text="World 2 boss...remixed!"/>
+  <cloudboss x="32" y="497" width="0" height="0"/>
+  <track x="68" y="156" width="354" height="67"/>
+  <trackwall x="311" y="126" width="131" height="68"/>
+  <track x="66" y="25" width="370" height="54"/>
+  <trackblade x="173" y="31"/>
+  <trackblade x="353" y="29"/>
+  <boostfruit x="168" y="-8" width="24" height="28"/>
+  <boostfruit x="351" y="-10" width="24" height="28"/>
+  <track x="2" y="-162" width="501" height="30"/>
+  <trackblade x="63" y="-157" width="50" height="55"/>
+  <trackblade x="273" y="-156" width="50" height="55"/>
+  <trackblade x="491" y="-155" width="50" height="55"/>
+  <track x="21" y="-308" width="453" height="38"/>
+  <wall x="449" y="-408" width="54" height="-414"/>
+  <wall x="449" y="-1127" width="78" height="344"/>
+  <trackwall x="107" y="-319" width="110" height="31"/>
+  <trackblade x="444" y="-304"/>
+  <wall x="267" y="-626" width="-47" height="-186"/>
+  <track x="255" y="-895" width="36" height="332"/>
+  <trackblade x="258" y="-816" width="50" height="55"/>
+  <track x="100" y="-1096" width="285" height="58"/>
+  <trackwall x="242" y="-1162" width="62" height="167"/>
+  <track x="95" y="-1068" width="290" height="31"/>
+  <track x="34" y="-1235" width="414" height="47"/>
+  <trackwall x="67" y="-1256" width="100" height="56"/>
+  <track x="149" y="-1369" width="219" height="56"/>
+  <trackwall x="302" y="-1388" width="115" height="43"/>
+  <trackblade x="153" y="-1363"/>
+  <track x="54" y="-1543" width="383" height="42"/>
+  <track x="52" y="-1699" width="399" height="30"/>
+  <trackwall x="212" y="-1715" width="90" height="63"/>
+  <track x="399" y="-1897" width="53" height="201"/>
+  <track x="104" y="-1889" width="43" height="202"/>
+  <trackwall x="72" y="-1902" width="75" height="42"/>
+  <trackwall x="366" y="-1907" width="80" height="48"/>
+  <track x="47" y="-1811" width="409" height="25"/>
+  <trackblade x="255" y="-1806" width="50" height="55"/>
+  <boost x="197" y="-2107" width="132" height="191"/>
+  <boostfruit x="222" y="-2279"/>
+  <boostfruit x="292" y="-2281"/>
+  <goal x="-18" y="-2949" width="525" height="229"/>
+  <boostfruit x="66" y="-2503"/>
+  <boostfruit x="440" y="-2505"/>
+  <trackwall x="216" y="-1568" width="97" height="86"/>
+</level>

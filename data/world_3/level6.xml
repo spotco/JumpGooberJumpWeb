@@ -1,0 +1,56 @@
+<level name="world 3-6">
+  <track x="142" y="340" width="229" height="51" text=""/>
+  <trackwall x="177" y="316" width="129" height="58" text=""/>
+  <boost x="400" y="217" width="56" height="-184"/>
+  <boost x="61" y="43" width="55" height="174" text=""/>
+  <boostfruit x="219" y="-77"/>
+  <boostfruit x="295" y="-76" width="24" height="28" text=""/>
+  <boostfruit x="260" y="-140" width="24" height="28" text=""/>
+  <rocketlauncher x="261" y="-271" width="0" height="0" text=""/>
+  <rocketlauncher x="57" y="-469"/>
+  <rocketlauncher x="452" y="-473"/>
+  <boostfruit x="226" y="-456"/>
+  <boostfruit x="298" y="-458"/>
+  <boostfruit x="90" y="-268"/>
+  <boostfruit x="441" y="-282"/>
+  <boostfruit x="395" y="-699" width="24" height="28" text=""/>
+  <deathwall x="282" y="-1027" width="305" height="81" text=""/>
+  <boostfruit x="181" y="-855" width="24" height="28" text=""/>
+  <wall x="54" y="-899" width="-56" height="-186"/>
+  <deathwall x="-48" y="-731" width="282" height="88" text=""/>
+  <boostfruit x="238" y="-1100" width="24" height="28" text=""/>
+  <boostfruit x="239" y="-1151" width="24" height="28" text=""/>
+  <wall x="257" y="-1527" width="44" height="180" text=""/>
+  <wall x="445" y="-1057" width="36" height="-316"/>
+  <track x="147" y="-1834" width="56" height="238" text=""/>
+  <trackwall x="120" y="-1635" width="71" height="81"/>
+  <rocketlauncher x="89" y="-2146"/>
+  <rocketlauncher x="95" y="-2268" width="0" height="0" text=""/>
+  <deathwall x="86" y="-1957" width="-109" height="-91"/>
+  <boost x="244" y="-2079" width="77" height="153" text=""/>
+  <boostfruit x="412" y="-2202" width="24" height="28" text=""/>
+  <deathwall x="362" y="-2590" width="136" height="169"/>
+  <deathwall x="174" y="-2488" width="-187" height="-96"/>
+  <boostfruit x="268" y="-2529"/>
+  <deathwall x="224" y="-2833" width="318" height="91" text=""/>
+  <boostfruit x="97" y="-2777" width="24" height="28" text=""/>
+  <deathwall x="-38" y="-3126" width="306" height="92" text=""/>
+  <boostfruit x="384" y="-2938" width="24" height="28" text=""/>
+  <wall x="182" y="-3169" width="104" height="-112"/>
+  <deathwall x="-22" y="-1140" width="49" height="272" text=""/>
+  <laserlauncher x="46" y="-1838" dir="3"/>
+  <boostfruit x="408" y="-2155"/>
+  <wall x="26" y="-3557" width="61" height="225" text=""/>
+  <rocketlauncher x="428" y="-3508"/>
+  <boostfruit x="247" y="-3579" width="24" height="28" text=""/>
+  <boostfruit x="245" y="-3531" width="24" height="28" text=""/>
+  <goal x="196" y="-4262" width="105" height="148" text=""/>
+  <deathwall x="139" y="-3657" width="-147" height="-154"/>
+  <deathwall x="368" y="-3826" width="133" height="173"/>
+  <boostfruit x="250" y="-3796"/>
+  <wall x="361" y="-3873" width="131" height="32"/>
+  <wall x="132" y="-3835" width="-123" height="-37"/>
+  <wall x="463" y="-3950" width="28" height="-187"/>
+  <wall x="44" y="-3940" width="-29" height="-191"/>
+  <boostfruit x="274" y="-2348"/>
+</level>

@@ -1,0 +1,33 @@
+<level name="world 1-9">
+  <wall x="226" y="391" width="74" height="66"/>
+  <boost x="324" y="353" width="92" height="-128"/>
+  <deathwall x="310" y="183" width="-264" height="-138"/>
+  <wall x="461" y="186" width="28" height="-334"/>
+  <boostfruit x="211" y="-23"/>
+  <wall x="32" y="-495" width="36" height="417" text=""/>
+  <deathwall x="208" y="-289" width="288" height="134"/>
+  <deathwall x="163" y="-333" width="66" height="94" text=""/>
+  <deathwall x="166" y="-586" width="63" height="122" text=""/>
+  <deathwall x="-2" y="-627" width="294" height="117" text=""/>
+  <wall x="245" y="-351" width="142" height="40" text=""/>
+  <textfield x="49" y="214" text="Now this will require some precision!"/>
+  <textfield x="302" y="-147" width="156" height="70" text="Use the long jump! (release the arrow keys right as you jump)"/>
+  <wall x="490" y="-378" width="-35" height="-269"/>
+  <boost x="425" y="-585" width="-70" height="-257"/>
+  <deathwall x="-10" y="-865" width="301" height="262" text=""/>
+  <deathwall x="175" y="-1275" width="343" height="124" text=""/>
+  <wall x="456" y="-1100" width="33" height="201"/>
+  <textfield x="300" y="-1130" width="156" height="70" text="no sweat!"/>
+  <deathwall x="180" y="-1562" width="90" height="78" text=""/>
+  <deathwall x="-55" y="-1691" width="327" height="136" text=""/>
+  <wall x="152" y="-1966" width="165" height="26" text=""/>
+  <goal x="181" y="-2265" width="118" height="160" text=""/>
+  <textfield x="38" y="-2055" width="156" height="70" text="You're totally pro!"/>
+  <wall x="85" y="-915" width="241" height="27"/>
+  <wall x="22" y="-1434" width="26" height="433" text=""/>
+  <wall x="257" y="-1320" width="114" height="33" text=""/>
+  <wall x="353" y="-1576" width="-37" height="-244"/>
+  <wall x="437" y="-1758" width="26" height="-306"/>
+  <wall x="449" y="-1650" width="31" height="277" text=""/>
+  <deathwall x="172" y="-1301" width="55" height="144" text=""/>
+</level>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Jump Goober Jump</title>
+  <link rel="icon" type="image/png" href="img/guyright.png" />
+  <style>
+    @font-face {
+      font-family: 'Bienvenu';
+      src: url('fonts/Bienvenu.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    canvas {
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
+      z-index: 60;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+  <div style="position:fixed;bottom:8px;right:12px;z-index:50;">
+    <a href="https://github.com/spotco/Jump--goober--Jump--" target="_blank"
+       style="color:#444;font-size:10px;font-family:monospace;text-decoration:none;">
+      original source
+    </a>
+  </div>
+  <script src="lib/phaser.min.js"></script>
+  <script type="module" src="src/Main.js"></script>
+</body>
+</html>

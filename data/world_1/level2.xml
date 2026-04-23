@@ -1,0 +1,24 @@
+<level name="world 1-2">
+  <wall x="162" y="369" width="243" height="45" text=""/>
+  <deathwall x="1" y="48" width="134" height="146" text=""/>
+  <deathwall x="316" y="-240" width="207" height="175" text=""/>
+  <wall x="422" y="-34" width="40" height="364"/>
+  <wall x="113" y="-370" width="31" height="401" text=""/>
+  <wall x="242" y="-287" width="172" height="30" text=""/>
+  <wall x="431" y="-615" width="34" height="266" text=""/>
+  <wall x="335" y="-535" width="-36" height="-405"/>
+  <deathwall x="453" y="-752" width="86" height="122"/>
+  <wall x="154" y="-941" width="181" height="58" text=""/>
+  <deathwall x="104" y="-967" width="-107" height="152"/>
+  <deathwall x="18" y="-443" width="236" height="-219"/>
+  <wall x="64" y="-1335" width="40" height="341" text=""/>
+  <deathwall x="253" y="-1255" width="274" height="144" text=""/>
+  <wall x="203" y="-1296" width="206" height="30"/>
+  <wall x="415" y="-1405" width="72" height="54" text=""/>
+  <wall x="153" y="-1502" width="223" height="32" text=""/>
+  <goal x="206" y="-1752" width="115" height="167" text=""/>
+  <textfield x="191" y="-1463" width="156" height="70" text="Nice job! But it only gets more fun from here!"/>
+  <textfield x="32" y="202" width="156" height="70" text="see these red squares? don't touch them!"/>
+  <wall x="158" y="81" width="182" height="31"/>
+  <wall x="429" y="-1094" width="33" height="327" text=""/>
+</level>

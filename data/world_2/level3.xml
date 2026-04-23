@@ -1,0 +1,34 @@
+<level name="world 2-3">
+  <track x="160" y="323" width="173" height="40" text=""/>
+  <trackwall x="168" y="305" width="128" height="39" text=""/>
+  <textfield x="162" y="375" width="156" height="70" text="they go the other way too!"/>
+  <wall x="456" y="-56" width="27" height="307" text=""/>
+  <wall x="25" y="-43" width="27" height="295" text=""/>
+  <trackwall x="298" y="-23" width="93" height="42" text=""/>
+  <track x="268" y="-384" width="38" height="211" text=""/>
+  <trackwall x="286" y="-113" width="-25" height="-151"/>
+  <track x="172" y="-7" width="172" height="17" text=""/>
+  <boostfruit x="105" y="-364" width="24" height="28" text=""/>
+  <boostfruit x="107" y="-400" width="24" height="28" text=""/>
+  <boostfruit x="421" y="-404" width="24" height="28" text=""/>
+  <boostfruit x="418" y="-367" width="24" height="28" text=""/>
+  <boostfruit x="269" y="-693"/>
+  <track x="125" y="-927" width="268" height="34" text=""/>
+  <trackwall x="300" y="-1107" width="29" height="228" text=""/>
+  <boost x="219" y="-1212" width="80" height="-198"/>
+  <wall x="316" y="-1332" width="160" height="27"/>
+  <wall x="297" y="-1417" width="-198" height="-28"/>
+  <deathwall x="196" y="-1405" width="-174" height="123"/>
+  <deathwall x="293" y="-1465" width="-278" height="-120"/>
+  <deathwall x="90" y="-1498" width="-78" height="117"/>
+  <boost x="357" y="-1592" width="71" height="150" text=""/>
+  <track x="83" y="-1641" width="220" height="33"/>
+  <trackwall x="54" y="-1665" width="105" height="55"/>
+  <boost x="124" y="-1762" width="-75" height="-163"/>
+  <track x="186" y="-1986" width="283" height="30" text=""/>
+  <trackwall x="340" y="-2012" width="108" height="57" text=""/>
+  <wall x="395" y="-2252" width="103" height="234"/>
+  <track x="210" y="-2446" width="47" height="210" text=""/>
+  <trackwall x="176" y="-2260" width="89" height="69"/>
+  <goal x="225" y="-2555" width="102" height="-137"/>
+</level>

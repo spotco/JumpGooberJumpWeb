@@ -1,0 +1,23 @@
+<level name="world 1-3">
+  <wall x="167" y="300" width="197" height="37" text=""/>
+  <wall x="283" y="208" width="-44" height="-286"/>
+  <textfield x="55" y="139" width="156" height="70" text="now this next thing..."/>
+  <textfield x="302" y="138" width="156" height="70" text="is pretty awesome! Climb up and see for yourself!"/>
+  <boost x="204" y="-337" width="106" height="140" text=""/>
+  <textfield x="33" y="-300" width="156" height="70" text="Meet the boostpad! He'll get you where you need to go!"/>
+  <textfield x="316" y="-297" width="156" height="70" text="Assuming that's up of course! so, jump in!"/>
+  <wall x="17" y="-548" width="170" height="33" text=""/>
+  <wall x="311" y="-551" width="190" height="35" text=""/>
+  <boost x="146" y="-640" width="-84" height="-156"/>
+  <boost x="363" y="-797" width="86" height="161" text=""/>
+  <wall x="141" y="-1024" width="225" height="99"/>
+  <boost x="209" y="-1301" width="94" height="169"/>
+  <textfield x="45" y="-1213" width="156" height="70" text="enter from the bottom for maximum speed!"/>
+  <wall x="311" y="-1657" width="148" height="184"/>
+  <boost x="419" y="-1777" width="-83" height="-143"/>
+  <textfield x="94" y="-1881" width="156" height="70" text="go left, then right!"/>
+  <boost x="154" y="-2341" width="87" height="341" text=""/>
+  <wall x="263" y="-2733" width="135" height="294"/>
+  <goal x="289" y="-2820" width="91" height="-134"/>
+    <textfield x="191" y="-803" width="156" height="70" text="If you get stuck, try falling off and getting back on from lower!"/>
+</level>

@@ -1,0 +1,47 @@
+<level name="Challenge 1" bg="1">
+  <wall x="200" y="319" width="128" height="61"/>
+  <flowerboss y="642"/>
+  <wall x="438" y="250" width="49" height="-204"/>
+  <boostfruit x="253" y="125"/>
+  <textfield x="36" y="223" text="You thought world1 was hard? You ain't seen nothing yet!"/>
+  <deathwall x="-43" y="43" width="182" height="132"/>
+  <wall x="54" y="-23" width="-44" height="-190"/>
+  <deathwall x="218" y="-157" width="292" height="86"/>
+  <boostfruit x="244" y="-233"/>
+  <wall x="458" y="-181" width="37" height="-191"/>
+  <deathwall x="-26" y="-451" width="329" height="120"/>
+  <boost x="344" y="-502" width="104" height="125"/>
+  <wall x="163" y="-682" width="149" height="92"/>
+  <wall x="48" y="-787" width="67" height="59"/>
+  <wall x="161" y="-927" width="60" height="59"/>
+  <deathwall x="362" y="-859" width="140" height="73"/>
+  <wall x="394" y="-906" width="42" height="-240"/>
+  <boost x="214" y="-1314" width="107" height="124"/>
+  <deathwall x="32" y="-1190" width="148" height="83"/>
+  <boost x="61" y="-1552" width="110" height="179"/>
+  <deathwall x="230" y="-1641" width="66" height="203"/>
+  <deathwall x="224" y="-2045" width="62" height="185"/>
+  <deathwall x="0" y="-2048" width="258" height="76"/>
+  <boostfruit x="113" y="-1736" width="24" height="28"/>
+  <deathwall x="258" y="-1513" width="247" height="73"/>
+  <boost x="336" y="-2046" width="112" height="465"/>
+  <deathwall x="275" y="-2432" width="302" height="82"/>
+  <wall x="456" y="-2325" width="56" height="256"/>
+  <deathwall x="3" y="-2080" width="203" height="84"/>
+  <boostfruit x="120" y="-2150" width="24" height="28"/>
+  <deathwall x="105" y="-2349" width="-111" height="-248"/>
+  <boostfruit x="184" y="-2513"/>
+  <deathwall x="272" y="-2555" width="99" height="141"/>
+  <wall x="387" y="-2683" width="109" height="234"/>
+  <boostfruit x="431" y="-2801"/>
+  <boostfruit x="104" y="-2996"/>
+  <boostfruit x="432" y="-3218"/>
+  <deathwall x="71" y="-2840" width="149" height="101"/>
+  <deathwall x="322" y="-3062" width="149" height="91"/>
+  <deathwall x="180" y="-3184" width="-154" height="-98"/>
+  <goal x="14" y="-3425" width="479" height="-227"/>
+  <textfield x="38" y="-3167" text="It wasn't this hard last time, was it?"/>
+  <deathwall x="201" y="-2151" width="82" height="127"/>
+  <boostfruit x="55" y="-2152"/>
+  <boostfruit x="87" y="-2209"/>
+</level>

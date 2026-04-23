@@ -1,0 +1,31 @@
+<level name="world 1-8">
+  <wall x="233" y="308" width="62" height="62"/>
+  <wall x="158" y="454" width="-142" height="-40"/>
+  <boost x="111" y="351" width="-47" height="-238"/>
+  <boost x="65" y="-319" width="53" height="302" text=""/>
+  <boost x="266" y="-287" width="-279" height="-44"/>
+  <wall x="266" y="-332" width="-311" height="-32"/>
+  <wall x="343" y="-402" width="38" height="319" text=""/>
+  <deathwall x="398" y="-448" width="107" height="363" text=""/>
+  <wall x="35" y="-445" width="-42" height="98"/>
+  <boost x="72" y="-691" width="57" height="262" text=""/>
+  <boost x="70" y="-1020" width="57" height="234" text=""/>
+  <boost x="20" y="-1021" width="152" height="60" text=""/>
+  <deathwall x="332" y="-1056" width="-342" height="-129"/>
+  <wall x="475" y="-1278" width="28" height="303" text=""/>
+  <wall x="-107" y="-1048" width="279" height="33" text=""/>
+  <boostfruit x="233" y="-889" width="24" height="28" text=""/>
+  <wall x="0" y="-1872" width="26" height="414" text=""/>
+  <wall x="-72" y="-1890" width="330" height="26" text=""/>
+  <boost x="153" y="-1227" width="122" height="-186"/>
+  <textfield x="301" y="-1416" width="156" height="70" text="Use the long jump! (release the arrow keys right as you jump)"/>
+  <boost x="84" y="-1498" width="-56" height="-365"/>
+  <boost x="256" y="-1801" width="-222" height="-62"/>
+  <boost x="266" y="-1739" width="140" height="150"/>
+  <wall x="422" y="-1792" width="29" height="-385"/>
+  <deathwall x="272" y="-2051" width="-305" height="157"/>
+  <boost x="301" y="-2074" width="-112" height="-122"/>
+  <goal x="34" y="-2337" width="119" height="178"/>
+  <textfield x="270" y="-531" width="156" height="70" text="gravity defying!"/>
+  <textfield x="284" y="-1995" width="156" height="70" text="stuck on a boost pad? Try falling off and entering from lower!"/>
+</level>

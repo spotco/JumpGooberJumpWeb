@@ -1,0 +1,26 @@
+<level name="world 3-1">
+  <wall x="125" y="373" width="207" height="51" text=""/>
+  <wall x="-2" y="64" width="55" height="226" text=""/>
+  <rocketlauncher x="220" y="-172" width="0" height="0" text=""/>
+  <wall x="205" y="37" width="105" height="49" text=""/>
+  <wall x="360" y="-11" width="105" height="49"/>
+  <wall x="453" y="-80" width="38" height="-219"/>
+  <boostfruit x="282" y="-267" width="24" height="28" text=""/>
+  <wall x="55" y="-353" width="-40" height="-222"/>
+  <textfield x="18" y="-120" width="156" height="70" text="Yikes! Better watch out!"/>
+  <textfield x="307" y="133" text="These are some ancient ruins. What could lie ahead?"/>
+  <boostfruit x="243" y="-574" width="24" height="28" text=""/>
+  <wall x="441" y="-657" width="43" height="-220"/>
+  <wall x="321" y="-813" width="-232" height="-36"/>
+  <deathwall x="80" y="-785" width="-83" height="-101"/>
+  <wall x="73" y="-900" width="-32" height="-305"/>
+  <rocketlauncher x="367" y="-1105"/>
+  <boost x="227" y="-1179" width="108" height="-175"/>
+  <wall x="422" y="-1628" width="48" height="267" text=""/>
+  <rocketlauncher x="306" y="-1789" width="0" height="0" text=""/>
+  <track x="55" y="-1557" width="231" height="76" text=""/>
+  <wall x="51" y="-1668" width="-41" height="-230"/>
+  <trackwall x="32" y="-1593" width="90" height="87"/>
+  <wall x="195" y="-2030" width="105" height="148"/>
+  <goal x="200" y="-2113" width="100" height="-128"/>
+</level>

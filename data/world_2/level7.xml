@@ -1,0 +1,56 @@
+<level name="world 2-7">
+  <textfield x="80" y="161" width="156" height="70" text="It's an old friend...better start running!"/>
+  <track x="161" y="306" width="192" height="41" text=""/>
+  <trackwall x="201" y="294" width="107" height="33"/>
+  <flowerboss x="-2" y="632" width="500" height="300" text=""/>
+  <boost x="365" y="179" width="85" height="-262"/>
+  <track x="167" y="-181" width="160" height="44" text=""/>
+  <trackwall x="229" y="-192" width="106" height="36" text=""/>
+  <wall x="85" y="-293" width="-39" height="-161"/>
+  <track x="210" y="-450" width="153" height="49"/>
+  <trackwall x="198" y="-463" width="120" height="35"/>
+  <track x="402" y="-658" width="48" height="158"/>
+  <trackwall x="392" y="-566" width="33" height="93" text=""/>
+  <boost x="285" y="-678" width="-75" height="-159"/>
+  <track x="247" y="-1025" width="56" height="-166"/>
+  <trackblade x="249" y="-1040"/>
+  <wall x="356" y="-1009" width="49" height="-278"/>
+  <wall x="62" y="-1095" width="44" height="302" text=""/>
+  <track x="52" y="-1250" width="172" height="33" text=""/>
+  <trackwall x="33" y="-1258" width="76" height="27" text=""/>
+  <boost x="107" y="-1366" width="-64" height="-231"/>
+  <wall x="192" y="-1680" width="271" height="37"/>
+  <track x="152" y="-1714" width="335" height="23" text=""/>
+  <trackblade x="402" y="-1710" width="50" height="55" text=""/>
+  <wall x="429" y="-1785" width="45" height="-256"/>
+  <wall x="203" y="-1929" width="45" height="-226"/>
+  <boostfruit x="198" y="-2247" width="24" height="28" text=""/>
+  <boostfruit x="254" y="-2247" width="24" height="28" text=""/>
+  <track x="220" y="-2692" width="80" height="266"/>
+  <trackblade x="226" y="-2602" width="50" height="55" text=""/>
+  <boostfruit x="136" y="-2546" width="24" height="28" text=""/>
+  <boostfruit x="319" y="-2546" width="24" height="28" text=""/>
+  <track x="68" y="-2767" width="347" height="52"/>
+  <boostfruit x="227" y="-2834" width="24" height="28" text=""/>
+  <boostfruit x="103" y="-3083" width="24" height="28" text=""/>
+  <boostfruit x="391" y="-3085" width="24" height="28" text=""/>
+  <goal x="6" y="-3605" width="504" height="226" text=""/>
+  <trackblade x="304" y="-2763"/>
+  <track x="64" y="-3013" width="393" height="50"/>
+  <trackblade x="371" y="-3009"/>
+  <track x="68" y="-3303" width="381" height="45" text=""/>
+  <trackblade x="262" y="-3303" width="50" height="55" text=""/>
+  <track x="253" y="-3220" width="60" height="170" text=""/>
+  <trackblade x="253" y="-3129" width="50" height="55" text=""/>
+  <track x="61" y="-2505" width="372" height="48"/>
+  <trackblade x="335" y="-2501"/>
+  <track x="136" y="-3052" width="47" height="342"/>
+  <trackblade x="141" y="-2840"/>
+  <track x="7" y="-3228" width="246" height="38" text=""/>
+  <trackblade x="98" y="-3221" width="50" height="55" text=""/>
+  <track x="357" y="-3322" width="54" height="187" text=""/>
+  <trackblade x="363" y="-3177" width="50" height="55" text=""/>
+  <track x="82" y="-2222" width="303" height="24"/>
+  <track x="85" y="-2199" width="305" height="18"/>
+  <trackblade x="110" y="-2206"/>
+</level>

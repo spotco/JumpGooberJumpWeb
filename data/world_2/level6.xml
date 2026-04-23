@@ -1,0 +1,50 @@
+<level name="world 2-6">
+  <wall x="217" y="332" width="86" height="29"/>
+  <boost x="358" y="337" width="62" height="-233"/>
+  <track x="312" y="50" width="151" height="30"/>
+  <track x="311" y="11" width="153" height="20" text=""/>
+  <trackblade x="388" y="57"/>
+  <trackblade x="388" y="17"/>
+  <boostfruit x="370" y="-48"/>
+  <boostfruit x="412" y="-47"/>
+  <deathwall x="6" y="451" width="490" height="123"/>
+  <track x="82" y="-263" width="162" height="38" text=""/>
+  <trackwall x="59" y="-274" width="94" height="31"/>
+  <track x="68" y="-376" width="44" height="-177"/>
+  <trackwall x="60" y="-425" width="30" height="77" text=""/>
+  <boostfruit x="176" y="-613"/>
+  <boostfruit x="176" y="-574"/>
+  <track x="274" y="-782" width="193" height="40" text=""/>
+  <trackwall x="258" y="-794" width="104" height="33" text=""/>
+  <track x="303" y="-915" width="58" height="-246"/>
+  <track x="399" y="-1159" width="52" height="241" text=""/>
+  <trackwall x="295" y="-979" width="26" height="93"/>
+  <trackwall x="393" y="-1093" width="24" height="-93"/>
+  <track x="208" y="-1039" width="282" height="32"/>
+  <trackblade x="213" y="-1033"/>
+  <boostfruit x="337" y="-1288"/>
+  <boostfruit x="386" y="-1289"/>
+  <track x="217" y="-1505" width="59" height="272"/>
+  <trackblade x="222" y="-1275"/>
+  <track x="98" y="-1635" width="60" height="281" text=""/>
+  <trackwall x="91" y="-1421" width="25" height="117"/>
+  <track x="200" y="-1574" width="147" height="44" text=""/>
+  <trackwall x="206" y="-1587" width="89" height="38" text=""/>
+  <track x="315" y="-1673" width="67" height="265" text=""/>
+  <trackblade x="318" y="-1628" width="50" height="55" text=""/>
+  <track x="373" y="-1649" width="77" height="-195"/>
+  <trackwall x="390" y="-1639" width="-24" height="-145"/>
+  <track x="258" y="-1977" width="51" height="146" text=""/>
+  <trackwall x="247" y="-1903" width="32" height="124" text=""/>
+  <goal x="101" y="-2927" width="127" height="153" text=""/>
+  <wall x="332" y="-2068" width="112" height="40" text=""/>
+  <wall x="456" y="-2150" width="30" height="-290"/>
+  <track x="111" y="-2355" width="201" height="40"/>
+  <trackwall x="233" y="-2363" width="92" height="26"/>
+  <track x="222" y="-2496" width="52" height="-153"/>
+  <track x="93" y="-2493" width="62" height="-157"/>
+  <trackwall x="209" y="-2545" width="35" height="96"/>
+  <trackwall x="113" y="-2603" width="-30" height="-104"/>
+  <track x="45" y="-2582" width="241" height="31" text=""/>
+  <trackblade x="163" y="-2576"/>
+</level>

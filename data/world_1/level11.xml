@@ -1,0 +1,50 @@
+<level name="world 1-11">
+  <wall x="171" y="347" width="185" height="31"/>
+  <textfield x="72" y="134" width="156" height="70" text="trust me...run!"/>
+  <wall x="428" y="290" width="28" height="-332"/>
+  <wall x="157" y="-6" width="161" height="27"/>
+  <wall x="81" y="-64" width="-34" height="-341"/>
+  <flowerboss y="670"/>
+  <wall x="198" y="-382" width="180" height="27"/>
+  <textfield x="107" y="-605" text="and don't look back!"/>
+  <wall x="435" y="-606" width="29" height="163" text=""/>
+  <wall x="296" y="-865" width="41" height="297" text=""/>
+  <deathwall x="449" y="-734" width="74" height="110" text=""/>
+  <deathwall x="269" y="-938" width="-242" height="306"/>
+  <deathwall x="331" y="-880" width="-114" height="-57"/>
+  <wall x="453" y="-1085" width="33" height="322"/>
+  <boost x="152" y="-1120" width="181" height="151" text=""/>
+  <wall x="42" y="-1378" width="33" height="319" text=""/>
+  <boostfruit x="192" y="-1349"/>
+  <boostfruit x="189" y="-1390"/>
+  <wall x="342" y="-1525" width="92" height="-169"/>
+  <boostfruit x="387" y="-1811"/>
+  <wall x="120" y="-1974" width="-34" height="-238"/>
+  <boost x="211" y="-2155" width="93" height="-386"/>
+  <deathwall x="317" y="-2328" width="175" height="190"/>
+  <deathwall x="170" y="-2314" width="-174" height="-223"/>
+  <wall x="309" y="-2542" width="-376" height="-43"/>
+  <boostfruit x="384" y="-2441"/>
+  <boostfruit x="388" y="-2658"/>
+  <deathwall x="305" y="-2795" width="-374" height="205"/>
+  <textfield x="309" y="-2111" width="156" height="70" text="how much further does this go?!"/>
+  <wall x="463" y="-2836" width="31" height="-295"/>
+  <textfield x="295" y="-1236" width="156" height="70" text="cross left, then right, then left!"/>
+  <deathwall x="233" y="-2906" width="74" height="125"/>
+  <deathwall x="301" y="-3122" width="-66" height="-110"/>
+  <deathwall x="235" y="-3245" width="259" height="108"/>
+  <boost x="180" y="-2840" width="-132" height="-475"/>
+  <wall x="234" y="-3453" width="88" height="110"/>
+  <deathwall x="261" y="-3788" width="72" height="93"/>
+  <deathwall x="257" y="-3715" width="-257" height="73"/>
+  <textfield x="58" y="-3610" text="believe...in yourself!"/>
+  <boost x="358" y="-3466" width="117" height="-321"/>
+  <boostfruit x="95" y="-3960" width="24" height="28" text=""/>
+  <boostfruit x="353" y="-4175" width="24" height="28" text=""/>
+  <boostfruit x="103" y="-4370" width="24" height="28" text=""/>
+  <goal x="2" y="-4949" width="495" height="196" text=""/>
+  <boostfruit x="334" y="-4632" width="24" height="28" text=""/>
+  <textfield x="314" y="-3130" width="156" height="70" text="use the long jump!"/>
+  <wall x="100" y="-3849" width="139" height="116" text=""/>
+  <textfield x="308" y="-4726" width="156" height="70" text="what a welcome sight..."/>
+</level>
