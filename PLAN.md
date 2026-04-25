@@ -211,33 +211,33 @@ Primary source:
 - [x] Wire `src/scenes/GameScene.js` to create `GameEngine` from
   `world1_level1`.
 - [x] Add debug PageUp/PageDown vertical scroll.
-- [ ] Port `GameEngine.loadfromXML()` support for every node type in source
+- [x] Port `GameEngine.loadfromXML()` support for every node type in source
   order.
-- [ ] Port `makeui()` fully: menu, back/skip, mute, pause/unpause,
+- [x] Port `makeui()` fully: menu, back/skip, mute, pause/unpause,
   leveldisplay image, time/death text, and paused cover.
-- [ ] Port `update(e)` fully: timing, pause, input, player update, block update,
+- [x] Port `update(e)` fully: timing, pause, input, player update, block update,
   scroll, UI layering, and early-return behavior.
-- [ ] Port `moveUiToFront()`.
-- [ ] Port `clearAbove()` and `clearBelow()` behavior.
-- [ ] Port `checkOffScreenDeath()`.
-- [ ] Port background scrollRect behavior.
-- [ ] Port `onKeyPress()`, `onKeyUp()`, `inputStackMove()`, and
+- [x] Port `moveUiToFront()`.
+- [x] Port `clearAbove()` and `clearBelow()` behavior.
+- [x] Port `checkOffScreenDeath()`.
+- [x] Port background scrollRect behavior.
+- [x] Port `onKeyPress()`, `onKeyUp()`, `inputStackMove()`, and
   `playjumpsound()`.
-- [ ] Port `reload()`, `loadnextlevel(hitgoal)`, and callback contracts to
+- [x] Port `reload()`, `loadnextlevel(hitgoal)`, and callback contracts to
   `CurrentFunction`.
-- [ ] Port `clear()` fully, including listener cleanup and object cleanup.
+- [x] Port `clear()` fully, including listener cleanup and object cleanup.
 
 ### 3b. XML data coverage
 
 - [x] Copy all bundled campaign/challenge XML files.
 - [x] Verify World 1 Level 1 actual counts:
   17 walls, 7 text fields, 1 goal.
-- [ ] Parse all World 1 levels without unsupported-node crashes.
-- [ ] Parse all World 2 levels without unsupported-node crashes.
-- [ ] Parse all World 3 levels without unsupported-node crashes.
-- [ ] Parse all challenge levels without unsupported-node crashes.
-- [ ] Add parser diagnostics that report unsupported node type, file, and count.
-- [ ] Keep XML as canonical source format during the faithful port.
+- [x] Parse all World 1 levels without unsupported-node crashes.
+- [x] Parse all World 2 levels without unsupported-node crashes.
+- [x] Parse all World 3 levels without unsupported-node crashes.
+- [x] Parse all challenge levels without unsupported-node crashes.
+- [x] Add parser diagnostics that report unsupported node type, file, and count.
+- [x] Keep XML as canonical source format during the faithful port.
 
 ---
 

@@ -54,9 +54,17 @@ export default class BaseBlock {
         this.container.y = this.y;
     }
 
-    destroy() {
+    removeFromMemory() {
+        this.memRemoved = true;
+        this.activated = false;
+
         if (this.container) {
             this.container.destroy();
+            this.container = null;
         }
+    }
+
+    destroy() {
+        this.removeFromMemory();
     }
 }

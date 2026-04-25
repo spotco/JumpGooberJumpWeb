@@ -2,13 +2,33 @@
 // Mirrors the first step of GameEngine.loadfromXML() in core/GameEngine.as.
 
 const SUPPORTED_TYPES = new Set([
+    'activatetrackwall',
+    'boost',
+    'boostfruit',
+    'bossactivate',
+    'cloudboss',
+    'deathwall',
+    'flowerboss',
     'wall',
     'textfield',
     'goal',
+    'laserlauncher',
+    'rocketlauncher',
+    'track',
+    'trackblade',
+    'trackwall',
 ]);
 
 export default class LevelXmlParser {
-    parse(xmlText) {
+    parse(xmlText, sourceName = 'unknown') {
+        if (typeof xmlText !== 'string') {
+            throw new Error(`Level data for ${sourceName} must remain XML text during the faithful port.`);
+        }
+
+        if (!xmlText.includes('<level')) {
+            throw new Error(`Level data for ${sourceName} is not XML level text.`);
+        }
+
         const parser = new DOMParser();
         const doc = parser.parseFromString(xmlText, 'application/xml');
         const parserError = doc.querySelector('parsererror');
@@ -24,23 +44,31 @@ export default class LevelXmlParser {
 
         const objects = [];
         const unsupported = [];
+        const counts = {};
+        const unsupportedCounts = {};
 
         for (const node of Array.from(levelNode.children)) {
             const type = node.tagName;
             const record = this._parseNode(type, node);
 
+            counts[type] = (counts[type] || 0) + 1;
+
             if (SUPPORTED_TYPES.has(type)) {
                 objects.push(record);
             } else {
                 unsupported.push(record);
+                unsupportedCounts[type] = (unsupportedCounts[type] || 0) + 1;
             }
         }
 
         return {
             name: levelNode.getAttribute('name') || 'Untitled Level',
             bg: this._numberAttribute(levelNode, 'bg', null),
+            sourceName,
             objects,
             unsupported,
+            counts,
+            unsupportedCounts,
         };
     }
 
@@ -51,6 +79,9 @@ export default class LevelXmlParser {
             y: this._numberAttribute(node, 'y', 0),
             width: this._numberAttribute(node, 'width', 0),
             height: this._numberAttribute(node, 'height', 0),
+            dir: this._numberAttribute(node, 'dir', 0),
+            hp: this._numberAttribute(node, 'hp', 0),
+            explode: node.getAttribute('explode') || '',
             text: node.getAttribute('text') || '',
         };
 
@@ -61,6 +92,22 @@ export default class LevelXmlParser {
             if (!node.hasAttribute('height')) {
                 record.height = 70;
             }
+        }
+
+        if (type === 'boostfruit' && !node.hasAttribute('width')) {
+            record.width = 24;
+        }
+
+        if (type === 'boostfruit' && !node.hasAttribute('height')) {
+            record.height = 28;
+        }
+
+        if ((type === 'rocketlauncher' || type === 'laserlauncher' || type === 'flowerboss' || type === 'cloudboss') && !node.hasAttribute('width')) {
+            record.width = 0;
+        }
+
+        if ((type === 'rocketlauncher' || type === 'laserlauncher' || type === 'flowerboss' || type === 'cloudboss') && !node.hasAttribute('height')) {
+            record.height = 0;
         }
 
         return this._normalizeRecord(record);
