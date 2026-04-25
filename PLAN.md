@@ -22,6 +22,13 @@ Planning style reference:
 
 ---
 
+## Human notes: Do not start on these unless specifically prompted.
+- [ ] Super jump javascript must release arrow key first then jump. Make any order work, and hold other direction work.
+- [ ] Air resistance feels different than flash game, try tweaking.
+- [ ] debug input lag
+
+---
+
 ## Phase 0: Project Setup And Source Inventory
 
 - [x] Initialize `JumpGooberJumpWeb` as a static Phaser 3 project.
@@ -247,23 +254,23 @@ Primary source:
 
 - `core/Guy.as`
 
-- [ ] Create `src/core/Guy.js`.
-- [ ] Port fields:
+- [x] Create `src/core/Guy.js`.
+- [x] Port fields:
   `vx`, `vy`, `boost`, `canJump`, `jumpCounter`, `justtouched`,
   `JUSTTOUCHED_ERROR_TIME`, `guydisplay`, `hitbox`, `innerhitbox`,
   `isslide`, `hashitwall`, `jumpavailable`, `jumpcd`, `JUMPCDTIMER`,
   `animcounter`, `toggle`, explosion fields, and animation state.
-- [ ] Port constructor spawn, display setup, hitbox setup, and sprite offsets.
-- [ ] Port `changePos(chx, chy)`.
-- [ ] Port `update(walls, justWallJumped)`.
-- [ ] Port collision chunking, y collision, x collision, recursive out behavior,
+- [x] Port constructor spawn, display setup, hitbox setup, and sprite offsets.
+- [x] Port `changePos(chx, chy)`.
+- [x] Port `update(walls, justWallJumped)`.
+- [x] Port collision chunking, y collision, x collision, recursive out behavior,
   wall-slide behavior, recoil, friction, and gravity.
-- [ ] Port `checkCollision(walls)`.
-- [ ] Port `updateImg()`.
-- [ ] Port `explode()`, explosion animation update, and reload timing handoff.
-- [ ] Port math helpers from `Guy.as` such as `roundDec`, `SIG`, and
+- [x] Port `checkCollision(walls)`.
+- [x] Port `updateImg()`.
+- [x] Port `explode()`, explosion animation update, and reload timing handoff.
+- [x] Port math helpers from `Guy.as` such as `roundDec`, `SIG`, and
   `SIG_ONE`.
-- [ ] Validate movement parity: flat jump, wall slide, wall jump, boost jump,
+- [x] Validate movement parity: flat jump, wall slide, wall jump, boost jump,
   side fall death, top/bottom offscreen death, and negative-dimension walls.
 
 ---

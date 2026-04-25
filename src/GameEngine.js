@@ -16,6 +16,7 @@ import LaserLauncher from './blocks/LaserLauncher.js';
 import BossActivate from './blocks/BossActivate.js';
 import FlowerBoss from './blocks/FlowerBoss.js';
 import CloudBoss from './blocks/CloudBoss.js';
+import Guy from './core/Guy.js';
 
 export default class GameEngine {
     static CLEAR_ABOVE_MARGIN = -400;
@@ -24,6 +25,8 @@ export default class GameEngine {
     static OFFSCREEN_RIGHT = 564;
     static OFFSCREEN_TOP = -220;
     static OFFSCREEN_BOTTOM = 620;
+    static DEFAULT_PLAYER_X = 238;
+    static DEFAULT_PLAYER_Y = 400;
 
     constructor(scene, options) {
         this.scene = scene;
@@ -97,6 +100,7 @@ export default class GameEngine {
 
         this.attachToCurrentFunction();
         this.loadfromXML(this.clvlxml);
+        this.createPlayer();
         this.makeui();
         this.registerInputListeners();
     }
@@ -298,6 +302,7 @@ export default class GameEngine {
             this.prev_time = _time;
         }
         const frameDelta = Math.max(0, Math.min(100, delta || (_time - this.prev_time)));
+        this.frameDeltaSeconds = frameDelta / 1000;
         this.prev_time = _time;
 
         if (this.ispaused) {
@@ -372,6 +377,10 @@ export default class GameEngine {
     }
 
     gameScroll(scroll_spd) {
+        if (this.testguy && !this.testguy.memRemoved && this.testguy.activated !== false) {
+            this.testguy.gameScroll(scroll_spd);
+        }
+
         for (const blockArray of this.blocksarrays) {
             for (const block of blockArray) {
                 block.gameScroll(scroll_spd);
@@ -390,6 +399,45 @@ export default class GameEngine {
         this.scrollRectMask = this.scrollRectGraphics.createGeometryMask();
         this.rootContainer.setMask(this.scrollRectMask);
         this.scrollRectGraphics.setVisible(false);
+    }
+
+    createPlayer() {
+        const spawn = this.getPlayerSpawnPosition();
+        this.testguy = new Guy(this.scene, this.worldContainer, spawn.x, spawn.y);
+    }
+
+    getPlayerSpawnPosition() {
+        const spawnX = GameEngine.DEFAULT_PLAYER_X;
+        let spawnY = GameEngine.DEFAULT_PLAYER_Y;
+        const hitboxLeft = spawnX + Guy.HITBOX_OFFSET_X;
+        const hitboxRight = hitboxLeft + Guy.HITBOX_WIDTH;
+        let bestFloor = null;
+
+        for (const wall of this.walls) {
+            if (!wall || wall.memRemoved || wall.activated === false) {
+                continue;
+            }
+
+            const wallLeft = wall.x;
+            const wallRight = wall.x + wall.w;
+            if (hitboxRight <= wallLeft || hitboxLeft >= wallRight) {
+                continue;
+            }
+
+            if (wall.y > 500) {
+                continue;
+            }
+
+            if (!bestFloor || wall.y > bestFloor.y) {
+                bestFloor = wall;
+            }
+        }
+
+        if (bestFloor) {
+            spawnY = bestFloor.y - Guy.HITBOX_OFFSET_Y - Guy.HITBOX_HEIGHT;
+        }
+
+        return { x: spawnX, y: spawnY };
     }
 
     registerInputListeners() {
@@ -480,6 +528,10 @@ export default class GameEngine {
             return false;
         }
 
+        if (this.testguy.exploded) {
+            return false;
+        }
+
         const px = typeof this.testguy.x === 'number' ? this.testguy.x : 0;
         const py = typeof this.testguy.y === 'number' ? this.testguy.y : 0;
         const pw = typeof this.testguy.w === 'number' ? this.testguy.w : 0;
@@ -491,7 +543,11 @@ export default class GameEngine {
             || (py + ph) < GameEngine.OFFSCREEN_TOP
             || py > GameEngine.OFFSCREEN_BOTTOM
         ) {
-            this.queueReload();
+            if (typeof this.testguy.explode === 'function') {
+                this.testguy.explode();
+            } else {
+                this.queueReload();
+            }
             return true;
         }
 

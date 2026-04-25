@@ -52,8 +52,18 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('guy_left2', 'img/guyleft2.png');
         this.load.image('guy_right', 'img/guyright.png');
         this.load.image('guy_right2', 'img/guyright2.png');
+        this.load.image('guy_slide_left', 'img/guyslideleft.png');
+        this.load.image('guy_slide_right', 'img/guyslideright.png');
         this.load.image('guy_up', 'img/guyup.png');
+        this.load.image('guy_up_left', 'img/guyupleft.png');
+        this.load.image('guy_up_right', 'img/guyupright.png');
         this.load.image('guy_down', 'img/guydown.png');
+        this.load.image('guy_down_left', 'img/guydownleft.png');
+        this.load.image('guy_down_right', 'img/guydownright.png');
+        this.load.image('guy_explode_0', 'img/guyexplode/0.png');
+        this.load.image('guy_explode_1', 'img/guyexplode/1.png');
+        this.load.image('guy_explode_2', 'img/guyexplode/2.png');
+        this.load.image('guy_explode_3', 'img/guyexplode/3.png');
 
         this.load.image('wall_blue', 'img/block/blueblock.png');
         this.load.image('wall_blue_tall', 'img/block/blueblocktall.png');
