@@ -827,21 +827,21 @@ export default class GameEngine {
     }
 
     clearAbove(b) {
-        // Mirrors GameEngine.as clearAbove(): hide blocks scrolled far above,
-        // re-add them if they come back into view.
+        // Mirrors GameEngine.as clearAbove(): hide blocks scrolled far above
+        // (WITHOUT destroying, so they can be recycled), re-show them if they
+        // come back into view.
         if (!b || b === this.testguy) {
             return;
         }
         if (b.y <= -500 && !b.memRemoved) {
-            this.removeBlockFromMemory(b);
+            b.memRemoved = true;
+            if (b.container) {
+                b.container.setVisible(false);
+            }
         } else if (b.y >= -500 && b.y <= 1000 && b.memRemoved) {
-            if (typeof b.addToMemory === 'function') {
-                b.addToMemory();
-            } else {
-                b.memRemoved = false;
-                if (b.container) {
-                    b.container.setVisible(true);
-                }
+            b.memRemoved = false;
+            if (b.container) {
+                b.container.setVisible(true);
             }
         }
     }

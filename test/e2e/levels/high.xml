@@ -1,0 +1,4 @@
+<level name="e2e-high">
+  <wall x="0" y="100" width="500" height="20"/>
+  <wall x="0" y="-600" width="500" height="20"/>
+</level>

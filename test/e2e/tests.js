@@ -176,4 +176,23 @@ export const TESTS = [
       return { pass, details: `ticks=${snaps.length} minY=${minY.toFixed(1)}` };
     },
   },
+  {
+    name: 'block-recycling-when-scrolling',
+    level: 'high.xml',
+    ticks: 60,
+    script: [],
+    check(snaps, { engine }) {
+      // Regression test: blocks removed by clearAbove (y<=-500) must be
+      // recycled (re-shown) when scrolled back into view. The wall at y=-600
+      // is hidden on tick 1; autoScroll moves it down; when y>=-500 it must
+      // become visible again (memRemoved=false, container visible).
+      const wall = engine.blocksarrays.flat().find((b) => b && b.w === 500 && b.h === 20 && b.y < 0);
+      if (!wall) {
+        return { pass: false, details: 'wall not found' };
+      }
+      const visible = wall.container ? wall.container.visible : false;
+      const pass = !wall.memRemoved && visible && wall.y >= -500;
+      return { pass, details: `y=${wall.y.toFixed(1)} memRemoved=${wall.memRemoved} visible=${visible}` };
+    },
+  },
 ];
