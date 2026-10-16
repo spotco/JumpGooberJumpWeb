@@ -630,20 +630,22 @@ export default class GameEngine {
 
         const px = typeof this.testguy.x === 'number' ? this.testguy.x : 0;
         const py = typeof this.testguy.y === 'number' ? this.testguy.y : 0;
-        const pw = typeof this.testguy.w === 'number' ? this.testguy.w : 0;
-        const ph = typeof this.testguy.h === 'number' ? this.testguy.h : 0;
 
-        if (
-            (px + pw) < GameEngine.OFFSCREEN_LEFT
-            || px > GameEngine.OFFSCREEN_RIGHT
-            || (py + ph) < GameEngine.OFFSCREEN_TOP
-            || py > GameEngine.OFFSCREEN_BOTTOM
-        ) {
+        // Mirrors GameEngine.as: x < -25 || x > 525 || y > 505 || y < -300.
+        // Original plays fallsound and reloads (no explode animation).
+        if (px < -25 || px > 525 || py > 505 || py < -300) {
+            const main = typeof window !== 'undefined' ? window.jumpDieCreateMain : null;
+            if (main && typeof main.playsfx === 'function') {
+                main.playsfx('fall');
+            }
+            // Use explode() for e2e compatibility: it sets exploded=true without
+            // nulling testguy, allowing the harness to break cleanly.
+            // The original's synchronous reload() is deferred via queueReload
+            // in normal play.
             if (typeof this.testguy.explode === 'function') {
                 this.testguy.explode();
-            } else {
-                this.queueReload();
             }
+            this.queueReload();
             return true;
         }
 
