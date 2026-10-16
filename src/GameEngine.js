@@ -70,7 +70,6 @@ export default class GameEngine {
             this.boostfruits,
             this.tracks,
             this.particles,
-            this.otherblocks,
         ];
 
         this.currenty = 0;
@@ -174,42 +173,42 @@ export default class GameEngine {
         }
         case 'trackwall': {
             const trackwall = new TrackWall(this.scene, this.worldContainer, record.x, record.y, record.width, record.height);
-            this.tracks.push(trackwall);
+            this.walls.push(trackwall);
             return trackwall;
         }
         case 'activatetrackwall': {
             const activator = new ActivateTrackWall(this.scene, this.worldContainer, record.x, record.y, record.width, record.height);
-            this.tracks.push(activator);
+            this.walls.push(activator);
             return activator;
         }
         case 'trackblade': {
-            const trackblade = new TrackBlade(this.scene, this.worldContainer, record.x, record.y, record.width || 50, record.height || 55);
-            this.tracks.push(trackblade);
+            const trackblade = new TrackBlade(this.scene, this.worldContainer, record.x, record.y);
+            this.deathwall.push(trackblade);
             return trackblade;
         }
         case 'rocketlauncher': {
             const rocketlauncher = new RocketLauncher(this.scene, this.worldContainer, record.x, record.y);
-            this.otherblocks.push(rocketlauncher);
+            this.deathwall.push(rocketlauncher);
             return rocketlauncher;
         }
         case 'laserlauncher': {
             const laserlauncher = new LaserLauncher(this.scene, this.worldContainer, record.x, record.y, record.dir);
-            this.otherblocks.push(laserlauncher);
+            this.deathwall.push(laserlauncher);
             return laserlauncher;
         }
         case 'bossactivate': {
             const bossactivate = new BossActivate(this.scene, this.worldContainer, record.x, record.y, record.width, record.height, record.hp, record.explode);
-            this.otherblocks.push(bossactivate);
+            this.particles.push(bossactivate);
             return bossactivate;
         }
         case 'flowerboss': {
             const flowerboss = new FlowerBoss(this.scene, this.worldContainer, record.x, record.y);
-            this.otherblocks.push(flowerboss);
+            this.deathwall.push(flowerboss);
             return flowerboss;
         }
         case 'cloudboss': {
             const cloudboss = new CloudBoss(this.scene, this.worldContainer, record.x, record.y);
-            this.otherblocks.push(cloudboss);
+            this.deathwall.push(cloudboss);
             return cloudboss;
         }
         case 'rocketboss': {
