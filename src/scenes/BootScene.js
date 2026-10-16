@@ -79,6 +79,11 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('text_speechbubble', 'img/block/textbug/speechbubble.png');
         this.load.image('yellowblock', 'img/block/yellowblock.png');
         this.load.image('redblock', 'img/block/redblock.png');
+        this.load.image('launcher1_img', 'img/block/red/launcher1.png');
+        this.load.image('launcherbase_img', 'img/block/red/launcherbase.png');
+        this.load.image('rocket_img', 'img/block/red/rocket.png');
+        this.load.image('trackblade_img', 'img/block/red/trackblade.png');
+        this.load.image('flowershot_img', 'img/boss/flowershot.png');
         this.load.image('boostfruit', 'img/editoricon/boostfruit.png');
 
         this.load.image('playbutton_preloader', 'img/playbutton.png');
