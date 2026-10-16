@@ -656,6 +656,20 @@ export default class GameEngine {
             return;
         }
 
+        // Mirrors GameEngine.as moveUiToFront(): bosses in deathwall come
+        // forward (in array order), then the player and UI.
+        for (const b of this.deathwall) {
+            if (!b || b.memRemoved || !b.container) {
+                continue;
+            }
+            const t = typeof b.type === 'function' ? b.type() : '';
+            if (t === 'flowerboss' || t === 'bullet' || t === 'cloudboss' || t === 'rocketboss') {
+                this.scene.children.bringToTop(b.container);
+            }
+        }
+        if (this.testguy && this.testguy.container) {
+            this.scene.children.bringToTop(this.testguy.container);
+        }
         this.scene.children.bringToTop(this.uiContainer);
     }
 
