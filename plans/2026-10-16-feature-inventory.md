@@ -85,3 +85,78 @@ items above that reference them.
 6. Port `TrackWall`/`ActivateTrackWall`, then bosses (P1)
 7. Block y-range gating + `clearAbove` recycling (P1)
 8. Offscreen-death bounds/fallsound, `soundfadein`, key shortcuts (P1/P2)
+
+---
+
+## Second-pass findings (2026-10-16, evening)
+
+Divergences missed by the first inventory. Do NOT re-list items from above.
+
+### Critical: Block array placements diverge from source
+
+`GameEngine.as` pushes blocks to specific arrays that determine collision
+(`Guy.update` only checks `walls`) and update ordering. The port uses
+different arrays:
+
+| Block | Original (`GameEngine.as`) | Port (`_createBlockFromRecord`) | Impact |
+|---|---|---|---|
+| `trackwall` | `walls` (line 169) | `tracks` | Guy will not collide — `Guy.update(walls)` only tests `walls` |
+| `activatetrackwall` | `walls` (line 179) | `tracks` | Guy will not collide |
+| `trackblade` | `deathwall` (line 174) | `tracks` | Wrong update path; `moveUiToFront` skips it |
+| `rocketlauncher` | `deathwall` (line 199) | `otherblocks` | Wrong update path |
+| `laserlauncher` | `deathwall` (line 204) | `otherblocks` | Wrong update path |
+| `bossactivate` | `particles` (line 214) | `otherblocks` | Wrong update path |
+| `flowerboss` | `deathwall` (line 184) | `otherblocks` | Wrong update path |
+| `cloudboss` | `deathwall` (line 194) | `otherblocks` | Wrong update path |
+
+The port added an `otherblocks` array (not in the original) to `blocksarrays`,
+so these blocks do get `update()` calls — but collision and boss-z-ordering
+behave differently than the source.
+
+### Constructor argument mismatches
+
+- `flowerboss`: original is `new FlowerBoss(node.@y)` — only Y is passed
+  (`GameEngine.as:183`). Port calls `new FlowerBoss(x, y)`.
+- `cloudboss`: original is `new CloudBoss()` — no arguments
+  (`GameEngine.as:193`). Port calls `new CloudBoss(x, y)`.
+- `trackblade`: original is `new TrackBlade(node.@x, node.@y)` — only X,Y
+  (`GameEngine.as:173`). Port also passes width/height.
+
+### `Track.js` incomplete (blocks track followers)
+
+`src/blocks/Track.js` is still first-pass. Missing from `blocks/Track.as`:
+- `direction` — `HORIZ (true)` if `w > h`, else `VERT (false)`
+- `start` / `end` — `x` / `x+w` for horizontal, `y` / `y+h` for vertical
+- Negative-dimension normalization: if `w < 0` then `x += w; w = -w`
+  (same for `h`)
+
+`TrackBlade.findTrack()` and `TrackWall` read these to move; without them,
+blades/walls on tracks will not move.
+
+### Missing texture preloads in `BootScene.js`
+
+These keys are referenced by the newly-ported blocks (guarded by
+`scene.textures.exists()`) but have no preload entry — visuals will be
+placeholder shapes until added:
+- `flowershot_img`, `launcher1_img`, `launcherbase_img`, `rocket_img`,
+  `trackblade_img`
+
+### `Guy.explode()` visual simplification (minor)
+
+Original `Guy.as` `explode()` spawns 24 green particles in a radial pattern
+after the 4-frame animation. The port shows the explosion frames but skips
+the particle burst. Visual-only; no gameplay impact.
+
+### Verified matching (no action)
+
+- `BaseBlock.gameScroll()` matches source (`y += scroll_spd`)
+- `Wall`/`Goal` do not override `gameScroll` in either codebase
+- `simpleupdate()` overrides exist for the same 5 classes in both
+  (`BaseBlock`, `LaserLauncher`, `RocketBoss`, `TrackBlade`, `TrackWall`)
+- `Guy` hitboxes match source: 26x22 at (0,2), inner 24x20 at (1,4)
+- `updateImg()` vy double-flip quirk mirrored; boost decrement on wall-hit
+  present in both Y and X chunk loops
+- `loadfromXML` attribute sets match for `wall`, `deathwall`, `goal`,
+  `boost`, `boostfruit`, `track`, `textfield`
+- `loadnextlevel` / `reload` / `clear` flow structure matches
+- `makeui` text content and button positions match
