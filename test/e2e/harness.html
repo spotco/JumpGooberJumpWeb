@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JumpGooberJump e2e</title>
+  <style>
+    html, body { margin: 0; background: #000; }
+    #e2e-results {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      color: #0f0; font: 12px monospace; white-space: pre-wrap;
+      max-width: 90vw;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+  <div id="e2e-results">PENDING</div>
+  <script src="../../lib/phaser.min.js"></script>
+  <script type="module" src="../../src/Main.js"></script>
+  <script type="module" src="./harness.js"></script>
+</body>
+</html>

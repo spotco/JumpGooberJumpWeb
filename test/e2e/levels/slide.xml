@@ -1,0 +1,4 @@
+<level name="e2e-slide">
+  <wall x="0" y="480" width="500" height="40"/>
+  <wall x="380" y="180" width="40" height="300"/>
+</level>

@@ -19,6 +19,9 @@ import CloudBoss from './blocks/CloudBoss.js';
 import Guy from './core/Guy.js';
 
 export default class GameEngine {
+    // Fixed logic tick mirroring the original's Timer(30) = 33.3ms.
+    // (The tuned escape hatch steps at 60fps; see update().)
+    static LOGIC_TICK_MS = 1000 / 30;
     static CLEAR_ABOVE_MARGIN = -400;
     static CLEAR_BELOW_MARGIN = 1000;
     static OFFSCREEN_LEFT = -64;
@@ -77,8 +80,10 @@ export default class GameEngine {
         this.debugScrollSpeed = 0;
         this.justWallJumped = false;
         this.testguy = null;
-        this.inputstack = [];
-        this.currentInput = null;
+        this.storekey = [];
+        this.jumpUnpressed = true;
+        this.tickAccumulator = 0;
+        this.e2eManualStep = false;
         this.inputx = 0;
         this.inputy = 0;
         this.keyState = {
@@ -314,14 +319,51 @@ export default class GameEngine {
         this.game_time += frameDelta;
         this.updateUiText();
 
+        if (this.e2eManualStep) {
+            // E2E harness (test/e2e/) drives tick() manually.
+            return;
+        }
+
+        // Fixed-timestep logic: the original stepped update() on a Timer(30).
+        const tickMs = Guy.USE_TUNED_JUMP ? 1000 / 60 : GameEngine.LOGIC_TICK_MS;
+        this.tickAccumulator += frameDelta;
+        let steps = 0;
+        while (this.tickAccumulator >= tickMs && steps < 5 && !this.cleared) {
+            this.tickAccumulator -= tickMs;
+            steps += 1;
+            if (this.tick()) {
+                return;
+            }
+        }
+        if (steps === 5) {
+            this.tickAccumulator = 0;
+        }
+        this.moveUiToFront();
+    }
+
+    // tick() - one fixed logic step, mirroring the original's update(e:TimerEvent).
+    // Returns true when the level ended during this tick.
+    tick() {
         if (this.pendingReload || this.kill) {
             this.reload();
-            return;
+            return true;
         }
 
         if (this.pendingLevelAdvance) {
             this.loadnextlevel(this.pendingLevelAdvanceHitGoal);
-            return;
+            return true;
+        }
+
+        if (!Guy.USE_TUNED_JUMP) {
+            this.inputStackMove(); // per-tick key-stack handling, mirrors GameEngine.as
+            // NOTE: the original assigns justWallJumped inside inputStackMove
+            // and clears it on the very next line, so guy.update always
+            // observed false. Mirrored exactly.
+            this.justWallJumped = false;
+        }
+
+        if (this.checkOffScreenDeath()) {
+            return false;
         }
 
         if (this.testguy && this.testguy.activated !== false && typeof this.testguy.update === 'function') {
@@ -333,7 +375,7 @@ export default class GameEngine {
                 } else if (this.pendingLevelAdvance) {
                     this.loadnextlevel(this.pendingLevelAdvanceHitGoal);
                 }
-                return;
+                return true;
             }
         }
 
@@ -355,7 +397,7 @@ export default class GameEngine {
                         } else if (this.pendingLevelAdvance) {
                             this.loadnextlevel(this.pendingLevelAdvanceHitGoal);
                         }
-                        return;
+                        return true;
                     }
                 }
             }
@@ -365,15 +407,14 @@ export default class GameEngine {
             this.gameScroll(this.debugScrollSpeed);
         }
 
-        this.checkOffScreenDeath();
         if (this.pendingReload || this.kill) {
             this.reload();
-            return;
+            return true;
         }
 
         this.clearAbove();
         this.clearBelow();
-        this.moveUiToFront();
+        return false;
     }
 
     gameScroll(scroll_spd) {
@@ -583,13 +624,18 @@ export default class GameEngine {
             this.setDebugScrollSpeed(-8);
             return;
         case 'ArrowLeft':
+        case 'KeyA':
         case 'ArrowRight':
+        case 'KeyD':
         case 'ArrowUp':
+        case 'KeyW':
         case 'ArrowDown':
         case 'Space':
+        case 'Enter':
+        case 'KeyZ':
             this.keyState[event.code] = true;
-            this.inputStackMove(event.code, true);
-            if (event.code === 'Space' && !event.repeat) {
+            this.updateKeyStack(event.code, true);
+            if (Guy.USE_TUNED_JUMP && event.code === 'Space' && !event.repeat) {
                 this.playjumpsound();
             }
             return;
@@ -611,32 +657,48 @@ export default class GameEngine {
             this.setDebugScrollSpeed(this.keyState.PageUp ? 8 : 0);
             return;
         case 'ArrowLeft':
+        case 'KeyA':
         case 'ArrowRight':
+        case 'KeyD':
         case 'ArrowUp':
+        case 'KeyW':
         case 'ArrowDown':
         case 'Space':
+        case 'Enter':
+        case 'KeyZ':
             this.keyState[event.code] = false;
-            this.inputStackMove(event.code, false);
+            this.updateKeyStack(event.code, false);
             return;
         default:
             return;
         }
     }
 
-    inputStackMove(inputCode, pressed) {
-        const existingIndex = this.inputstack.indexOf(inputCode);
-
+    updateKeyStack(inputCode, pressed) {
+        // Key-event side of the key stack (mirrors onKeyPress/onKeyUp in
+        // GameEngine.as). Per-tick movement reads the stack top.
+        const existingIndex = this.storekey.indexOf(inputCode);
         if (pressed) {
             if (existingIndex !== -1) {
-                this.inputstack.splice(existingIndex, 1);
+                this.storekey.splice(existingIndex, 1);
             }
-            this.inputstack.push(inputCode);
+            if (!this.isJumpKey(inputCode)) {
+                this.storekey.push(inputCode);
+            } else if (this.jumpUnpressed) {
+                this.jumpUnpressed = false;
+                this.storekey.push(inputCode);
+            }
+            if (inputCode === 'ArrowDown' && this.testguy) {
+                this.testguy.vx = this.testguy.vx / 1.3;
+            }
         } else if (existingIndex !== -1) {
-            this.inputstack.splice(existingIndex, 1);
+            this.storekey.splice(existingIndex, 1);
+        }
+        if (this.isJumpKey(inputCode) && !pressed) {
+            this.jumpUnpressed = true;
         }
 
-        this.currentInput = this.inputstack.length > 0 ? this.inputstack[this.inputstack.length - 1] : null;
-
+        // Tuned-path compat: keep the old sampled input fields fresh.
         this.inputx = 0;
         if (this.keyState.ArrowLeft && !this.keyState.ArrowRight) {
             this.inputx = -1;
@@ -650,8 +712,59 @@ export default class GameEngine {
         } else if (this.keyState.ArrowDown && !this.keyState.ArrowUp) {
             this.inputy = 1;
         }
+    }
 
-        return this.currentInput;
+    isJumpKey(code) {
+        return code === 'Space' || code === 'Enter' || code === 'ArrowUp' || code === 'KeyW' || code === 'KeyZ';
+    }
+
+    inputStackMove() { // move based on top key in keystack - mirrors GameEngine.as
+        if (!this.testguy) {
+            return;
+        }
+        const topkey = this.storekey[this.storekey.length - 1];
+        if (this.storekey.length > 0) {
+            if (topkey === 'ArrowLeft' || topkey === 'KeyA') {
+                if (this.testguy.vx < -5) {
+                    // this.testguy.vx += 1; (commented out in source)
+                } else if (this.testguy.vx > 5) {
+                    this.testguy.vx -= 1;
+                } else {
+                    this.testguy.vx = -5;
+                }
+            } else if (topkey === 'ArrowRight' || topkey === 'KeyD') {
+                if (this.testguy.vx < -5) {
+                    this.testguy.vx += 1;
+                } else if (this.testguy.vx > 5) {
+                    // this.testguy.vx -= 1; (commented out in source)
+                } else {
+                    this.testguy.vx = 5;
+                }
+            } else if (this.isJumpKey(topkey) && ((this.testguy.canJump && this.testguy.hashitwall || this.testguy.justtouched > 0) || this.testguy.boost > 0)) {
+                if (!this.testguy.jumpavailable) { // cooldown not off, stop
+                    return;
+                }
+                this.testguy.jumpavailable = false;
+                this.testguy.jumpcd = this.testguy.JUMPCDTIMER;
+                if (this.testguy.boost > 0) { // if boost(boostfruit), subtract boost counter
+                    this.testguy.boost--;
+                }
+                this.storekey.pop();
+
+                this.testguy.jumpCounter++; // dunno what this is for lol
+                this.testguy.vy = -15;
+
+                if (this.testguy.boost === 0) { // if not boosting, cannot jump until
+                    this.testguy.canJump = false;
+                }
+                if (this.testguy.isslide) { // if sliding side of wall, add additional vx
+                    this.testguy.vx = 10;
+                    // if wall is to the right, bounce off and this is to reduce friction-loss for next cycle
+                    this.justWallJumped = true;
+                }
+                this.playjumpsound();
+            }
+        }
     }
 
     clearAbove(clearLine = GameEngine.CLEAR_ABOVE_MARGIN) {
@@ -798,8 +911,8 @@ export default class GameEngine {
             this.testguy.destroy();
         }
         this.testguy = null;
-        this.inputstack.length = 0;
-        this.currentInput = null;
+        this.storekey.length = 0;
+        this.jumpUnpressed = true;
         this.inputx = 0;
         this.inputy = 0;
         this.keyState.ArrowLeft = false;

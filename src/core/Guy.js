@@ -1,17 +1,33 @@
 // Guy.js - Player character runtime.
 // Mirrors core/Guy.as.
+//
+// FAITHFUL PHYSICS (default): the Flash original ran game logic on a 30ms
+// Timer (33.3fps logic tick; the stage rendered at 60fps). updateFaithful()
+// ports Guy.as update() verbatim for the fixed 33.3ms logic tick driven by
+// GameEngine.tick(): vy += 1 gravity, vx snapped to +-5 by the key stack,
+// vy = -15 jumps, vx = 10 wall-slide shove, vx *= .99 / vy *= .99 friction,
+// SIG() = +-0.1 push-out steps. No retuning.
+//
+// TUNED ESCAPE HATCH: Guy.USE_TUNED_JUMP = true restores the pre-2026-10-16
+// tuned physics (1.0s release-buffer super jump, accel movement, separate
+// wall jump) via updateTuned(). GameEngine also flips its logic tick to
+// 60fps in that case. Disabled by default.
 
 export default class Guy {
+    // Escape hatch: true restores the pre-2026-10-16 tuned physics.
+    static USE_TUNED_JUMP = false;
+
     static JUSTTOUCHED_ERROR_TIME = 120;
     static JUMPCDTIMER = 10;
-    static HITBOX_OFFSET_X = 5;
+    // Hitbox dims mirror Guy.as: drawRect(0,2,26,22) and drawRect(1,4,24,20).
+    static HITBOX_OFFSET_X = 0;
     static HITBOX_OFFSET_Y = 2;
-    static HITBOX_WIDTH = 16;
-    static HITBOX_HEIGHT = 20;
-    static INNER_HITBOX_OFFSET_X = 7;
+    static HITBOX_WIDTH = 26;
+    static HITBOX_HEIGHT = 22;
+    static INNER_HITBOX_OFFSET_X = 1;
     static INNER_HITBOX_OFFSET_Y = 4;
-    static INNER_HITBOX_WIDTH = 12;
-    static INNER_HITBOX_HEIGHT = 16;
+    static INNER_HITBOX_WIDTH = 24;
+    static INNER_HITBOX_HEIGHT = 20;
     static MOVE_ACCEL = 0.45;
     static MOVE_MAX = 3.4;
     static GROUND_FRICTION = 0.72;
@@ -87,12 +103,162 @@ export default class Guy {
     changePos(chx, chy) {
         this.x += chx;
         this.y += chy;
-        this.container.x = this.x;
-        this.container.y = this.y;
-        this.updateHitboxes();
+        this.syncDisplay();
     }
 
     update(walls, justWallJumped) {
+        if (Guy.USE_TUNED_JUMP) {
+            return this.updateTuned(walls, justWallJumped);
+        }
+        return this.updateFaithful(walls, justWallJumped);
+    }
+
+    // updateFaithful() - verbatim port of Guy.as update().
+    // Runs once per fixed 33.3ms logic tick (GameEngine.tick), mirroring the
+    // original's Timer(30). Per-tick constants are the original's literals.
+    updateFaithful(walls, justWallJumped) {
+        if (this.exploded) {
+            this.updateExplosion();
+            return false;
+        }
+
+        if (!this.jumpavailable) {
+            this.jumpcd--;
+            if (this.jumpcd === 0) {
+                this.jumpavailable = true;
+            }
+        }
+
+        let isItSlide = false;
+        this.updateImg();
+        this.vy += 1;
+        this.vy = Guy.roundDec(this.vy, 1);
+        const checkDepth = 5;
+        for (let i = 0; i < Math.abs(this.vy); i += checkDepth) { // move y by vy, break into chunks
+            this.y += Guy.SIG_ONE(this.vy - i, checkDepth);
+            this.syncDisplay();
+            if (this.checkCollision(walls).length > 0) {
+                if (this.boost > 0) {
+                    this.boost--;
+                }
+                break;
+            }
+        }
+
+        let yhit = false;
+        for (let i = 0; i < walls.length; i++) {
+            if (this.hitWall(walls[i])) { // if hitting a wall
+                this.justtouched = 5; // Guy.as JUSTTOUCHED_ERROR_TIME
+                this.canJump = true;
+                yhit = true;
+                this.y = Guy.roundDec(this.y, 1); // round position to one decimal
+
+                // move reverse direction in increments until not hit
+                const inity = this.y;
+                let sum = 0;
+                while (this.hitWall(walls[i]) && this.vy !== 0) {
+                    sum += Guy.SIG(this.vy);
+                    this.y = inity - sum;
+                    this.syncDisplay();
+                    if (!this.hitWall(walls[i])) {
+                        break;
+                    }
+                    this.y = inity + sum;
+                    this.syncDisplay();
+                    if (!this.hitWall(walls[i])) {
+                        break;
+                    }
+                }
+                if (this.hitWall(walls[i])) { // only for spawning inside block, I think
+                    this.recursiveOut(walls, 1);
+                    return false;
+                }
+            }
+        }
+        if (yhit) { // note: do the reverse outside the loop (else will break 2 block case)
+            this.vy = 0;
+            this.vx = this.vx / 1.2;
+        }
+
+        for (let i = 0; i < Math.abs(this.vx); i += checkDepth) { // move x by vx, break into chunks
+            this.x += Guy.SIG_ONE(this.vx - i, checkDepth);
+            this.syncDisplay();
+            if (this.checkCollision(walls).length > 0) {
+                if (this.boost > 0) {
+                    this.boost--;
+                }
+                break;
+            }
+        }
+
+        let xhit = false;
+        for (let i = 0; i < walls.length; i++) {
+            if (this.hitWall(walls[i])) {
+                this.justtouched = 5; // Guy.as JUSTTOUCHED_ERROR_TIME
+                isItSlide = true;
+                if (!justWallJumped) {
+                    this.canJump = true;
+                }
+                xhit = true;
+                this.x = Guy.roundDec(this.x, 1);
+                while (this.hitWall(walls[i]) && this.vx !== 0) {
+                    this.x = this.x - Guy.SIG(this.vx);
+                    this.syncDisplay();
+                }
+                if (this.hitWall(walls[i])) { // if stuck inside object, recursive out
+                    this.recursiveOut(walls, 1);
+                    return false;
+                }
+            }
+        }
+        if (xhit && Math.abs(this.vx) > 5 && !this.isslide) {
+            this.vx = -this.vx / 2;
+        } else if (xhit) {
+            this.vx = -this.vx / 1.1;
+            // vx = 0; (commented out in source)
+        }
+        if (!xhit && !yhit && this.justtouched > 0) {
+            this.justtouched--;
+        }
+
+        this.hashitwall = (xhit || yhit);
+        this.isslide = isItSlide; // for walljumping
+        if (Math.abs(this.vx) < 0.01) {
+            this.vx = 0;
+        }
+        this.vx *= 0.99; // friction
+        this.vy *= 0.99;
+
+        // Port bridge: the original triggers explode from FalldownBlock's
+        // update; until that block is wired, the death check lives here.
+        if (this.checkDeathCollision()) {
+            this.explode();
+            return false;
+        }
+
+        return false;
+    }
+
+    syncDisplay() {
+        // Push logical x/y to the Phaser container and hitboxes, mirroring how
+        // the original's hitTestObject read live display positions.
+        if (this.container) {
+            this.container.x = this.x;
+            this.container.y = this.y;
+        }
+        this.updateHitboxes();
+    }
+
+    hitWall(wall) {
+        if (!wall || wall.memRemoved || wall.activated === false) {
+            return false;
+        }
+        const wallRect = new Phaser.Geom.Rectangle(wall.x, wall.y, wall.w, wall.h);
+        return Phaser.Geom.Intersects.RectangleToRectangle(this.hitbox, wallRect);
+    }
+
+    // ---- TUNED PHYSICS (escape hatch; only runs when Guy.USE_TUNED_JUMP) ----
+    updateTuned(walls, justWallJumped) {
         if (this.exploded) {
             this.updateExplosion();
             return false;
@@ -201,7 +367,7 @@ export default class Guy {
         }
 
         if (horizontalResult.collided && !grounded && !jumpedThisFrame && Math.abs(horizontalResult.amount) > 0.5) {
-            this.vx = -Guy.SIG(horizontalResult.amount) * Guy.WALL_RECOIL_SPEED;
+            this.vx = -Math.sign(horizontalResult.amount) * Guy.WALL_RECOIL_SPEED;
         }
 
         if (this.checkDeathCollision()) {
@@ -362,7 +528,7 @@ export default class Guy {
         let remaining = amount;
         while (Math.abs(remaining) > 0.0001) {
             const chunkMagnitude = Math.min(Math.abs(remaining), Guy.MOVE_CHUNK_SIZE);
-            const chunk = Guy.SIG(remaining) * chunkMagnitude;
+            const chunk = Math.sign(remaining) * chunkMagnitude;
             const nextX = axis === 'x' ? this.x + chunk : this.x;
             const nextY = axis === 'y' ? this.y + chunk : this.y;
             const hitbox = this.getHitboxAt(nextX, nextY);
@@ -480,6 +646,44 @@ export default class Guy {
         return bestMove;
     }
 
+    recursiveOut(walls, dist) {
+        // Mirrors Guy.as recursiveOut (trace calls omitted).
+        this.x += dist;
+        this.syncDisplay();
+        // regular
+        if (this.checkCollision(walls).length === 0) {
+            return;
+        }
+        this.x -= dist;
+        this.syncDisplay();
+
+        this.y += dist;
+        this.syncDisplay();
+        if (this.checkCollision(walls).length === 0) {
+            return;
+        }
+        this.y -= dist;
+        this.syncDisplay();
+
+        this.x -= dist;
+        this.syncDisplay();
+        if (this.checkCollision(walls).length === 0) {
+            return;
+        }
+        this.x += dist;
+        this.syncDisplay();
+
+        this.y -= dist;
+        this.syncDisplay();
+        if (this.checkCollision(walls).length === 0) {
+            return;
+        }
+        this.y += dist;
+        this.syncDisplay();
+
+        this.recursiveOut(walls, dist + 1);
+    }
+
     detectWallState(walls, moveInput) {
         const leftProbe = this.getHitboxAt(this.x - 1, this.y);
         const rightProbe = this.getHitboxAt(this.x + 1, this.y);
@@ -519,61 +723,41 @@ export default class Guy {
         return collisions;
     }
 
-    updateImg() {
-        const horizontalMotion = Math.abs(this.vx);
-        const verticalMotion = this.vy;
-        const movingLeft = this.vx < -0.25;
-        const movingRight = this.vx > 0.25;
-
-        if (movingLeft) {
-            this.facing = -1;
-        } else if (movingRight) {
-            this.facing = 1;
-        } else if (this.wallJumpDirection !== 0) {
-            this.facing = this.wallJumpDirection;
+    updateImg() { // updates animation - mirrors Guy.as (vy flipped twice; net physics effect zero)
+        this.animcounter++;
+        if (this.animcounter < 5) {
+            return;
         }
+        this.animcounter = 0;
+        this.toggle = !this.toggle;
 
+        this.vy = -this.vy;
         if (this.isslide) {
-            this.guydisplay.setTexture(this.facing < 0 ? 'guy_slide_left' : 'guy_slide_right');
-            return;
-        }
-
-        if (verticalMotion < -0.25) {
-            if (movingLeft) {
-                this.guydisplay.setTexture('guy_up_left');
-            } else if (movingRight) {
-                this.guydisplay.setTexture('guy_up_right');
-            } else {
-                this.guydisplay.setTexture('guy_up');
-            }
-            return;
-        }
-
-        if (verticalMotion > 0.25) {
-            if (movingLeft) {
+            this.guydisplay.setTexture(this.vx > 0 ? 'guy_slide_right' : 'guy_slide_left');
+        } else if (this.vx < -2) {
+            if (this.vy < -0.5) {
                 this.guydisplay.setTexture('guy_down_left');
-            } else if (movingRight) {
-                this.guydisplay.setTexture('guy_down_right');
+            } else if (this.vy > 1.4) {
+                this.guydisplay.setTexture('guy_up_left');
             } else {
-                this.guydisplay.setTexture('guy_down');
-            }
-            return;
-        }
-
-        if (horizontalMotion > 0.25) {
-            this.animcounter += 1;
-            this.toggle = Math.floor(this.animcounter / 6) % 2 === 0;
-            if (this.facing < 0) {
                 this.guydisplay.setTexture(this.toggle ? 'guy_left' : 'guy_left2');
+            }
+        } else if (this.vx > 2) {
+            if (this.vy < -0.5) {
+                this.guydisplay.setTexture('guy_down_right');
+            } else if (this.vy > 1.4) {
+                this.guydisplay.setTexture('guy_up_right');
             } else {
                 this.guydisplay.setTexture(this.toggle ? 'guy_right' : 'guy_right2');
             }
-            return;
+        } else if (this.vy > 0.99) {
+            this.guydisplay.setTexture('guy_up');
+        } else if (this.vy < -0.99) {
+            this.guydisplay.setTexture('guy_down');
+        } else {
+            this.guydisplay.setTexture('guy_stand');
         }
-
-        this.animcounter = 0;
-        this.toggle = false;
-        this.guydisplay.setTexture('guy_stand');
+        this.vy = -this.vy;
     }
 
     explode() {
@@ -651,13 +835,28 @@ export default class Guy {
     }
 
     static SIG(num) {
-        if (num === 0) {
+        // Mirrors Guy.as: +-0.1 push-out steps.
+        if (num < 0) {
+            return -0.1;
+        } else if (num > 0) {
+            return 0.1;
+        } else {
             return 0;
         }
-        return num < 0 ? -1 : 1;
     }
 
-    static SIG_ONE(num) {
-        return num < 0 ? -1 : 1;
+    static SIG_ONE(n, tar) {
+        // Mirrors Guy.as: clamped chunk of +-tar.
+        if (Math.abs(n) > tar) {
+            if (n < 0) {
+                return -tar;
+            } else if (n > 0) {
+                return tar;
+            } else {
+                return 0;
+            }
+        } else {
+            return n;
+        }
     }
 }
