@@ -392,25 +392,34 @@ export default class GameEngine {
         this.soundfadein();
 
         for (const blockArray of this.blocksarrays) {
-            for (const block of blockArray) {
-                if (!block || block.memRemoved || block.activated === false) {
+            for (let bi = 0; bi < blockArray.length; bi++) {
+                const block = blockArray[bi];
+                if (!block || block.activated === false) {
                     continue;
                 }
 
-                if (typeof block.simpleupdate === 'function') {
-                    block.simpleupdate(this);
-                }
-
-                if (typeof block.update === 'function') {
-                    const shouldReturn = block.update(this);
-                    if (shouldReturn === true || this.pendingReload || this.pendingLevelAdvance || this.kill) {
-                        if (this.pendingReload || this.kill) {
-                            this.reload();
-                        } else if (this.pendingLevelAdvance) {
-                            this.loadnextlevel(this.pendingLevelAdvanceHitGoal);
+                // Mirrors GameEngine.as: full update() only in y-window;
+                // simpleupdate() for blocks far above.
+                if (!block.memRemoved && block.y > -500 && block.y < 1000) {
+                    if (typeof block.update === 'function') {
+                        const shouldReturn = block.update(this);
+                        if (shouldReturn === true || this.pendingReload || this.pendingLevelAdvance || this.kill) {
+                            if (this.pendingReload || this.kill) {
+                                this.reload();
+                            } else if (this.pendingLevelAdvance) {
+                                this.loadnextlevel(this.pendingLevelAdvanceHitGoal);
+                            }
+                            return true;
                         }
-                        return true;
                     }
+                } else if (!block.memRemoved && block.y <= -500) {
+                    if (typeof block.simpleupdate === 'function') {
+                        block.simpleupdate(this);
+                    }
+                }
+                this.clearAbove(block);
+                if (this.clearBelow(block, blockArray, bi)) {
+                    bi--;
                 }
             }
         }
