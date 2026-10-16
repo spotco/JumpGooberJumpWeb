@@ -160,4 +160,20 @@ export const TESTS = [
       return { pass, details: `vx@20=${vLeft.toFixed(3)} vx@35=${vRight.toFixed(3)}` };
     },
   },
+  {
+    name: 'scroll-with-removed-blocks',
+    level: 'scroll.xml',
+    ticks: 60,
+    script: [],
+    check(snaps, { engine }) {
+      // Regression test for BaseBlock.gameScroll null container crash.
+      // Setup: player spawns on y=100 wall (y<250, so autoScroll runs every
+      // tick); a wall at y=-600 is removed by clearAbove on tick 1
+      // (container=null). autoScroll -> gameScroll must not crash on it.
+      // If we get 60 snapshots without a TypeError, the fix works.
+      const minY = Math.min(...snaps.map((s) => s.y));
+      const pass = snaps.length === 60 && minY < 250;
+      return { pass, details: `ticks=${snaps.length} minY=${minY.toFixed(1)}` };
+    },
+  },
 ];

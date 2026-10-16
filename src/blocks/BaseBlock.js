@@ -51,7 +51,11 @@ export default class BaseBlock {
 
     gameScroll(scroll_spd) {
         this.y += scroll_spd;
-        this.container.y = this.y;
+        // Container is null after removeFromMemory() (clearAbove/clearBelow);
+        // the y update must still happen for recycling, but skip the display sync.
+        if (this.container) {
+            this.container.y = this.y;
+        }
     }
 
     removeFromMemory() {
