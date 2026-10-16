@@ -23,9 +23,18 @@ Planning style reference:
 ---
 
 ## Human notes: Do not start on these unless specifically prompted.
-- [ ] Super jump javascript must release arrow key first then jump. Make any order work, and hold other direction work.
-- [ ] Air resistance feels different than flash game, try tweaking.
-- [ ] debug input lag
+- [x] Super jump javascript must release arrow key first then jump. Make any order work, and hold other direction work.
+  - Addressed 2026-10-16 by the faithful-physics port (no retuning): Guy.as update() verbatim on a fixed
+    33.3ms tick, most-recent-wins key stack, no invented wall jump. The original super-jumps on wall-slide
+    + jump regardless of key order (verified: test/e2e `super-jump-release-then-jump` and
+    `super-jump-hold-into-wall` both produce vx=-9.00/vy=-13.86). Tuned 60fps code kept behind
+    Guy.USE_TUNED_JUMP=false as an escape hatch.
+- [x] Air resistance feels different than flash game, try tweaking.
+  - Addressed 2026-10-16 by the faithful port: original is vx*=.99/vy*=.99 per 33.3ms tick (the 60fps
+    retune used 0.92, ~100x stronger). Verified: test/e2e `air-friction-matches-original`.
+- [x] debug input lag
+  - Addressed 2026-10-16 by input parity: per-tick key-stack handling (most-recent-wins), DOWN brake,
+    A/D/W/Z/Enter aliases, jumpUnpressed. Verified: test/e2e `key-stack-most-recent-wins`, `down-brake`.
 
 ---
 
