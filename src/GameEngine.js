@@ -3,6 +3,7 @@
 
 import LevelXmlParser from './LevelXmlParser.js';
 import Wall from './blocks/Wall.js';
+import FalldownBlock from './blocks/FalldownBlock.js';
 import Goal from './blocks/Goal.js';
 import Textdisplay from './blocks/Textdisplay.js';
 import Boost from './blocks/Boost.js';
@@ -16,6 +17,7 @@ import LaserLauncher from './blocks/LaserLauncher.js';
 import BossActivate from './blocks/BossActivate.js';
 import FlowerBoss from './blocks/FlowerBoss.js';
 import CloudBoss from './blocks/CloudBoss.js';
+import RocketBoss from './blocks/RocketBoss.js';
 import Guy from './core/Guy.js';
 
 export default class GameEngine {
@@ -44,6 +46,10 @@ export default class GameEngine {
         this.sceneData = options.sceneData || null;
 
         this.deathwall = [];
+        this.bulletsreuse = [];
+        this.particlesreuse = [];
+        this.rocketparticlesreuse = [];
+        this.bgcounter = 0;
         this.boostlist = [];
         this.textdisplays = [];
         this.walls = [];
@@ -137,12 +143,7 @@ export default class GameEngine {
             return wall;
         }
         case 'deathwall': {
-            const deathwall = new Wall(this.scene, this.worldContainer, record.x, record.y, record.width, record.height);
-            deathwall.container.iterate((child) => {
-                if (child && typeof child.setTintFill === 'function') {
-                    child.setTintFill(0xff7777);
-                }
-            });
+            const deathwall = new FalldownBlock(this.scene, this.worldContainer, record.x, record.y, record.width, record.height);
             this.deathwall.push(deathwall);
             return deathwall;
         }
@@ -210,6 +211,11 @@ export default class GameEngine {
             const cloudboss = new CloudBoss(this.scene, this.worldContainer, record.x, record.y);
             this.otherblocks.push(cloudboss);
             return cloudboss;
+        }
+        case 'rocketboss': {
+            const rocketboss = new RocketBoss(this.scene, this.worldContainer, record.x, record.y);
+            this.deathwall.push(rocketboss);
+            return rocketboss;
         }
         default:
             return null;
@@ -344,6 +350,10 @@ export default class GameEngine {
     // tick() - one fixed logic step, mirroring the original's update(e:TimerEvent).
     // Returns true when the level ended during this tick.
     tick() {
+        if (typeof window !== 'undefined' && window.__e2eDebug) {
+            console.log('[tick] testguy=' + (this.testguy ? this.testguy.x + ',' + this.testguy.y : 'null') +
+                ' pendingReload=' + this.pendingReload + ' kill=' + this.kill);
+        }
         if (this.pendingReload || this.kill) {
             this.reload();
             return true;
@@ -379,6 +389,8 @@ export default class GameEngine {
             }
         }
 
+        this.soundfadein();
+
         for (const blockArray of this.blocksarrays) {
             for (const block of blockArray) {
                 if (!block || block.memRemoved || block.activated === false) {
@@ -403,6 +415,7 @@ export default class GameEngine {
             }
         }
 
+        this.autoScroll();
         if (this.debugScrollSpeed !== 0) {
             this.gameScroll(this.debugScrollSpeed);
         }
@@ -412,9 +425,42 @@ export default class GameEngine {
             return true;
         }
 
-        this.clearAbove();
-        this.clearBelow();
         return false;
+    }
+
+    autoScroll() {
+        // Mirrors GameEngine.as gameScroll(): called every tick; scrolls the
+        // world when the player climbs above y=250.
+        if (!this.testguy || this.testguy.memRemoved) {
+            return;
+        }
+        const scrollSpd = Guy.roundDec((250 - this.testguy.y) / 9, 1);
+        if (this.testguy.y < 250) {
+            this.bgcounter++;
+            if (this.bgcounter > 0 && this.bg_y < -1) {
+                this.bg_y += scrollSpd / 3;
+                this.bgcounter = 0;
+            }
+            this.calcBgScrollRect();
+            this.gameScroll(scrollSpd);
+        }
+        if (this.bg_y > 0) {
+            this.bg_y = 0;
+        }
+    }
+
+    calcBgScrollRect() {
+        // Mirrors calc_bg_scroll_rect(): pans the background with the camera.
+        if (this.background) {
+            this.background.y = this.bg_y;
+        }
+    }
+
+    soundfadein() {
+        const main = typeof window !== 'undefined' ? window.jumpDieCreateMain : null;
+        if (main && main.soundManager && typeof main.soundManager.soundfadein === 'function') {
+            main.soundManager.soundfadein();
+        }
     }
 
     gameScroll(scroll_spd) {
@@ -609,9 +655,6 @@ export default class GameEngine {
         }
 
         switch (event.code) {
-        case 'Escape':
-            this.handleMenuButton();
-            return;
         case 'KeyP':
             if (!event.repeat) {
                 this.togglePause();
@@ -650,6 +693,12 @@ export default class GameEngine {
         }
 
         switch (event.code) {
+        case 'Escape':
+            this.togglePause();
+            return;
+        case 'F1':
+            this.handleMuteButton();
+            return;
         case 'PageUp':
             this.setDebugScrollSpeed(this.keyState.PageDown ? -8 : 0);
             return;
@@ -767,12 +816,39 @@ export default class GameEngine {
         }
     }
 
-    clearAbove(clearLine = GameEngine.CLEAR_ABOVE_MARGIN) {
-        this._clearByBounds((block) => (block.y + this.getBlockHeight(block)) < clearLine);
+    clearAbove(b) {
+        // Mirrors GameEngine.as clearAbove(): hide blocks scrolled far above,
+        // re-add them if they come back into view.
+        if (!b || b === this.testguy) {
+            return;
+        }
+        if (b.y <= -500 && !b.memRemoved) {
+            this.removeBlockFromMemory(b);
+        } else if (b.y >= -500 && b.y <= 1000 && b.memRemoved) {
+            if (typeof b.addToMemory === 'function') {
+                b.addToMemory();
+            } else {
+                b.memRemoved = false;
+                if (b.container) {
+                    b.container.setVisible(true);
+                }
+            }
+        }
     }
 
-    clearBelow(clearLine = GameEngine.CLEAR_BELOW_MARGIN) {
-        this._clearByBounds((block) => block.y > clearLine);
+    clearBelow(b, blockArray, index) {
+        // Mirrors GameEngine.as clearBelow(): permanently drop blocks far below.
+        if (!b || b === this.testguy) {
+            return false;
+        }
+        if (b.y >= 1000 && !b.memRemoved) {
+            this.removeBlockFromMemory(b);
+            if (blockArray && typeof index === 'number') {
+                blockArray.splice(index, 1);
+            }
+            return true;
+        }
+        return false;
     }
 
     _clearByBounds(shouldClear) {

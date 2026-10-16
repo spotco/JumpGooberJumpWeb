@@ -27,8 +27,17 @@ export default class Goal extends BaseBlock {
         }
     }
 
-    update(_gameEngine) {
+    update(gameEngine) {
         this.animate();
+        // Mirrors blocks/Goal.as: touching the goal advances the level.
+        if (gameEngine && gameEngine.testguy && typeof gameEngine.testguy.hitTestObject === 'function') {
+            if (gameEngine.testguy.hitTestObject(this)) {
+                if (typeof gameEngine.loadnextlevel === 'function') {
+                    gameEngine.loadnextlevel(true);
+                }
+                return true;
+            }
+        }
         return false;
     }
 
