@@ -160,3 +160,42 @@ the particle burst. Visual-only; no gameplay impact.
   `boost`, `boostfruit`, `track`, `textfield`
 - `loadnextlevel` / `reload` / `clear` flow structure matches
 - `makeui` text content and button positions match
+
+---
+
+## Third-pass findings (2026-10-16, night)
+
+Divergences missed by first and second passes. Do NOT re-list items from above.
+
+### P0 — Breaks gameplay
+
+| Issue | Original behavior | Port status | Notes |
+|---|---|---|---|
+| `BaseBlock.removeFromMemory()` destroys container, breaking `clearAbove` recycling | `GameEngine.as:480-489` — `clearAbove` removes block from stage (`main.removeChild(b)`) but does NOT destroy it; re-adds via `main.addChild(b)` when back in view | **Broken** — `src/blocks/BaseBlock.js:60-68` calls `this.container.destroy()` and sets `container = null`. When `clearAbove` tries to re-add (player descends), the container is gone — block stays invisible forever. No `addToMemory()` exists. | Likely cause of user-reported "blocks dont load when getting high enough". Fix: hide instead of destroy, or implement `addToMemory()` to recreate. |
+
+### P1 — Noticeable gaps
+
+| Issue | Original behavior | Port status | Notes |
+|---|---|---|---|
+| `moveUiToFront` doesn't bring bosses forward | `GameEngine.as:456-461` — iterates `deathwall`, brings `FlowerBoss`/`Bullet`/`CloudBoss`/`RocketBoss` to front via `setChildIndex` | **Diverged** — `src/GameEngine.js:654` only brings `uiContainer` to top. Port's `FalldownBlock.update()` does per-block `bringToTop`, which is more aggressive but not identical ordering. | Bosses may render behind other deathwall blocks. Low visual impact but differs from source. |
+
+### P2 — Polish / minor
+
+| Issue | Original behavior | Port status | Notes |
+|---|---|---|---|
+| `Track.js` redundant normalization | `Track.as:29-37` normalizes negative dims before setting x/y | **Redundant** — port does it in constructor AND `BaseBlock.normalizeBounds()` does it again in `super()`. Harmless duplicate. | Cleanup only. |
+| `Guy.explode()` particle burst | `Guy.as:283-295` — after 4-frame anim, spawns 24 green particles radially | **Missing** — port shows explosion frames but skips particle burst (already noted in second-pass; confirming still absent). | Visual-only. |
+| `changePos` semantics | `Guy.as:52-55` defines `changePos` with SET semantics (`this.x = chx`) but never calls it (dead code) | **Diverged** — port implements with ADD semantics (`this.x += chx`) and calls it in chunk loop. | Not a bug: port repurposed it correctly for incremental movement. Documenting for clarity. |
+
+### Verified matching (no action)
+
+- `update()` coverage: all 19 blocks match AS3 (Track's is commented out in source — correct)
+- `simpleupdate()` coverage: all 5 overrides match (`BaseBlock`, `LaserLauncher`, `RocketBoss`, `TrackBlade`, `TrackWall`)
+- `LevelXmlParser` reads all attributes used by `GameEngine.as` (x, y, width, height, dir, hp, explode, text)
+- `SFX_KEYS` registers all played sounds (explode, fruit, fall, boost, thunder, shoot, etc.)
+- `currenty` tracked but never read in both (public var, external use)
+- `particles` array correctly holds `bossactivate` + runtime `Particle`s from Rocket/RocketBoss
+- `Wall.js` negative dims handled via `BaseBlock.normalizeBounds()` (not duplicated)
+- `Goal` `noEdge` parameter present in both
+- `gameScroll` overrides: only `BaseBlock` (null-guarded) and `CloudBoss` (no-op, matches AS3)
+
