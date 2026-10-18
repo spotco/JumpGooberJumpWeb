@@ -7,9 +7,11 @@ and automated regression testing.
 ## Recording (opt-in)
 
 1. Play the game in a browser (desktop with keyboard).
-2. Press **F9** to start recording. The console logs `[recorder] Started recording: ...`.
+2. Click the **REC** button (top-left, gray dot) or press **F9** to start.
+   A pulsing red **● REC** indicator appears with an elapsed timer.
 3. Play normally. Only gameplay keys are captured (arrows, WASD, Space, Enter, Z).
-4. Press **F9** again to stop. A JSON file downloads automatically.
+4. Click the **● REC** indicator or press **F9** again to stop.
+   A JSON file downloads automatically.
 
 The recording format matches the e2e test script format:
 ```json
