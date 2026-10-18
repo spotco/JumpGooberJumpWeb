@@ -91,6 +91,8 @@ export default class GameEngine {
         this.e2eManualStep = false;
         this.inputx = 0;
         this.inputy = 0;
+        this.inputRecording = null;
+        this.inputRecordStart = 0;
         this.keyState = {
             ArrowLeft: false,
             ArrowRight: false,
@@ -673,12 +675,84 @@ export default class GameEngine {
         this.scene.children.bringToTop(this.uiContainer);
     }
 
+    startRecording(levelName) {
+        // Opt-in input recorder for e2e replay. Captures key time series
+        // in the same format as test/e2e/tests.js scripts.
+        this.inputRecording = {
+            name: 'recording-' + new Date().toISOString().slice(0, 19).replace(/:/g, '-'),
+            level: levelName || (this.sceneData && this.sceneData.name) || 'unknown',
+            world: this.world || 1,
+            levelNum: this.level || 1,
+            events: [],
+        };
+        this.inputRecordStart = performance.now();
+        console.log('[recorder] Started recording: ' + this.inputRecording.name);
+    }
+
+    stopRecording() {
+        if (!this.inputRecording) {
+            return null;
+        }
+        const rec = this.inputRecording;
+        rec.durationMs = performance.now() - this.inputRecordStart;
+        rec.gameVersion = '1.0';
+        this.inputRecording = null;
+        console.log('[recorder] Stopped. ' + rec.events.length + ' events over ' + Math.round(rec.durationMs) + 'ms');
+        return rec;
+    }
+
+    downloadRecording() {
+        const rec = this.stopRecording();
+        if (!rec) {
+            console.log('[recorder] No active recording');
+            return;
+        }
+        const blob = new Blob([JSON.stringify(rec, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = rec.name + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log('[recorder] Downloaded: ' + rec.name + '.json');
+    }
+
+    _recordInput(code, type) {
+        if (!this.inputRecording) {
+            return;
+        }
+        // Only record gameplay keys (not UI shortcuts like P, F1, etc.)
+        const gameplayKeys = ['ArrowLeft', 'KeyA', 'ArrowRight', 'KeyD', 'ArrowUp', 'KeyW',
+                              'ArrowDown', 'Space', 'Enter', 'KeyZ'];
+        if (!gameplayKeys.includes(code)) {
+            return;
+        }
+        this.inputRecording.events.push({
+            t: Math.round(performance.now() - this.inputRecordStart),
+            code: code,
+            type: type,
+        });
+    }
+
     onKeyPress(event) {
         if (this.cleared || !event || !event.code) {
             return;
         }
 
+        this._recordInput(event.code, 'down');
+
         switch (event.code) {
+        case 'F9':
+            if (!event.repeat) {
+                if (this.inputRecording) {
+                    this.downloadRecording();
+                } else {
+                    this.startRecording();
+                }
+            }
+            return;
         case 'KeyP':
             if (!event.repeat) {
                 this.togglePause();
@@ -715,6 +789,8 @@ export default class GameEngine {
         if (this.cleared || !event || !event.code) {
             return;
         }
+
+        this._recordInput(event.code, 'up');
 
         switch (event.code) {
         case 'Escape':

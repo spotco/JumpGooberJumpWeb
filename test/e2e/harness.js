@@ -122,6 +122,38 @@ async function runTest(game, test) {
   return { name: test.name, pass: !!outcome.pass, details: outcome.details || '' };
 }
 
+async function loadRecording(name) {
+  // Loads a human-recorded input session from test/e2e/recordings/.
+  // Returns a test object compatible with runTest().
+  const resp = await fetch('./recordings/' + name);
+  if (!resp.ok) {
+    throw new Error('Recording not found: ' + name);
+  }
+  const rec = await resp.json();
+  const params = new URLSearchParams(window.location.search);
+  const levelFile = params.get('level') || 'flat.xml';
+  const ticks = Math.ceil((rec.durationMs || 5000) / TICK_MS) + 60;
+  return {
+    name: 'replay-' + rec.name,
+    level: levelFile,
+    ticks: ticks,
+    script: rec.events || [],
+    check(snaps, { engine }) {
+      // Replay passes if it runs without crashing. Human recordings may
+      // include player death (exploded) — the harness breaks early in that
+      // case, which is expected and deterministic. We're verifying the
+      // replay doesn't crash, not that the player survives.
+      const pass = snaps.length > 0;
+      const final = snaps[snaps.length - 1];
+      const died = engine.testguy && engine.testguy.exploded;
+      return {
+        pass,
+        details: `ticks=${snaps.length}/${ticks} final=(${final.x.toFixed(1)},${final.y.toFixed(1)}) events=${rec.events.length}${died ? ' (died)' : ''}`,
+      };
+    },
+  };
+}
+
 async function main() {
   const resultsEl = document.getElementById('e2e-results');
   try {
@@ -131,9 +163,18 @@ async function main() {
       return s && s.scene.isActive() ? s : null;
     }, 120000, 'menu (boot)');
 
+    const params = new URLSearchParams(window.location.search);
+    const replayName = params.get('replay');
+
     const results = [];
-    for (const test of TESTS) {
+    if (replayName) {
+      // Replay mode: run a single human recording instead of the test suite.
+      const test = await loadRecording(replayName);
       results.push(await runTest(game, test));
+    } else {
+      for (const test of TESTS) {
+        results.push(await runTest(game, test));
+      }
     }
     const passed = results.filter((r) => r.pass).length;
     resultsEl.textContent = 'DONE|' + JSON.stringify({
