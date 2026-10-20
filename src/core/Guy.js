@@ -83,7 +83,9 @@ export default class Guy {
         this.exploded = false;
         this.explodecounter = 0;
         this.explodetimer = 0;
-        this.explodereload = 30;
+        // AS3 FalldownBlock.as uses Timer(1200,1) before reload: 1200ms at
+        // the 33.33ms tick = 36 ticks.
+        this.explodereload = 36;
         this.explodeframe = 0;
         this.memRemoved = false;
         this.activated = true;
