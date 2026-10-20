@@ -291,7 +291,8 @@ export default class TutorialGame extends CurrentFunction {
     }
 
     levelcompletescreen() {
-        const gameTime = this.currentGame ? this.currentGame.game_time : 0;
+        const gameTime = this.lastGameTime != null ? this.lastGameTime
+            : (this.currentGame ? this.currentGame.game_time : 0);
         const displaytime = GameEngine.gettimet(gameTime);
         const totaldisplaytime = GameEngine.gettimet(this.prev_game_time_store + gameTime);
         this.main.playsfx('cheer');

@@ -171,21 +171,27 @@ async function loadRecording(name) {
   // old recordings use `t` in ms. Normalize tick -> t for runTest().
   const events = rec.events || [];
   const startTick = rec.startTick || 0;
+  const hasTicks = events.length > 0 && typeof events[0].tick === 'number';
   const script = events.map((ev) => {
     if (typeof ev.tick === 'number') {
-      // Absolute tick in live game -> relative tick from recording start.
-      const relTick = ev.tick - startTick;
-      return { t: relTick * TICK_MS, code: ev.code, type: ev.type };
+      // Keep ABSOLUTE tick positions: the replay idle-advances startTick
+      // ticks first, then feeds events at their recorded ticks. This keeps
+      // time-dependent objects (track blades, bosses, timers) in sync with
+      // the original playthrough, as the recorder starts mid-session.
+      return { t: ev.tick * TICK_MS, code: ev.code, type: ev.type };
     }
     return ev; // already has t (ms)
   });
-  const maxTick = events.reduce((m, ev) => Math.max(m, (ev.tick || 0) - startTick), 0);
-  const ticks = (rec.totalTicks ? rec.totalTicks : (maxTick > 0 ? maxTick : Math.ceil((rec.durationMs || 5000) / TICK_MS))) + 10;
+  const maxAbsTick = events.reduce((m, ev) => Math.max(m, ev.tick || 0), 0);
+  const ticks = hasTicks
+    ? startTick + (rec.totalTicks || (maxAbsTick - startTick)) + 10
+    : Math.ceil((rec.durationMs || 5000) / TICK_MS) + 10;
   return {
     name: 'replay-' + rec.name,
     level: levelFile,
     ticks: ticks,
     script: script,
+    startTick: startTick,
     startX: rec.startX,
     startY: rec.startY,
     startWorldY: rec.startWorldY,

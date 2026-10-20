@@ -560,6 +560,11 @@ export default class GameEngine {
 
         this.curfunction.currentGame = this;
         this.curfunction.currentgame = this;
+        // Keep the current function pointed at the ACTIVE scene. It caches
+        // main.scene at construction (often the MenuScene), but gameplay runs
+        // in GameScene — without this, post-level screens (level complete)
+        // are added to an inactive scene and the player sees a black screen.
+        this.curfunction.scene = this.scene;
     }
 
     updateUiText() {
@@ -1059,6 +1064,13 @@ export default class GameEngine {
             return;
         }
 
+        // [recorder] Auto-save an in-progress recording when the level ends
+        // (e.g. goal touched) so the playthrough is not lost.
+        if (this.inputRecording) {
+            console.log('[recorder] Level ended - auto-saving recording.');
+            this.downloadRecording();
+        }
+
         this.pendingLevelAdvance = false;
         this.pendingLevelAdvanceHitGoal = false;
         this.ispaused = false;
@@ -1066,6 +1078,8 @@ export default class GameEngine {
 
         const currentFunction = this.curfunction;
         if (currentFunction && typeof currentFunction === 'object') {
+            // Preserve final time for the complete screen before detaching.
+            currentFunction.lastGameTime = this.game_time;
             currentFunction.currentGame = null;
             currentFunction.currentgame = null;
         }
