@@ -1,6 +1,6 @@
 {
-  "commit": "614c8ba1b87d05ee5af328017495824087659b3c",
-  "short": "614c8ba",
-  "message": "Update version.json to bdf5858",
-  "date": "2026-10-19 22:11:33 -0400"
+  "commit": "2ac0ef525a1e355c27be28d6ded57d3c37cb5155",
+  "short": "2ac0ef5",
+  "message": "Fix version.json escaping",
+  "date": "2026-10-19 22:11:39 -0400"
 }
