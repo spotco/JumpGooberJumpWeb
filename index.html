@@ -103,13 +103,23 @@
 
       btn.addEventListener('click', () => {
         const engine = getEngine();
-        if (!engine) return;
-        if (engine.inputRecording) {
-          engine.downloadRecording();
-        } else {
-          engine.startRecording();
+        if (engine) {
+          if (engine.inputRecording) {
+            engine.downloadRecording();
+          } else {
+            engine.startRecording();
+          }
         }
         updateRecUI();
+        // Release focus so Space/Enter (game jump keys) don't re-trigger
+        // this button while playing. Refocus the game canvas instead.
+        btn.blur();
+        const canvas = document.querySelector('#game-container canvas');
+        if (canvas) canvas.focus();
+      });
+      // Prevent Space/Enter from activating the button when it has focus.
+      btn.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.code === 'Enter') e.preventDefault();
       });
 
       function updateRecUI() {
