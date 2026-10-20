@@ -1,6 +1,8 @@
 // TutorialGame.js - Campaign world select/progression port.
 
 import { MUSIC } from '../Constants.js';
+import WinAnimation from '../misc/WinAnimation.js';
+import Fireworks from '../misc/Fireworks.js';
 import GameEngine from '../GameEngine.js';
 import CurrentFunction from './CurrentFunction.js';
 import JumpDieCreateMenu from './JumpDieCreateMenu.js';
@@ -300,18 +302,73 @@ export default class TutorialGame extends CurrentFunction {
         const rank = TutorialGame.parserank(gameTime, this.thisworld, this.clvl, this.main.rankdata);
         this.clearObjects();
         this.add(this.scene.add.image(250, 260, 'menu_bg'));
-        this.add(JumpDieCreateMenu.getTextBubble(this.scene));
+        const bub = JumpDieCreateMenu.getTextBubble(this.scene);
+        if (bub && typeof bub.setAlpha === 'function') {
+            bub.setAlpha(0.7);
+        }
+        this.add(bub);
         this.add(this.scene.add.text(20, 15, 'Level Complete!', this.main.getTextFormat(60, 2)));
-        this.add(this.scene.add.text(127, 210, `Time: ${displaytime}\nRank: ${rank}\n\nTotal Time: ${totaldisplaytime}\nDeaths: ${this.numDeath}\n\nPress Space\nto Continue`, this.main.getTextFormat(17)).setAlign('center'));
+
+        // AS3: the text starts WITHOUT the "Press Space" line; a 1000ms
+        // timer blinks it on/off, and the KEY_UP continue-listener is only
+        // attached at the first tick. Combined with the fresh-press guard
+        // below, a Space held over from gameplay can never skip the screen:
+        // it requires a NEW Space press (down, then up) to continue.
+        const baseText = `Time: ${displaytime}\nRank: ${rank}\n\nTotal Time: ${totaldisplaytime}\nDeaths: ${this.numDeath}`;
+        const promptText = baseText + '\n\nPress Space\nto Continue';
+        const displayText = this.scene.add.text(127, 210, baseText, this.main.getTextFormat(17)).setAlign('center');
+        this.add(displayText);
+
         this.main.stop();
         this.playWinSound();
-        const handler = (e) => {
+
+        // AS3: WinAnimation at (140,140) + Fireworks behind the screen.
+        const winanim = new WinAnimation(this.scene);
+        winanim.container.setPosition(140, 140);
+        this.add(winanim.container);
+        winanim.start();
+        const fireworks = new Fireworks(this.scene);
+        this.add(fireworks.container);
+        const fireworksTimer = this.scene.time.addEvent({
+            delay: 30,
+            loop: true,
+            callback: () => fireworks.update(),
+        });
+
+        let showPrompt = false;
+        let freshPressSeen = false;
+        const downHandler = (e) => {
             if (e.code === 'Space') {
-                this.scene.input.keyboard.off('keyup', handler);
+                freshPressSeen = true;
+            }
+        };
+        const upHandler = (e) => {
+            if (e.code === 'Space' && freshPressSeen) {
+                cleanup();
                 this.loadNextLevel();
             }
         };
-        this.scene.input.keyboard.on('keyup', handler);
+        const cleanup = () => {
+            blinkTimer.remove();
+            fireworksTimer.remove();
+            fireworks.destroy();
+            winanim.destroy();
+            this.scene.input.keyboard.off('keydown', downHandler);
+            this.scene.input.keyboard.off('keyup', upHandler);
+        };
+        const blinkTimer = this.scene.time.addEvent({
+            delay: 1000,
+            loop: true,
+            callback: () => {
+                showPrompt = !showPrompt;
+                displayText.setText(showPrompt ? promptText : baseText);
+            },
+        });
+        // AS3 attaches the continue listener at the first timer tick (1s).
+        this.scene.time.delayedCall(1000, () => {
+            this.scene.input.keyboard.on('keydown', downHandler);
+            this.scene.input.keyboard.on('keyup', upHandler);
+        });
     }
 
     playWinSound() {

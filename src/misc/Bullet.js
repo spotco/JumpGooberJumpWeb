@@ -61,6 +61,20 @@ export default class Bullet extends FalldownBlock {
         g.bulletsreuse.push(this);
     }
 
+    // The bullet's logical w/h are 0 (inherited from the AS3 super(0,0,0,0)),
+    // but Flash collision used the bullet BITMAP's display bounds (14x14,
+    // centered). Override so the guy's inner hitbox tests against the real
+    // centered 14x14 rect — without this the bullet has no collision area.
+    overlapsInnerHitbox(guy) {
+        if (!guy.innerhitbox) {
+            return false;
+        }
+        return Phaser.Geom.Intersects.RectangleToRectangle(
+            guy.innerhitbox,
+            new Phaser.Geom.Rectangle(this.x - 7, this.y - 7, 14, 14)
+        );
+    }
+
     update(g) {
         this.x += this.vx;
         this.y -= this.vy;

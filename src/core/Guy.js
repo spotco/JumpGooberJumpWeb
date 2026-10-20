@@ -789,6 +789,8 @@ export default class Guy {
     }
 
     explode() {
+        // Mirrors Guy.as explode(): clears children, shows the explosion
+        // frames (ex0..ex3 at -8,-8), then a 24-particle radial burst.
         if (this.exploded) {
             return;
         }
@@ -797,6 +799,7 @@ export default class Guy {
         this.explodecounter = 0;
         this.explodetimer = 0;
         this.explodeframe = 0;
+        this.explodeparticles = [];
         this.vx = 0;
         this.vy = 0;
         this.canJump = false;
@@ -804,6 +807,8 @@ export default class Guy {
         this.hashitwall = false;
         this.isslide = false;
         this.guydisplay.setTexture('guy_explode_0');
+        this.guydisplay.setPosition(-8, -8);
+        this.guydisplay.setVisible(true);
 
         const main = window.jumpDieCreateMain;
         if (main && typeof main.playsfx === 'function') {
@@ -812,10 +817,35 @@ export default class Guy {
     }
 
     updateExplosion() {
+        // Mirrors Guy.as animupdate (Timer(30)): vx=vy=0, frames 0..3 one per
+        // tick, then a 24-particle green burst with gravity 0.25.
+        this.vx = 0;
+        this.vy = 0;
         this.explodetimer += 1;
-        if (this.explodetimer % 4 === 0 && this.explodeframe < 3) {
-            this.explodeframe += 1;
+        if (this.explodeframe < 4) {
             this.guydisplay.setTexture(`guy_explode_${this.explodeframe}`);
+            this.explodeframe += 1;
+        } else {
+            if (this.explodeframe === 4) {
+                // Frame 4: hide the guy image, spawn the 24-particle burst.
+                this.guydisplay.setVisible(false);
+                for (let i = 0; i < 24; i += 1) {
+                    const randSpd = Math.random() * 10;
+                    const radius = 4 * Math.random();
+                    const p = this.scene.add.circle(14, 12, radius, 0x76C346);
+                    p.vx = Math.sin(i * (Math.PI / 12)) * randSpd;
+                    p.vy = Math.cos(i * (Math.PI / 12)) * randSpd;
+                    this.container.add(p);
+                    this.explodeparticles.push(p);
+                }
+                this.explodeframe += 1;
+            } else {
+                for (const p of this.explodeparticles) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.25;
+                }
+            }
         }
 
         this.explodecounter += 1;

@@ -78,12 +78,25 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('text_bug_2', 'img/block/textbug/textbug2.png');
         this.load.image('text_speechbubble', 'img/block/textbug/speechbubble.png');
         this.load.image('yellowblock', 'img/block/yellowblock.png');
+        for (let i = 0; i <= 4; i += 1) {
+            this.load.image('yellowblock' + i, 'img/block/yellowblock' + i + '.png');
+        }
         this.load.image('redblock', 'img/block/redblock.png');
         this.load.image('launcher1_img', 'img/block/red/launcher1.png');
         this.load.image('launcherbase_img', 'img/block/red/launcherbase.png');
         this.load.image('rocket_img', 'img/block/red/rocket.png');
         this.load.image('trackblade_img', 'img/block/red/trackblade.png');
         this.load.image('flowershot_img', 'img/boss/flowershot.png');
+        this.load.image('flowerhead', 'img/boss/flowerhead.png');
+        this.load.image('flowerhead2', 'img/boss/flowerhead2.png');
+        this.load.image('flowerhead3', 'img/boss/flowerhead3.png');
+        this.load.image('flowerstem', 'img/boss/flowerstem.png');
+        // WinAnimation frames (misc/WinAnimation.as)
+        for (let i = 1; i <= 9; i += 1) {
+            this.load.image('guywin_' + i, 'img/guywin/' + i + '.png');
+        }
+        this.load.image('guywin_blink1', 'img/guywin/blink1.png');
+        this.load.image('guywin_blink2', 'img/guywin/blink2.png');
         this.load.image('boostfruit', 'img/editoricon/boostfruit.png');
 
         this.load.image('playbutton_preloader', 'img/playbutton.png');

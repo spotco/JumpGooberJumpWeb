@@ -24,16 +24,21 @@ export default class FlowerBoss extends FalldownBlock {
         this.container.add(this.particlefield);
         this.addparticles();
 
-        // Head wrapper at (253,-48), rotates to track the player.
-        this.headwrapper = scene.add.container(253, -48);
-        this.headimg = scene.add.ellipse(0, 0, 60, 60, 0xe15d8e, 0.9)
-            .setStrokeStyle(3, 0x8e224d, 1);
-        this.headwrapper.add(this.headimg);
-        this.container.add(this.headwrapper);
-
-        // Stem visual.
-        this.stemimg = scene.add.rectangle(247, -20, 32, 40, 0x3a8e3a, 0.9);
+        // Stem visual (AS3: flowerstem bitmap at (231,-34)).
+        this.stemimg = scene.add.image(231, -34, 'flowerstem').setOrigin(0, 0);
         this.container.add(this.stemimg);
+
+        // Head wrapper at (253,-48), rotates to track the player. The AS3
+        // stacks three head bitmaps centered on the wrapper and cycles their
+        // visibility for the shoot animation (default: head3 visible).
+        this.headwrapper = scene.add.container(253, -48);
+        this.flowerhead1 = scene.add.image(0, 0, 'flowerhead').setOrigin(0.5, 0.5);
+        this.flowerhead2 = scene.add.image(0, 0, 'flowerhead2').setOrigin(0.5, 0.5);
+        this.flowerhead3 = scene.add.image(0, 0, 'flowerhead3').setOrigin(0.5, 0.5);
+        this.flowerhead1.setVisible(false);
+        this.flowerhead2.setVisible(false);
+        this.headwrapper.add([this.flowerhead1, this.flowerhead2, this.flowerhead3]);
+        this.container.add(this.headwrapper);
 
         this.syncPosition();
     }
@@ -74,22 +79,25 @@ export default class FlowerBoss extends FalldownBlock {
     }
 
     animatehead() {
+        // Mirrors FlowerBoss.as animatehead(): cycles head frame visibility.
         if (this.headanimatetimer > 0) {
             this.headanimatetimer--;
-            // The AS3 cycles flowerhead1/2/3 visibility; the port tints
-            // the head placeholder to show the animation phase.
+            this.clearhead();
+            this.flowerhead2.setVisible(true);
             if (this.headanimatetimer === 3) {
-                this.headimg.setFillStyle(0xe15d8e, 0.9);
+                this.flowerhead1.setVisible(true);
             } else if (this.headanimatetimer === 2) {
-                this.headimg.setFillStyle(0xc74a7a, 0.9);
+                this.flowerhead2.setVisible(true);
             } else {
-                this.headimg.setFillStyle(0xa83a66, 0.9);
+                this.flowerhead3.setVisible(true);
             }
         }
     }
 
     clearhead() {
-        this.headimg.setFillStyle(0xe15d8e, 0.9);
+        this.flowerhead1.setVisible(false);
+        this.flowerhead2.setVisible(false);
+        this.flowerhead3.setVisible(false);
     }
 
     playSound(key) {
