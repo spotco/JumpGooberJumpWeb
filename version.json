@@ -1,6 +1,6 @@
 {
-  "commit": "2ac0ef525a1e355c27be28d6ded57d3c37cb5155",
-  "short": "2ac0ef5",
-  "message": "Fix version.json escaping",
-  "date": "2026-10-19 22:11:39 -0400"
+  "commit": "18bf57d5e5287c6fb0aec5783b13aabbe125be73",
+  "short": "18bf57d",
+  "message": "[1] Auto-save recording on goal touch [3] Fix black end screen [2] Absolute-tick replay sync",
+  "date": "2026-10-19 23:26:10 -0400"
 }
