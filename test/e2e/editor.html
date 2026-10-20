@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Editor Smoke Test</title></head>
+<body>
+  <div id="game-container"></div>
+  <div id="results">RUNNING</div>
+  <script src="../../lib/phaser.min.js"></script>
+  <script type="module" src="../../src/Main.js"></script>
+  <script type="module">
+    import LevelEditor from '../../src/currentfunction/LevelEditor.js';
+
+    async function waitFor(fn, timeout, label) {
+      const start = Date.now();
+      while (Date.now() - start < timeout) {
+        const v = fn();
+        if (v) return v;
+        await new Promise(r => setTimeout(r, 100));
+      }
+      throw new Error('timeout: ' + label);
+    }
+
+    const errors = [];
+    window.addEventListener('error', (e) => errors.push(e.message));
+
+    try {
+      const game = await waitFor(() => window.jumpGooberJumpGame, 20000, 'game');
+      const main = await waitFor(() => window.jumpDieCreateMain, 20000, 'main');
+      const scene = await waitFor(() => {
+        const s = game.scene.getScene('MenuScene');
+        return (s && s.scene.isActive()) ? s : null;
+      }, 20000, 'menu scene');
+
+      // Boot the editor the same way the menu route does.
+      main.setScene(scene);
+      const editor = new LevelEditor(main);
+      main.curfunction = editor;
+
+      // Exercise core behaviors.
+      const checks = {};
+      checks.typeConstants = (LevelEditor.WALL === 0 && LevelEditor.ROCKETBOSS === 17);
+      checks.toolBarBuilt = !!editor.selectorbutton;
+
+      // Place a wall programmatically via the creation path.
+      editor.cboxx = 100; editor.cboxy = 300; editor.ststo = 300;
+      editor.currenttype = LevelEditor.WALL;
+      editor.createAtPointer(200, 400);
+      checks.wallPlaced = editor.rectList.length === 1;
+      checks.wallXml = editor.xmllist[0] === '<wall x="100" y="300" width="100" height="100"></wall>';
+
+      // Scroll shifts block y + currenty inversely.
+      editor.levelEditorScroll(5);
+      checks.scroll = (editor.currenty === -5 && editor.rectList[0].y === 305);
+      editor.levelEditorScroll(-5);
+      checks.scrollBack = (editor.currenty === 0 && editor.rectList[0].y === 300);
+
+      // Move tool.
+      editor.currenttype = LevelEditor.MOVE;
+      editor.cboxx = 150; editor.cboxy = 350;
+      const top = editor.getTopMouseOverBlock(150, 350);
+      checks.moveFound = (top === editor.rectList[0]);
+
+      // Undo removes.
+      editor.undo();
+      checks.undo = (editor.rectList.length === 0 && editor.xmllist.length === 0);
+
+      // outputXML wraps.
+      editor.addBlock(editor.makeBoxBlock(LevelEditor.GOAL, 0, 0, 50, 50), '<goal x="0" y="0" width="50" height="50"></goal>');
+      checks.xml = editor.outputXML('test') === '<level name="test" bg="1"><goal x="0" y="0" width="50" height="50"></goal></level>';
+
+      const allPass = Object.values(checks).every(Boolean);
+      document.getElementById('results').textContent =
+        'DONE|' + JSON.stringify({ pass: allPass, checks, errors });
+    } catch (e) {
+      document.getElementById('results').textContent =
+        'DONE|' + JSON.stringify({ pass: false, error: e.message, errors });
+    }
+  </script>
+</body>
+</html>
