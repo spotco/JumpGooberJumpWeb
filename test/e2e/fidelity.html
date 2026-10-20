@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Record-Replay Fidelity Test</title></head>
+<body>
+<div id="game-container"></div>
+<div id="results" style="position:fixed;top:0;left:0;z-index:9999;color:#0f0;font:12px monospace;white-space:pre-wrap;">PENDING</div>
+<script src="../../lib/phaser.min.js"></script>
+<script type="module" src="../../src/Main.js"></script>
+<script type="module">
+// TICK_MS not needed
+
+async function waitFor(fn, timeout, label) {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    const v = fn();
+    if (v) return v;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  throw new Error('Timeout: ' + label);
+}
+
+function dispatchKey(engine, code, type) {
+  const ev = { code, type, repeat: false, preventDefault: () => {} };
+  if (type === 'down') engine.onKeyPress(ev);
+  else engine.onKeyUp(ev);
+}
+
+async function main() {
+  const resultsEl = document.getElementById('results');
+  try {
+    const game = await waitFor(() => window.jumpGooberJumpGame, 60000, 'game boot');
+    await waitFor(() => {
+      const s = game.scene.getScene('MenuScene');
+      return s && s.scene.isActive() ? s : null;
+    }, 120000, 'menu');
+
+    // Load W1L1
+    const xml = await (await fetch('./levels/w1l1.xml')).text();
+    game.scene.stop('MenuScene');
+    game.scene.start('GameScene', {
+      clvlxml: xml, name: 'fidelity-test', usebackbutton: false, hasskip: false,
+      world: 1, level: 1, cacheKey: 'fidelity'
+    });
+    const scene = await waitFor(() => {
+      const s = game.scene.getScene('GameScene');
+      return s && s.scene.isActive() && s.gameEngine && s.gameEngine.testguy ? s : null;
+    }, 30000, 'GameScene');
+    const engine = scene.gameEngine;
+    engine.e2eManualStep = true;
+
+    // PHASE 1: Live record with scripted inputs
+    engine.startRecording('w1l1');
+    const liveSnaps = [];
+    const script = [
+      { tick: 10, code: 'ArrowRight', type: 'down' },
+      { tick: 30, code: 'Space', type: 'down' },
+      { tick: 35, code: 'Space', type: 'up' },
+      { tick: 80, code: 'ArrowRight', type: 'up' },
+      { tick: 90, code: 'ArrowLeft', type: 'down' },
+      { tick: 120, code: 'Space', type: 'down' },
+      { tick: 125, code: 'Space', type: 'up' },
+      { tick: 150, code: 'ArrowLeft', type: 'up' },
+    ];
+    let si = 0;
+    for (let tick = 0; tick < 200; tick++) {
+      while (si < script.length && script[si].tick === tick) {
+        const ev = script[si++];
+        dispatchKey(engine, ev.code, ev.type);
+      }
+      engine.tick();
+      liveSnaps.push({ x: engine.testguy.x, y: engine.testguy.y });
+      if (engine.testguy.exploded) break;
+    }
+    const recording = engine.stopRecording();
+    
+    // PHASE 2: Replay the recording
+    // Reset the level
+    game.scene.stop('GameScene');
+    game.scene.start('GameScene', {
+      clvlxml: xml, name: 'fidelity-replay', usebackbutton: false, hasskip: false,
+      world: 1, level: 1, cacheKey: 'fidelity2'
+    });
+    const scene2 = await waitFor(() => {
+      const s = game.scene.getScene('GameScene');
+      return s && s.scene.isActive() && s.gameEngine && s.gameEngine.testguy ? s : null;
+    }, 30000, 'GameScene2');
+    const engine2 = scene2.gameEngine;
+    engine2.e2eManualStep = true;
+
+    const replaySnaps = [];
+    const recEvents = recording.events;
+    const startTick = recording.startTick;
+    let ri = 0;
+    // Calculate ticks to run: max event tick + buffer
+    const totalTicks = recording.totalTicks || (Math.max(...recEvents.map(e => e.tick - startTick), 0) + 50);
+    for (let tick = 0; tick < totalTicks; tick++) {
+      while (ri < recEvents.length && (recEvents[ri].tick - startTick) === tick) {
+        const ev = recEvents[ri++];
+        dispatchKey(engine2, ev.code, ev.type);
+      }
+      engine2.tick();
+      if (!engine2.testguy) break;
+      replaySnaps.push({ x: engine2.testguy.x, y: engine2.testguy.y });
+      if (engine2.testguy.exploded) break;
+    }
+
+    // PHASE 3: Compare
+    const minLen = Math.min(liveSnaps.length, replaySnaps.length);
+    let maxDivergence = 0;
+    let divergenceTick = -1;
+    for (let i = 0; i < minLen; i++) {
+      const dx = Math.abs(liveSnaps[i].x - replaySnaps[i].x);
+      const dy = Math.abs(liveSnaps[i].y - replaySnaps[i].y);
+      const d = Math.max(dx, dy);
+      if (d > maxDivergence) {
+        maxDivergence = d;
+        divergenceTick = i;
+      }
+    }
+    
+    const pass = maxDivergence < 0.01 && liveSnaps.length === replaySnaps.length;
+    resultsEl.textContent = 'DONE|' + JSON.stringify({
+      pass,
+      liveTicks: liveSnaps.length,
+      replayTicks: replaySnaps.length,
+      maxDivergence: maxDivergence.toFixed(4),
+      divergenceTick,
+      eventsRecorded: recEvents.length,
+    });
+  } catch (e) {
+    resultsEl.textContent = 'ERROR|' + ((e && e.stack) || String(e));
+  }
+}
+main();
+</script>
+</body>
+</html>

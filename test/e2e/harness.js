@@ -152,7 +152,7 @@ async function loadRecording(name) {
     return ev; // already has t (ms)
   });
   const maxTick = events.reduce((m, ev) => Math.max(m, (ev.tick || 0) - startTick), 0);
-  const ticks = (maxTick > 0 ? maxTick : Math.ceil((rec.durationMs || 5000) / TICK_MS)) + 60;
+  const ticks = (rec.totalTicks ? rec.totalTicks : (maxTick > 0 ? maxTick : Math.ceil((rec.durationMs || 5000) / TICK_MS))) + 10;
   return {
     name: 'replay-' + rec.name,
     level: levelFile,

@@ -788,6 +788,7 @@ export default class GameEngine {
         }
         const rec = this.inputRecording;
         rec.durationMs = performance.now() - this.inputRecordStart;
+        rec.totalTicks = this.tickCount - (rec.startTick || 0);
         rec.gameVersion = '1.0';
         this.inputRecording = null;
         console.log('[recorder] Stopped. ' + rec.events.length + ' events over ' + Math.round(rec.durationMs) + 'ms');
