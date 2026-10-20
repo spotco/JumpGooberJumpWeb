@@ -10,6 +10,11 @@ export default class BoostFruit extends BaseBlock {
         this.sprite = scene.add.image(this.w / 2, this.h / 2, 'boostfruit')
             .setDisplaySize(this.w, this.h);
         this.container.add(this.sprite);
+
+        // Mirrors BoostFruit.as: ready=true in constructor.
+        // Without this, the fruit can never be collected (update checks ready).
+        this.ready = true;
+        this.eatAtCounter = 0;
     }
 
     type() {
