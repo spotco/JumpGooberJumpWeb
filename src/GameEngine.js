@@ -93,6 +93,7 @@ export default class GameEngine {
         this.inputy = 0;
         this.inputRecording = null;
         this.inputRecordStart = 0;
+        this.tickCount = 0;
         this.keyState = {
             ArrowLeft: false,
             ArrowRight: false,
@@ -451,6 +452,7 @@ export default class GameEngine {
             }
         }
 
+        this.tickCount++;
         this.soundfadein();
         this.updateRecTimer();
 
@@ -745,10 +747,11 @@ export default class GameEngine {
             level: levelName || (this.sceneData && this.sceneData.name) || 'unknown',
             world: this.world || 1,
             levelNum: this.level || 1,
+            startTick: this.tickCount,
             events: [],
         };
         this.inputRecordStart = performance.now();
-        console.log('[recorder] Started recording: ' + this.inputRecording.name);
+        console.log('[recorder] Started recording: ' + this.inputRecording.name + ' at tick ' + this.tickCount);
         this.updateRecUI();
     }
 
@@ -820,8 +823,10 @@ export default class GameEngine {
         if (!gameplayKeys.includes(code)) {
             return;
         }
+        // Use tick count (not wall-clock) for deterministic replay.
+        // Wall-clock drifts from tick count under jank/throttling.
         this.inputRecording.events.push({
-            t: Math.round(performance.now() - this.inputRecordStart),
+            tick: this.tickCount,
             code: code,
             type: type,
         });

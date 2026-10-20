@@ -177,6 +177,21 @@ export const TESTS = [
     },
   },
   {
+    name: 'goal-touch-advances-level',
+    level: 'goal.xml',
+    ticks: 30,
+    script: [],
+    check(snaps, { engine }) {
+      // Player spawns touching the goal. Goal.update should call
+      // loadnextlevel(true), which clears testguy (null).
+      // If testguy is null, the goal touch worked and level advanced.
+      const levelCompleted = !engine.testguy;
+      const hasHitTest = !engine.testguy || typeof engine.testguy.hitTestObject === 'function';
+      const pass = levelCompleted && hasHitTest;
+      return { pass, details: `ticks=${snaps.length} levelCompleted=${levelCompleted} hasHitTest=${hasHitTest}` };
+    },
+  },
+  {
     name: 'block-recycling-when-scrolling',
     level: 'high.xml',
     ticks: 60,

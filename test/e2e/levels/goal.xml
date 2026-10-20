@@ -1,0 +1,4 @@
+<level name="e2e-goal">
+  <wall x="0" y="455" width="500" height="40"/>
+  <goal x="200" y="400" width="100" height="50"/>
+</level>

@@ -48,6 +48,9 @@ function releaseAll(engine) {
 
 function snapshot(engine, tick) {
   const g = engine.testguy;
+  if (!g) {
+    return null; // Level completed (loadnextlevel cleared testguy)
+  }
   return {
     tick,
     x: +g.x.toFixed(3),
@@ -106,8 +109,12 @@ async function runTest(game, test) {
       dispatchKey(engine, ev.code, ev.type);
     }
     engine.tick();
-    snaps.push(snapshot(engine, tick));
-    if (engine.testguy.exploded) {
+    const snap = snapshot(engine, tick);
+    if (!snap) {
+      break; // Level completed via goal touch
+    }
+    snaps.push(snap);
+    if (engine.testguy && engine.testguy.exploded) {
       break;
     }
   }
@@ -132,23 +139,33 @@ async function loadRecording(name) {
   const rec = await resp.json();
   const params = new URLSearchParams(window.location.search);
   const levelFile = params.get('level') || 'flat.xml';
-  const ticks = Math.ceil((rec.durationMs || 5000) / TICK_MS) + 60;
+  // Convert events to script format. New recordings use absolute `tick`;
+  // old recordings use `t` in ms. Normalize tick -> t for runTest().
+  const events = rec.events || [];
+  const startTick = rec.startTick || 0;
+  const script = events.map((ev) => {
+    if (typeof ev.tick === 'number') {
+      // Absolute tick in live game -> relative tick from recording start.
+      const relTick = ev.tick - startTick;
+      return { t: relTick * TICK_MS, code: ev.code, type: ev.type };
+    }
+    return ev; // already has t (ms)
+  });
+  const maxTick = events.reduce((m, ev) => Math.max(m, (ev.tick || 0) - startTick), 0);
+  const ticks = (maxTick > 0 ? maxTick : Math.ceil((rec.durationMs || 5000) / TICK_MS)) + 60;
   return {
     name: 'replay-' + rec.name,
     level: levelFile,
     ticks: ticks,
-    script: rec.events || [],
+    script: script,
     check(snaps, { engine }) {
-      // Replay passes if it runs without crashing. Human recordings may
-      // include player death (exploded) — the harness breaks early in that
-      // case, which is expected and deterministic. We're verifying the
-      // replay doesn't crash, not that the player survives.
       const pass = snaps.length > 0;
       const final = snaps[snaps.length - 1];
       const died = engine.testguy && engine.testguy.exploded;
+      const minY = Math.min(...snaps.map(s => s.y));
       return {
         pass,
-        details: `ticks=${snaps.length}/${ticks} final=(${final.x.toFixed(1)},${final.y.toFixed(1)}) events=${rec.events.length}${died ? ' (died)' : ''}`,
+        details: `ticks=${snaps.length}/${ticks} final=(${final.x.toFixed(1)},${final.y.toFixed(1)}) minY=${minY.toFixed(1)} events=${rec.events.length}${died ? ' (died)' : ''}`,
       };
     },
   };

@@ -257,6 +257,20 @@ export default class Guy {
         return Phaser.Geom.Intersects.RectangleToRectangle(this.hitbox, wallRect);
     }
 
+    hitTestObject(obj) {
+        // Mirrors Flash DisplayObject.hitTestObject: bounding-box intersection.
+        // Used by Goal, Boost, BoostFruit for touch detection.
+        if (!obj || obj.memRemoved) {
+            return false;
+        }
+        // Handle negative dimensions (normalize like BaseBlock does)
+        let x = obj.x, y = obj.y, w = obj.w, h = obj.h;
+        if (w < 0) { x += w; w = -w; }
+        if (h < 0) { y += h; h = -h; }
+        const objRect = new Phaser.Geom.Rectangle(x, y, w, h);
+        return Phaser.Geom.Intersects.RectangleToRectangle(this.hitbox, objRect);
+    }
+
     // ---- TUNED PHYSICS (escape hatch; only runs when Guy.USE_TUNED_JUMP) ----
     updateTuned(walls, justWallJumped) {
         if (this.exploded) {
