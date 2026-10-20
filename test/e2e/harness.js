@@ -99,6 +99,34 @@ async function runTest(game, test) {
   engine.e2eManualStep = true;
   engine.tickAccumulator = 0;
 
+  // For replays: set player to recorded start position (mid-level recordings).
+  // If startWorldY is set, scroll the world so the player appears at screen-y=250,
+  // preserving relative positions and avoiding the offscreen death check.
+  if (test.startX !== undefined && engine.testguy) {
+    if (test.startWorldY !== undefined) {
+      const scroll = 250 - test.startWorldY;
+      for (const arr of engine.blocksarrays) {
+        for (const b of arr) {
+          if (b && typeof b.y === 'number') {
+            b.y += scroll;
+            if (b.container) b.container.y = b.y;
+          }
+        }
+      }
+      engine.currenty = scroll;
+      engine.testguy.x = test.startX;
+      engine.testguy.y = 250;
+    } else if (test.startY !== undefined) {
+      engine.testguy.x = test.startX;
+      engine.testguy.y = test.startY;
+    }
+    engine.testguy.vx = 0;
+    engine.testguy.vy = 0;
+    if (typeof engine.testguy.syncDisplay === 'function') {
+      engine.testguy.syncDisplay();
+    }
+  }
+
   const script = [...test.script].sort((a, b) => a.t - b.t);
   let si = 0;
   const snaps = [];
@@ -158,6 +186,9 @@ async function loadRecording(name) {
     level: levelFile,
     ticks: ticks,
     script: script,
+    startX: rec.startX,
+    startY: rec.startY,
+    startWorldY: rec.startWorldY,
     check(snaps, { engine }) {
       const pass = snaps.length > 0;
       const final = snaps[snaps.length - 1];

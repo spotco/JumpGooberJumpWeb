@@ -177,6 +177,23 @@ export const TESTS = [
     },
   },
   {
+    name: 'goal-reachable-from-top-platform',
+    level: 'goalreach.xml',
+    ticks: 120,
+    script: [
+      { t: 0, code: 'Space', type: 'down' },
+      { t: 100, code: 'Space', type: 'up' },
+    ],
+    check(snaps, { engine }) {
+      // Player spawns on the -1308 platform (need to set spawn).
+      // Jump and see if goal at -1603 is touched.
+      // If loadnextlevel fired, testguy is null (level completed).
+      const completed = !engine.testguy;
+      const minY = snaps.length > 0 ? Math.min(...snaps.map(s => s.y)) : 0;
+      return { pass: completed, details: `completed=${completed} minY=${minY.toFixed(1)} ticks=${snaps.length}` };
+    },
+  },
+  {
     name: 'goal-touch-advances-level',
     level: 'goal.xml',
     ticks: 30,

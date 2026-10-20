@@ -260,16 +260,28 @@ export default class Guy {
     }
 
     hitTestObject(obj) {
-        // Mirrors Flash DisplayObject.hitTestObject: bounding-box intersection.
+        // Mirrors Flash DisplayObject.hitTestObject: bounding-box intersection
+        // of DISPLAY bounds (not just logical rect). The Goal's edge decorations
+        // extend its display bounds (16px top/left, 14px bottom, 17px right),
+        // which is what makes the W1L1 goal reachable in the original.
         // Used by Goal, Boost, BoostFruit for touch detection.
         if (!obj || obj.memRemoved) {
             return false;
         }
-        // Handle negative dimensions (normalize like BaseBlock does)
-        let x = obj.x, y = obj.y, w = obj.w, h = obj.h;
-        if (w < 0) { x += w; w = -w; }
-        if (h < 0) { y += h; h = -h; }
-        const objRect = new Phaser.Geom.Rectangle(x, y, w, h);
+        let objRect;
+        if (obj.container && typeof obj.container.getBounds === 'function') {
+            const b = obj.container.getBounds();
+            if (b && b.width > 0 && b.height > 0) {
+                objRect = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
+            }
+        }
+        if (!objRect) {
+            // Fallback: logical rect (normalize negative dims)
+            let x = obj.x, y = obj.y, w = obj.w, h = obj.h;
+            if (w < 0) { x += w; w = -w; }
+            if (h < 0) { y += h; h = -h; }
+            objRect = new Phaser.Geom.Rectangle(x, y, w, h);
+        }
         return Phaser.Geom.Intersects.RectangleToRectangle(this.hitbox, objRect);
     }
 

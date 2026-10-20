@@ -1,0 +1,4 @@
+<level name="e2e-goalreach">
+  <wall x="159" y="400" width="204" height="35"/>
+  <goal x="202" y="105" width="111" height="144"/>
+</level>

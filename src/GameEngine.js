@@ -742,12 +742,15 @@ export default class GameEngine {
     startRecording(levelName) {
         // Opt-in input recorder for e2e replay. Captures key time series
         // in the same format as test/e2e/tests.js scripts.
+        const guy = this.testguy;
         this.inputRecording = {
             name: 'recording-' + new Date().toISOString().slice(0, 19).replace(/:/g, '-'),
             level: levelName || (this.sceneData && this.sceneData.name) || 'unknown',
             world: this.world || 1,
             levelNum: this.level || 1,
             startTick: this.tickCount,
+            startX: guy ? guy.x : 0,
+            startY: guy ? guy.y : 0,
             events: [],
         };
         this.inputRecordStart = performance.now();
