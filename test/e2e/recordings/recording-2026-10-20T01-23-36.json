@@ -1,0 +1,545 @@
+{
+  "name": "recording-2026-10-20T01-23-36",
+  "level": "unknown",
+  "world": 1,
+  "levelNum": 1,
+  "events": [
+    {
+      "t": 1079,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 1257,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 1468,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 1827,
+      "code": "ArrowRight",
+      "type": "up"
+    },
+    {
+      "t": 2111,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 2156,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 2467,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 2667,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 2720,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 2762,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 2816,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 2859,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 2890,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 3147,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 3686,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 3867,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 4167,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 4271,
+      "code": "ArrowRight",
+      "type": "up"
+    },
+    {
+      "t": 4361,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 4601,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 5102,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 5154,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 5197,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 5250,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 5292,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 5304,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 5486,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 5547,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 5635,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 6086,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 6282,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 6746,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 6836,
+      "code": "ArrowLeft",
+      "type": "up"
+    },
+    {
+      "t": 6882,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 6911,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 7167,
+      "code": "ArrowRight",
+      "type": "up"
+    },
+    {
+      "t": 7391,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 7677,
+      "code": "ArrowLeft",
+      "type": "up"
+    },
+    {
+      "t": 7916,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 8261,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 8591,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 9056,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 9461,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 9806,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 9986,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 10196,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 10361,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 10736,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 10856,
+      "code": "ArrowRight",
+      "type": "up"
+    },
+    {
+      "t": 10900,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 11425,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 11931,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 11982,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12024,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12079,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12121,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12175,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12217,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12259,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12311,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12352,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12407,
+      "code": "ArrowLeft",
+      "type": "down"
+    },
+    {
+      "t": 12443,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 12946,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 12984,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 13209,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 13421,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 13767,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 13962,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 14500,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 14667,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 15086,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 15161,
+      "code": "ArrowLeft",
+      "type": "up"
+    },
+    {
+      "t": 15267,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 15370,
+      "code": "ArrowRight",
+      "type": "down"
+    },
+    {
+      "t": 15536,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 15702,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 16046,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 16211,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 16736,
+      "code": "ArrowRight",
+      "type": "up"
+    },
+    {
+      "t": 16885,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 17400,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 17452,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 17494,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 17546,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 17588,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 17606,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 19192,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 19693,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 19743,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 19796,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 19838,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 19890,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 19932,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 20276,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 20790,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 20844,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 20887,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 20940,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 20983,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 20996,
+      "code": "Space",
+      "type": "up"
+    },
+    {
+      "t": 21325,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 21837,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 21890,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 21931,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 21974,
+      "code": "Space",
+      "type": "down"
+    },
+    {
+      "t": 21981,
+      "code": "Space",
+      "type": "up"
+    }
+  ],
+  "durationMs": 23223.5,
+  "gameVersion": "1.0"
+}
