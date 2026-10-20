@@ -269,67 +269,6 @@ export default class GameEngine {
             strokeThickness: 3,
         }).setOrigin(0.5, 0);
 
-        // Recording indicator (opt-in input recorder for e2e replay).
-        // Hidden by default; shown with pulsing red dot while recording.
-        // Click to toggle recording. F9 also toggles.
-        this.recContainer = this.scene.add.container(12, 8);
-        this.recDot = this.scene.add.circle(0, 6, 7, 0xff0000);
-        this.recLabel = this.scene.add.text(18, 0, 'REC', {
-            fontFamily: 'Arial, sans-serif',
-            fontSize: '14px',
-            color: '#ff0000',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3,
-        });
-        this.recTimer = this.scene.add.text(18, 18, '0:00', {
-            fontFamily: 'Arial, sans-serif',
-            fontSize: '11px',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 3,
-        });
-        this.recHint = this.scene.add.text(18, 34, 'F9 or click', {
-            fontFamily: 'Arial, sans-serif',
-            fontSize: '9px',
-            color: '#aaaaaa',
-            stroke: '#000000',
-            strokeThickness: 2,
-        });
-        this.recContainer.add([this.recDot, this.recLabel, this.recTimer, this.recHint]);
-        this.recContainer.setVisible(false);
-        this.recContainer.setSize(100, 50);
-        this.recContainer.setInteractive({ useHandCursor: true });
-        this.recContainer.on('pointerdown', () => {
-            if (this.inputRecording) {
-                this.downloadRecording();
-            } else {
-                this.startRecording();
-            }
-            this.updateRecUI();
-        });
-        this.uiContainer.add(this.recContainer);
-
-        // Standalone record button (visible when not recording, for discoverability)
-        this.recButton = this.scene.add.container(12, 8);
-        this.recButtonBg = this.scene.add.circle(0, 6, 7, 0x550000);
-        this.recButtonLabel = this.scene.add.text(18, 0, 'REC', {
-            fontFamily: 'Arial, sans-serif',
-            fontSize: '14px',
-            color: '#888888',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3,
-        });
-        this.recButton.add([this.recButtonBg, this.recButtonLabel]);
-        this.recButton.setSize(80, 20);
-        this.recButton.setInteractive({ useHandCursor: true });
-        this.recButton.on('pointerdown', () => {
-            this.startRecording();
-            this.updateRecUI();
-        });
-        this.uiContainer.add(this.recButton);
-
         this.pausedcover = this.scene.add.container(0, 0);
         this.pausedcoverbg = this.scene.add.rectangle(250, 260, 500, 520, 0x000000, 0.6);
         this.pausedcovertext = this.scene.add.text(250, 237, 'PAUSED', {
@@ -759,30 +698,12 @@ export default class GameEngine {
     }
 
     updateRecUI() {
-        // Shows/hides the REC indicator and record button based on state.
-        const isRec = !!this.inputRecording;
-        if (this.recContainer) {
-            this.recContainer.setVisible(isRec);
-        }
-        if (this.recButton) {
-            this.recButton.setVisible(!isRec);
-        }
+        // Recording UI lives in the web page (index.html), which polls
+        // engine.inputRecording. Nothing to update in the game canvas.
     }
 
     updateRecTimer() {
-        // Called per tick while recording: updates elapsed time and pulses dot.
-        if (!this.inputRecording || !this.recTimer) {
-            return;
-        }
-        const elapsed = performance.now() - this.inputRecordStart;
-        const secs = Math.floor(elapsed / 1000);
-        const mins = Math.floor(secs / 60);
-        this.recTimer.setText(mins + ':' + String(secs % 60).padStart(2, '0'));
-        // Pulse the red dot
-        if (this.recDot) {
-            const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 200);
-            this.recDot.setAlpha(pulse);
-        }
+        // Recording indicator/timer live in the web page now (index.html).
     }
 
     stopRecording() {
